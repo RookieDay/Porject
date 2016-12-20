@@ -239,4 +239,249 @@
             this.event.cancellBubble = true;
         }
     }
+    ana.fn.extend({
+        on: function(type, callback) {
+            this.each(function() {
+                if (this.addEventListener) {
+                    this.addEventListener(type, function(e) {
+                        e = e || window.event;
+                        callback.call(this, new ana.Event(e));
+                    })
+                } else {
+                    this.attachEvent('on' + type, function(e) {
+                        e = e || window.event;
+                        callback.call(this, new ana.Event(e));
+                    })
+                }
+                return this;
+            })
+        },
+        off: function() {
+            this.each(function() {
+                this.removeEventListener(type, callback);
+            })
+            return this;
+        }
+    })
+
+    ana.each(("click,mouseover,mouseout,mouseenter,mouseleave," +
+        "mousemove,mousedown," +
+        "mouseup,keydown,keyup").split(','), function(i, v) {
+        ana.fn[v] = function(callback) {
+            return this.on(v, callback);
+        }
+    })
+    ana.fn.extend({
+        hover: function(fn1, fn2) {
+            return this.mouseover(fn1).mouseout(fn2);
+        },
+        toggle: function() {
+            var args = arguments,
+                i = 0;
+            return this.click(function(e) {
+                args[i++ % args.length].call(this, e);
+            })
+        }
+    })
+    ana.fn.extend({
+        css: function(cssName, cssValue) {
+            if (typeof cssName === 'object') {
+                return this.each(function() {
+                    var k;
+                    for (k in cssName) {
+                        this.style[k] = cssName[k];
+                    }
+                })
+            } else if (cssValue === undefined) {
+                return window.getComputedStyle(this[0])[cssName];
+            } else {
+                return this.each(function() {
+                    this.style[cssName] = cssValue;
+                })
+            }
+        },
+        hasClass: function(cName) {
+            // cName 可能会是 'c1 c2 c3'
+            var has = false;
+            ana.each(this[0].className.split(' '), function(i, v) {
+                if (v === cName) {
+                    has = true;
+                    return false;
+                }
+            })
+        },
+        addClass: function(cName) {
+            return this.each(function() {
+                var className = this.className;
+                className += ' ' + cName;
+                this.className = ana.trim(className);
+            })
+        },
+        removeClass: function(cName) {
+            return this.each(function() {
+                this.className = ana.trim((' ' + this.className + ' ').replace(' ' + cName + ' ', ' '));
+            })
+        },
+        toggleClass: function(cName) {
+            if (this.hasClass(cName)) {
+                this.removeClass(cName);
+            } else {
+                this.addClass(cName);
+            }
+        }
+    })
+    ana.extend({
+        attr: function(attName, attValue) {
+            if (arguments.length == 1) {
+                return this[0][attName];
+            } else {
+                return this.each(function() {
+                    this[attName] = attValue;
+                })
+            }
+        },
+        val: function(value) {
+            if (value === undefined) {
+                return this[0].value;
+            } else {
+                return this.each(function() {
+                    this.value = value;
+                })
+            }
+        }
+    })
+    ana.extend({
+        getInnerText: function(dom) {
+            var list = [];
+            if (dom.innerText !== undefined) {
+                return dom.innerText;
+            } else {
+                getTextNode(dom, list);
+                return list.join('');
+            }
+
+            function getTextNode(dom, arr) {
+                var i, l = dom.childNodes.length,
+                    node;
+                for (i = 0; i < l; i++) {
+                    node = dom.childNodes[i];
+                    if (node.nodeType === 3) {
+                        arr.push(node.nodeValue);
+                    } else {
+                        getTextNode(node, arr);
+                    }
+                }
+            }
+        },
+        setInnerText: function(dom, str) {
+            if ('innerText' in dom) {
+                dom.innerText = str;
+            } else {
+                dom.innerHTML = "";
+                dom.appendChild(document.createTextNode(str));
+            }
+        }
+
+    })
+
+    ana.extend({
+        html: function(html) {
+            if (html === undefined) {
+                return this[0].innerHTML;
+            } else {
+                return this.each(function() {
+                    this.innerHTML = html;
+                })
+            }
+        },
+        text: function(text) {
+            if (text === undefined) {
+                return ana.getInnerText(this[0]);
+            } else {
+                return this.each(function() {
+                    ana.setInnerText(this, text);
+                })
+            }
+        }
+    })
+
+    ana.extend({
+        kv: {
+            left: 'offsetLeft',
+            top: 'offsetTop',
+            width: 'offsetWidth',
+            height: 'offsetHeight'
+        },
+        getDisctance: function(dom, target) {
+            var o = {};
+            for (var k in target) {
+                o[k] = parseInt(target[k] - dom[ana.kv[k]]);
+            }
+        },
+        getLocation: function(dom, target) {
+            var o = {};
+            for (var k in target) {
+                o[k] = dom[ana.kv[k]];
+            }
+            return o;
+        },
+        easing: function(x, time, startLocations, target, dur, easingName) {
+            var o = {};
+            for (var k in target) {
+                o[k] = ana.easing[easingName](x, time, startLocations[k], parseInt(target[k]), dur);
+            }
+            return o;
+        },
+        setStyle: function(dom, startLocations, tweens, target) {
+            for (var k in target) {
+                dom.style[k] = startLocations[k] + tweens[k] + 'px';
+            }
+        },
+        easing: {
+            liner: function(x, t, b, c, d) {
+                // console.log( '匀速' );
+                return t * (c - b) / d;
+            },
+            minusspeed: function(x, t, b, c, d) {
+                // 需要初始速度 和加速度
+                var a = 2 * (c - b) / (d * d),
+                    v_0 = a * d;
+                return v_0 * t - a * t * t / 2;
+            }
+        }
+    })
+    ana.fn.extend({
+        timerId: null,
+        animate: function(target, dur, easingName) {
+            easingName = easingName || 'liner';
+            var dom = this[0];
+            var totalDistance = ana.getDisctance(dom, target),
+                startTime = +new Date,
+                startLocations = ana.getLocation(dom, target),
+                stepTime = 25;
+            play = function() {
+                var time = +new Date - startTime,
+                    tweens;
+                if (time > dur) {
+                    tweens = totalDistance;
+                    clearInterval(this.timerId);
+                    this.timerId = null;
+                } else {
+                    tweens = ana.easings(null, time, startLocations, target, dur, easingName);
+                }
+                ana.setStyle(dom, startLocations, tweens, target);
+            }
+            play();
+            this.timerId = setInterval(play, stepTime);
+        },
+        stopAnimating: function() {
+            clearInterval(this.timerId);
+        },
+        isAnimating: function() {
+            return this.timerId === null;
+        }
+    })
+
+
+    window.I = window.ana = ana;
 })(window);
