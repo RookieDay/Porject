@@ -2,7 +2,7 @@
 
 ***
 
-## 1. Buffer
+## 1. Buffer 
 
 Buffer 是一个像 Array 的对象，主要用于操作二进制数据（字节）。
 
