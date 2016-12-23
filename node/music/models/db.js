@@ -1,6 +1,6 @@
 'use strict';
+const mysql = require('mysql');
 exports.query = function(sql, callback) {
-    var mysql = require('mysql');
     var connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',

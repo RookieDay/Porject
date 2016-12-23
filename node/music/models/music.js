@@ -12,6 +12,28 @@ Music.getAll = function(callback) {
         if (err) {
             return callback(err, null);
         }
+        // console.log(rows);
+        callback(null, rows);
+    })
+}
+Music.getColumn = function(id, callback) {
+    db.query('select "${id}" from music', (err, rows) => {
+        if (err) {
+            return callback(err, null);
+        }
+        // console.log(rows);
+        callback(null, rows);
+    })
+}
+
+Music.remove = function(id, callback) {
+    db.query(`
+        DELETE from music
+        WHERE id="${id}"
+        `, (err, rows) => {
+        if (err) {
+            return callback(err, null);
+        }
         callback(null, rows);
     })
 }
@@ -25,5 +47,12 @@ Music.prototype.save = function(callback) {
         callback(null, rows);
     })
 }
-
+Music.prototype.update = function(callback) {
+    db.query(`update music set where id="${this.id}"`, (err, rows) => {
+        if (err) {
+            return callback(err, null);
+        }
+        callback(null, rows);
+    })
+}
 module.exports = Music;

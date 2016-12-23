@@ -69,39 +69,59 @@ exports.renderEdit = (req, res) => {
 
 exports.doEdit = (req, res) => {
     let mid = req.query.mid;
-    let index = musicList.findIndex(m => m.id === mid);
-    if (index === -1) {
-        return res.json({
-            code: '5002',
-            msg: 'music info not found'
-        })
-    }
-    let data = '';
-    req.on('data', (chunk) => {
-        data += chunk;
+    // let index = musicList.findIndex(m => m.id === mid);
+    Music.getColumn(mid, (err, rows) => {
+        if (err) {
+            return res.json({
+                code: '5002',
+                msg: 'music info not found'
+            })
+            let selectTitle = rows.title;
+            let selectTime = rows.time;
+            let selectSinger = rows.singer;
+            let selectSrc = rows.src;
+
+            let data = '';
+            req.on('data', (chunk) => {
+                data += chunk;
+            })
+            req.on('end', () => {
+                data = querystring.parse(data);
+                data.id = mid;
+                let music = new Music(data);
+                if (selectTitle != music.title) {
+                    music.edit((err, rows) => {})
+                }
+                musicList[index] = data;
+                res.writeHead(302, {
+                    'Location': 'http://127.0.0.1:3000/'
+                })
+                res.end();
+            })
+        }
     })
-    req.on('end', () => {
-        data = querystring.parse(data);
-        data.id = mid;
-        musicList[index] = data;
-        res.writeHead(302, {
-            'Location': 'http://127.0.0.1:3000/'
-        })
-        res.end();
-    })
+
 }
 exports.doRemove = (req, res) => {
     let mid = req.query.mid;
-    let index = musicList.findIndex(m => m.id === mid);
-    if (index === -1) {
-        return res.json({
-            code: '6002',
-            msg: 'music info not found'
-        })
-    }
-    musicList.splice(index, 1);
-    res.json({
-        code: '6000',
-        msg: 'remove success'
+    // let index = musicList.findIndex(m => m.id === mid);
+    Music.getColumn(mid, (err, rows) => {
+        if (err) {
+            return res.json({
+                code: '6002',
+                msg: 'music info not found'
+            })
+        }
+        Music.remove(mid, (err, rows) => {
+            if (err) {
+                throw err;
+            }
+            res.json({
+                code: '6000',
+                msg: 'remove success'
+            })
+        });
     })
+
+
 }
