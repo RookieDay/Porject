@@ -8,6 +8,6 @@ exports.query = function(sql, callback) {
         database: 'music'
     })
     connection.connect();
-    connect.query(sql, callback);
-    connect.end();
+    connection.query(sql, callback);
+    connection.end();
 }

@@ -8,7 +8,7 @@ function Music(music) {
     this.src = music.src;
 }
 Music.getAll = function(callback) {
-    db.query('select * from music', (err, callback) => {
+    db.query('select * from music', (err, rows) => {
         if (err) {
             return callback(err, null);
         }

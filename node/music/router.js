@@ -12,7 +12,7 @@ const user = require('./controllers/user');
 module.exports = function(req, res) {
     let urlObj = url.parse(req.url, true);
 
-    req.query = url.query;
+    req.query = urlObj.query;
     let pathname = decodeURI(urlObj.pathname);
     req.pathname = pathname;
     let method = req.method;
