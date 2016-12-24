@@ -55,15 +55,16 @@ exports.doAdd = (req, res) => {
 
 exports.renderEdit = (req, res) => {
     let mid = req.query.mid;
-    let music = musicList.find(m => m.id === mid);
-    if (!music) {
-        return res.json({
-            code: '5003',
-            msg: 'music not found'
+    Music.getColumn(mid, (err, rows) => {
+        if (err) {
+            return res.json({
+                code: '5003',
+                msg: 'music not found'
+            })
+        }
+        res.render('edit', {
+            music: rows
         })
-    }
-    res.render('edit', {
-        music: music
     })
 }
 
@@ -77,9 +78,6 @@ exports.doEdit = (req, res) => {
                 msg: 'music info not found'
             })
             let selectTitle = rows.title;
-            let selectTime = rows.time;
-            let selectSinger = rows.singer;
-            let selectSrc = rows.src;
 
             let data = '';
             req.on('data', (chunk) => {
@@ -89,14 +87,18 @@ exports.doEdit = (req, res) => {
                 data = querystring.parse(data);
                 data.id = mid;
                 let music = new Music(data);
-                if (selectTitle != music.title) {
-                    music.edit((err, rows) => {})
-                }
-                musicList[index] = data;
-                res.writeHead(302, {
-                    'Location': 'http://127.0.0.1:3000/'
+                music.update((err, rows) => {
+                    if (err) {
+                        return res.json({
+                            code: '5003',
+                            msg: 'music updatea failed'
+                        })
+                    }
+                    res.writeHead(302, {
+                        'Location': 'http://127.0.0.1:3000/'
+                    })
+                    res.end();
                 })
-                res.end();
             })
         }
     })

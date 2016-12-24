@@ -48,7 +48,7 @@ Music.prototype.save = function(callback) {
     })
 }
 Music.prototype.update = function(callback) {
-    db.query(`update music set where id="${this.id}"`, (err, rows) => {
+    db.query(`update music set title="${this.title}" where id="${this.id}"`, (err, rows) => {
         if (err) {
             return callback(err, null);
         }
