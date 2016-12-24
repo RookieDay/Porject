@@ -62,8 +62,10 @@ exports.renderEdit = (req, res) => {
                 msg: 'music not found'
             })
         }
+        console.log(rows);
+        let music = rows;
         res.render('edit', {
-            music: rows
+            music: rows[0]
         })
     })
 }
@@ -77,30 +79,32 @@ exports.doEdit = (req, res) => {
                 code: '5002',
                 msg: 'music info not found'
             })
-            let selectTitle = rows.title;
-
-            let data = '';
-            req.on('data', (chunk) => {
-                data += chunk;
-            })
-            req.on('end', () => {
-                data = querystring.parse(data);
-                data.id = mid;
-                let music = new Music(data);
-                music.update((err, rows) => {
-                    if (err) {
-                        return res.json({
-                            code: '5003',
-                            msg: 'music updatea failed'
-                        })
-                    }
-                    res.writeHead(302, {
-                        'Location': 'http://127.0.0.1:3000/'
-                    })
-                    res.end();
-                })
-            })
         }
+        let selectTitle = rows[0].title;
+
+        let data = '';
+        req.on('data', (chunk) => {
+            data += chunk;
+        })
+        req.on('end', () => {
+            data = querystring.parse(data);
+            data.id = mid;
+            let music = new Music(data);
+            music.id = mid;
+            music.update((err, rows) => {
+                if (err) {
+                    return res.json({
+                        code: '5003',
+                        msg: 'music updatea failed'
+                    })
+                }
+                res.writeHead(302, {
+                    'Location': 'http://127.0.0.1:3000/'
+                })
+                res.end();
+            })
+        })
+
     })
 
 }

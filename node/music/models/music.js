@@ -17,7 +17,10 @@ Music.getAll = function(callback) {
     })
 }
 Music.getColumn = function(id, callback) {
-    db.query('select "${id}" from music', (err, rows) => {
+    db.query(`
+        select * from music 
+        where id=${id}
+        `, (err, rows) => {
         if (err) {
             return callback(err, null);
         }
