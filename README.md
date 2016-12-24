@@ -94,3 +94,7 @@ ana.js     //DOM操作模块 事件模块 样式属性模块 动画模块
 select.js  // 选择器模块封装
 test       //added test case
 ```
+## 4.canvas_FlappyBird
+- 关键字：canvas draw 
+- 简介：基于canvas的FlappyBird的实现
+- 运行 运行index.html即可
