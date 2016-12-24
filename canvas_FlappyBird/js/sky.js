@@ -7,9 +7,9 @@ var skyPrototype = {
     },
     draw: function(dt) {
         this.update(dt);
-        this.ctx.drawImage(this.img, this.x, 0);
+        this.ctx.drawImage(this.img, this.x, 0)
     }
-}
+};
 
 function Sky(ctx, x, img, speed) {
     this.ctx = ctx;
@@ -18,4 +18,5 @@ function Sky(ctx, x, img, speed) {
     this.build();
     this.x = x;
 }
+
 Sky.prototype = skyPrototype;

@@ -19,8 +19,8 @@ var birdPrototype = {
     },
     update: function(dt) {
         this.waitTime = this.waitTime + dt;
-        if (this.waitTime >= 200) {
-            this.waitTime = this.waitTime - 200;
+        if (this.waitTime >= 100) {
+            this.waitTime = this.waitTime - 100;
             this.frameIndex = ++this.frameIndex % 3;
         }
         this.speed = this.speed + this.accelerate * dt;
