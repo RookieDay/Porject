@@ -7,8 +7,8 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/node/music/app.js",
-            "cwd": "${workspaceRoot}/node/music"
+            "program": "${workspaceRoot}/node_music/app.js",
+            "cwd": "${workspaceRoot}/node_music"
         },
         {
             "type": "node",
