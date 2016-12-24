@@ -8,9 +8,9 @@ var select = (function() {
     var getTag = function(tag, context, results) {
         results = results || [];
         try {
-            results.push.apply(results, context.getElementByTagName(tag));
+            results.push.apply(results, context.getElementsByTagName(tag));
         } catch (e) {
-            myPush(results, context.getElementByTagName(tag));
+            myPush(results, context.getElementsByTagName(tag));
         }
         return results;
     }
@@ -88,7 +88,7 @@ var select = (function() {
             var list = v.split(' ');
             var c = context;
             for (var i = 0; i < list.length; i++) {
-                if (list[i] === ' ') continue;
+                if (list[i] === '') continue;
                 c = get(list[i], c);
             }
             results.push.apply(results, c);

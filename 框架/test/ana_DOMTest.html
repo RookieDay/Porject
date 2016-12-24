@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .c {
+            width: 100px;
+            height: 100px;
+            background-color: yellow;
+        }
+    </style>
+    <script src="../ana.js"></script>
+    <script type="text/javascript">
+        onload = function() {
+            ana.each(I('<div></div>').appendTo('div'), function(i, v) {
+                this.className = 'c';
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div id="">
+    </div>
+    <div id="">
+    </div>
+</body>
+
+</html>
