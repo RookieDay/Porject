@@ -91,4 +91,5 @@ node client.js //也可以多人执行 实现单聊 群发的
 ```
 ana.js     //DOM操作模块 事件模块 样式属性模块 动画模块
 select.js  // 选择器模块封装
+test       //added test case
 ```
