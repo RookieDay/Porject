@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="nameList.main">
+
+<head>
+    <meta charset="UTF-8">
+    <title>名单</title>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/angular/angular.js"></script>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap-theme.css">
+    <style>
+        li {
+            float: left;
+        }
+        
+        body {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+
+<body ng-controller="mainController">
+    <!--<div ng-controller="modelController">-->
+    <!--测试nameList.model模块是不是引入进来了-->
+    <!--{{name}}-->
+    <!--</div>-->
+    <div class="container">
+        <div class="row">
+            <h1>邀请名单</h1>
+        </div>
+        <div class="row" style="padding-top: 30px;">
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                      姓名
+                  </span>
+                    <input type="text" ng-model="name" class="form-control" placeholder="输入姓名">
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                      电话
+                  </span>
+                    <input type="text" ng-model="phone" class="form-control" placeholder="输入电话">
+                </div>
+            </div>
+            <div class="col-xs-1">
+                <button class="btn btn-success" ng-click="invite()">邀请</button>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 30px;">
+            <a class="btn btn-success btn-xs " href="#/all">显示全部</a>
+            <a class="btn btn-success btn-xs " href="#/invite">显示邀请中</a>
+            <a class="btn btn-success btn-xs " href="#/accept">显示已接受</a>
+            <a class="btn btn-success btn-xs " href="#/refuse">显示已拒绝</a>
+        </div>
+
+        <div class="row" style="padding-top: 30px;">
+            <table class="table table-bordered">
+                <tr>
+                    <th style="width: 50px">id</th>
+                    <th style="width: 100px">姓名</th>
+                    <th style="width: 150px">电话</th>
+                    <th style="width: 100px">状态</th>
+                    <th>操作</th>
+                </tr>
+                <tr nl-item nl-userinfo="userinfo" nl-remove-fn="remove" nl-id="{{$index+1}}" ng-repeat="userinfo in nameList"></tr>
+            </table>
+        </div>
+    </div>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="./modelService.js"></script>
+    <script>
+        // 创建模块，创建控制器
+        var app = angular.module('nameList.main', ['nameList.model']);
+        app.controller('mainController', function($scope, $location, modelService) {
+            // 我们应用中的vm是$scope
+            $scope.nameList = modelService.getAll();
+
+            $scope.invite = function() {
+                var obj = modelService.invite($scope.name, $scope.phone);
+                //            console.log(obj);
+                // 失败
+                if (obj.code == 'error') {
+                    alert(obj.message);
+                } else { //成功
+                    $scope.nameList = modelService.getAll();
+                    $scope.name = "";
+                    $scope.phone = "";
+                }
+            };
+
+            $scope.remove = function(userinfo) {
+                modelService.remove(userinfo);
+                $scope.nameList = modelService.getAll();
+            };
+
+            $scope.accept = function(userinfo) {
+                userinfo.accept();
+            };
+
+            $scope.refuse = function(userinfo) {
+                userinfo.refuse();
+            };
+
+            $scope.location = $location;
+            $scope.$watch('location.path()', function(newValue, oldValue) {
+                switch (newValue) {
+                    case '/all':
+                        $scope.nameList = modelService.getAll();
+                        break;
+                    case '/invite':
+                        $scope.nameList = modelService.getAll().filter(function(value) {
+                            return value.state == '邀请中'
+                        });
+                        break;
+                    case '/accept':
+                        $scope.nameList = modelService.getAll().filter(function(value) {
+                            return value.state == '已接受'
+                        });
+                        break;
+                    case '/refuse':
+                        $scope.nameList = modelService.getAll().filter(function(value) {
+                            return value.state == '已拒绝'
+                        });
+                        break;
+                }
+            })
+        });
+
+        // 在属性哪里，必须写成nl-item，这个AngularJS规定的命名
+        app.directive('nlItem', function() {
+
+            return {
+                restrict: "A",
+                templateUrl: "nl_item_tmpl.html",
+                scope: {
+                    nlUserinfo: "=", // 用=做双向绑定,
+                    nlRemoveFn: "=",
+                    nlId: "@",
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="nameList">
+
+<head>
+    <meta charset="UTF-8">
+    <title>名单</title>
+    <script src="../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../node_modules/angular/angular.js"></script>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap-theme.css">
+    <style>
+        li {
+            float: left;
+        }
+        
+        body {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+
+<body ng-controller="mainController">
+
+    <div class="container">
+        <div class="row">
+            <h1>邀请名单</h1>
+        </div>
+        <div class="row" style="padding-top: 30px;">
+            <div class="col-xs-3">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                      姓名
+                  </span>
+                    <input type="text" ng-model="inviteViewData.name" class="form-control" placeholder="输入姓名">
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                      电话
+                  </span>
+                    <input type="text" ng-model="inviteViewData.phone" class="form-control" placeholder="输入电话">
+                </div>
+            </div>
+            <div class="col-xs-1">
+                <button ng-click="action.invite()" class="btn btn-success">邀请</button>
+            </div>
+        </div>
+
+        <div class="row" style="padding-top: 30px;">
+            <a class="btn btn-success btn-xs " ng-class="{active:getPath() == '/全部'}" href="#/全部">显示全部</a>
+            <a class="btn btn-success btn-xs " ng-class="{active:getPath() == '/邀请中'}" href="#/邀请中">显示邀请中</a>
+            <a class="btn btn-success btn-xs " ng-class="{active:getPath() == '/已接受'}" href="#/已接受">显示已接受</a>
+            <a class="btn btn-success btn-xs " ng-class="{active:getPath() == '/已拒绝'}" href="#/已拒绝">显示已拒绝</a>
+        </div>
+
+        <div class="row" style="padding-top: 30px;">
+            <table class="table table-bordered">
+                <tr>
+                    <th style="width: 50px">id</th>
+                    <th style="width: 100px">姓名</th>
+                    <th style="width: 150px">电话</th>
+                    <th style="width: 100px">状态</th>
+                    <th>操作</th>
+
+                </tr>
+                <tr ng-repeat="item in data.getNameList() | filter:filterViewData">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.phone}}</td>
+                    <td>{{item.state}}</td>
+                    <td>
+                        <!--哪种方式好呢？-->
+                        <button ng-if="item.state == '邀请中'" ng-click="action.accept(item)" class="btn btn-xs btn-success">
+                        接受邀请
+                    </button>
+                        <button ng-if="item.state == '邀请中'" ng-click="item.refuse()" class="btn btn-xs btn-danger">拒绝邀请
+                    </button>
+                        <button ng-click="action.remove(item)" class="btn btn-xs btn-default">删除</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="modelService.js"></script>
+
+    <script>
+        var nameListApp = angular.module('nameList', ['ic.model']);
+        nameListApp.controller('mainController', ['$scope', '$location', 'icModel', function($scope, $location, icModelService) {
+            var data = $scope.data = icModelService;
+            var action = $scope.action = {};
+            action.accept = function(item) {
+                item.accept();
+            };
+            action.remove = function(item) {
+                icModelService.remove(item);
+            };
+
+            var inviteViewData = $scope.inviteViewData = {
+                name: "",
+                phone: ""
+            };
+            action.invite = function() {
+                icModelService.invite(inviteViewData.name, inviteViewData.phone);
+                inviteViewData.name = "";
+                inviteViewData.phone = "";
+
+            };
+
+            var filterViewData = $scope.filterViewData = {
+
+            };
+            $scope.getPath = function() {
+                return $location.path()
+            };
+            $scope.$watch('getPath()', function(nv, pv, scope) {
+                switch (nv) {
+                    case '/全部':
+                        filterViewData.state = '';
+                        break;
+                    case '/邀请中':
+                        filterViewData.state = '邀请中';
+                        break;
+                    case '/已接受':
+                        filterViewData.state = '已接受';
+                        break;
+                    case '/已拒绝':
+                        filterViewData.state = '已拒绝';
+                        break;
+                }
+            })
+
+        }])
+    </script>
+</body>
+
+</html>

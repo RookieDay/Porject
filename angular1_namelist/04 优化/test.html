@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="nameList.main">
+<head>
+    <meta charset="UTF-8">
+    <title>名单</title>
+    <script src="../../../../node_modules/jquery/dist/jquery.js"></script>
+    <script src="../../../../node_modules/angular/angular.js"></script>
+    <link rel="stylesheet" href="../../../../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../../../../node_modules/bootstrap/dist/css/bootstrap-theme.css">
+    <style>
+        li {
+            float: left;
+        }
+
+        body {
+            padding-top: 50px;
+        }
+    </style>
+</head>
+<body ng-controller="mainController">
+
+<script src="../../../../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+<script src="./modelService.js"></script>
+<script>
+    // 做测试：modelService是不是可用的
+    var app = angular.module('nameList.main', ['nameList.model']);
+    app.controller('mainController', function ($scope, modelService) {
+        modelService.invite('张三','18612345678');
+
+        var data = modelService.getAll();
+        // 测试的目标：返回的data数组中，是不是有张三这个嘉宾的对象
+        console.log('第一次',data);
+
+
+        modelService.invite('李四','186567812234');
+        modelService.remove(data[0]);
+        data = modelService.getAll();
+        // 测试的目标：能不能正确地删除掉张三这个嘉宾
+        console.log('第二次',data);
+
+        data[0].accept();
+        // 测试的目标：李四的状态有没有变成“已接受”
+        console.log('第三次',data[0].state);
+
+        data[0].refuse();
+        // 测试的目标：李四的状态有没有变成“已拒绝”
+        console.log('第四次',data[0].state);
+
+        modelService.invite("","");
+        modelService.invite("","18612789000");
+        modelService.invite("赵六","");
+        modelService.invite("王五","186567812234");
+        data = modelService.getAll();
+        // 测试的目标：是不是为空时，不向数组中添加嘉宾
+        console.log("第五次",data);
+    })
+
+</script>
+</body>
+</html>

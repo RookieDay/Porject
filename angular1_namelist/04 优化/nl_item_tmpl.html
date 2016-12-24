@@ -1,0 +1,14 @@
+<td>{{nlId}}</td>
+<td>{{nlUserinfo.name}}</td>
+<td>{{nlUserinfo.phone}}</td>
+<td>{{nlUserinfo.state}}</td>
+<td>
+    <!--哪种方式好呢？-->
+    <button class="btn btn-xs btn-success" ng-if="nlUserinfo.state == '邀请中'" ng-click="nlUserinfo.accept()">
+        接受邀请
+    </button>
+    <button class="btn btn-xs btn-danger" ng-if="nlUserinfo.state == '邀请中'" ng-click="nlUserinfo.refuse()">
+        拒绝邀请
+    </button>
+    <button class="btn btn-xs btn-default" ng-click="nlRemoveFn(nlUserinfo)">删除</button>
+</td>

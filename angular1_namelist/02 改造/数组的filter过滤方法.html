@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    var model = [
+        {name: "张三", phone: "18612345678", state: "邀请中"},
+        {name: "李四", phone: "18612345678", state: "已接受"}
+    ];
+
+    // 1. 这个filter里面的回调函数，有多少条数据，就调用了多少次
+    // 2. 这个函数返回false时，返回的数组是空的,返回值是true时，返回的数组是非空的
+
+    // 回调函数会对数组中每一个元素执行一次，并返回一个布尔值。
+    // 布尔值为真时，新数组中有这个元素，为假时，新数组中就没有这个元素
+    var filterArray = model.filter(function(value){
+        console.log(value);
+        return value.state == '邀请中';
+    });
+
+    console.log(filterArray);
+</script>
+</body>
+</html>
