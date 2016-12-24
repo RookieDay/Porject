@@ -22,22 +22,25 @@
 
         function main() {
             var model = {
-                displatObjects: [], //屏幕显示对象
-                gameOver: false, //游戏结束
-                skys: [],
-                lands: [],
-                pipes: []
-            }
+                    displatObjects: [], //屏幕显示对象
+                    gameOver: false, //游戏结束
+                    skys: [],
+                    lands: [],
+                    pipes: []
+                }
+                //创建鸟
             var bird = new Bird(ctx, images['birds'])
+                //创建填空
             for (var i = 0; i < 2; i++) {
                 var sky = new Sky(ctx, 800 * i, images['sky'], -0.1);
                 model.skys.push(sky);
             }
-
+            //创建大地
             for (var i = 0; i < 4; i++) {
                 var land = new Land(ctx, 336 * i, images['land'], -0.2);
                 model.lands.push(land);
             }
+            //创建管道
             for (var i = 0; i < 4; i++) {
                 var pipe = new Pipe(ctx, 400 + 800 / 4 * i, images['pipe1'], images['pipe2'], -0.2);
                 model.pipes.push(pipe)
@@ -77,7 +80,7 @@
                     }
                     ctx.beginPath();
                 },
-                onEnterFrame: function() {
+                onEnterFrame: function() { // 当一帧开始时执行
                     model.displayObjects = [];
                     model.displayObjects = model.displayObjects.concat(model.skys);
                     model.displayObjects = model.displayObjects.concat(model.pipes);
@@ -93,9 +96,9 @@
             function loop(lastTime) {
                 var now = Date.now();
                 var dt = now - lastTime;
-                controllers.onEnterFrame();
-                renderView(ctx, model, dt);
-                controllers.onRenderFrame();
+                controllers.onEnterFrame(); // 一帧进入时执行
+                renderView(ctx, model, dt); // 把渲染交给renderView去管
+                controllers.onRenderFrame(); // 渲染结束时执行
                 var loopWithTime = loop.bind(window, now)
                 if (!model.gameOver) {
                     requestAnimationFrame(loopWithTime);
