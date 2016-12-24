@@ -98,3 +98,11 @@ test       //added test case
 - 关键字：canvas draw 
 - 简介：基于canvas的FlappyBird的实现
 - 运行 运行index.html即可
+
+## 5.angular1_namelist
+- 关键字：angular1 servie
+- 运行  index.html
+
+## 6.angular1_MovieList
+- 关键字：angular1 MVVM router bootstrap template jsonp
+- 运行  index.html (调用豆瓣电影API实现)
