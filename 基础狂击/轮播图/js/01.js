@@ -69,7 +69,7 @@
 
         //如果sqaure大于第一个按钮的索引号才能自减 否则从最后一个开始
         if (square > 0) {
-            square++;
+            square--;
         } else {
             square = olLis.length - 1;
         }
