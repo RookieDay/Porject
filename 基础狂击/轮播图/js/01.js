@@ -15,15 +15,16 @@
         li.innerHTML = i + 1;
         ol.appendChild(li);
     }
-    //当前标号
+    //当前标号 默认第一个数字图标显示
     var olLis = ol.children;
     olLis[0].className = 'current';
     //动态复制第一张到最后面
     var firstImage = ulLis[0].cloneNode(true);
     ul.appendChild(firstImage);
-    //鼠标经过
+
+    //鼠标经过 处理
     for (var j = 0; j < olLis.length; j++) {
-        olLis[j].index = j;
+        olLis[j].index = j; //保存图片索引值
         olLis[j].onmouseover = function() {
             for (var k = 0; k < olLis.length; k++) {
                 olLis[k].className = "";
@@ -45,7 +46,6 @@
 
     box.onmouseout = function() {
         arr.style.display = "none";
-        // timer = setInterval(playNext,1000);
     }
 
     //点击箭头
@@ -53,8 +53,10 @@
     var square = 0; //当前亮起按钮索引
 
     arrRight.onclick = function() {
-        playNext();
-    }
+            playNext();
+        }
+        //添加自动滚动
+    setInterval(playNext, 1000);
 
     arrLeft.onclick = function() {
         //到达第一张
