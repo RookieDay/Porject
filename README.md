@@ -106,3 +106,7 @@ test       //added test case
 ## 6.angular1_MovieList
 - 关键字：angular1 MVVM router bootstrap template jsonp
 - 运行  index.html (调用豆瓣电影API实现)
+
+## 7.基础狂击
+- 关键字：JS 
+- 简介 ： 一些案例的实现
