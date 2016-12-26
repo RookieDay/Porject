@@ -4,7 +4,7 @@ btn.onclick = function() {
     $.ajax({
         url: 'stars.php',
         type: 'post',
-        data: { name: "baidu", aga: 10 },
+        data: { name: "baidu", age: 10 },
         success: function(data) {
             console.log(data);
             var html = '';

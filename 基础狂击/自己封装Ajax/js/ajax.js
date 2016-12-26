@@ -8,8 +8,11 @@ var $ = {
     },
     ajax: function(options) {
         var xhr = new XMLHttpRequest,
+            // 默认为get方式
             type = options.type || 'get',
+            // 默认请求路径
             url = options.url || location.pathname,
+            // 格式化数据key1=value1&key2=value2
             data = this.params(options.data),
             callback = options.success;
         // get 方式将参数拼接到URL上并将data设置成null
@@ -21,7 +24,7 @@ var $ = {
         // 当post形式必须要写请求头Content-Type，并且只能是application/x-www-form-urlencoded
         // 当以get形式情况下可以不写Content-Type
         // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.open(type, null);
+        xhr.open(type, url);
         if (type == 'post') {
             // 设置了一个请求头
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -33,8 +36,10 @@ var $ = {
         xhr.onreadystatechange = function() {
             // 监听完成的状态及服务器响应状态
             if (xhr.readyState == 4 && xhr.status == 200) {
+                // 获取响应类型
                 var contentType = xhr.getResponseHeader('Content-Type');
                 var data = xhr.responseText;
+                // 解析JSON
                 if (contentType.indexOf('json') != -1) {
                     data = JSON.parse(data);
                 }
