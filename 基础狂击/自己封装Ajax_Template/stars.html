@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        table {
+            width: 700px;
+            border-collapse: collapse;
+        }
+        
+        td {
+            height: 40px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+    </table>
+    <div class="btn"><input type="button" value="获取数据"></div>
+    <script src="./js/template-native.js"></script>
+    <script src="./js/getData.js"></script>
+    <script type="text/template" id="tpl">
+        <% for(var i = 0; i < data.length;i++) {%>
+            <tr>
+                <td>
+                    <%= data[i].name %>
+                </td>
+                <td>
+                    <%= data[i].age %>
+                </td>
+                <td>
+                    <%= data[i].sex %>
+                </td>
+                <td>
+                    <%= data[i].photo %>
+                </td>
+                <td>
+                    <%= data[i].ablum %>
+                </td>
+            </tr>
+            <% } %>
+    </script>
+</body>
+
+</html>
