@@ -2,7 +2,7 @@ var $ = {
     params: function(params) {
         var data = '';
         for (key in params) {
-            data += key + '+' + params[key] + '&';
+            data += key + '=' + params[key] + '&';
         }
         return data.slice(0, -1);
     },
@@ -12,6 +12,7 @@ var $ = {
             url = options.url || location.pathname,
             data = this.params(options.data),
             callback = options.success;
+        // get 方式将参数拼接到URL上并将data设置成null
         if (type == 'get') {
             url = url + '?' + data;
             data = null;

@@ -1,5 +1,5 @@
 var btn = document.querySelector('.btn');
-
+console.log(btn)
 btn.onclick = function() {
     $.ajax({
         url: 'stars.php',
@@ -18,6 +18,6 @@ btn.onclick = function() {
             }
             document.querySelector('table').innerHTML = html;
         },
-        err: function(err) {}
+        error: function(err) {}
     })
 }
