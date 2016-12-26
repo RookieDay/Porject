@@ -1,0 +1,51 @@
+﻿
+安装 PHP 集成开发环境
+
+1、双击 wampserver.exe 进行安装
+
+2、指定安装目录
+
+3、打开bin\apache\Apache2.2.21\conf\httpd.conf
+设定根目录，查找并修改 DocumentRoot "D:/wamp/www/"  --> DocumentRoot "E:/www/"
+这样就指定了 "E:/www/"为存放网站的根目录。
+
+4、配置根目录，查找<Directory "D:/wamp/www/">  --> <Directory "E:/www/">
+
+5、修改完后，并不能立即生效，需要重启Apache
+   注：可以指定任意目录为根目录
+6、网站部署
+  将我们制作好的网页拷贝到配置好的根目录下，浏览器访问127.0.0.1即可。
+
+7、配置虚拟主机
+
+在一台Web服务器上，我们可以通过配置虚拟主机，然后分别设定根目录，实现对多个网站的管理。
+具体步骤如下：
+1、开启虚拟主机辅配置，在httpd.conf 中找到
+# Virtual hosts
+#Include conf/extra/httpd-vhosts.conf
+去掉前面的#号注释，开启虚拟主机配置
+2.配置虚拟主机，打开conf/extra/httpd-vhosts.conf 
+找见
+<VirtualHost *:80>
+    ServerAdmin webmaster@dummy-host.example.com
+    DocumentRoot "c:/Apache2/docs/dummy-host.example.com"
+    ServerName dummy-host.example.com
+    ServerAlias www.dummy-host.example.com
+    ErrorLog "logs/dummy-host.example.com-error.log"
+    CustomLog "logs/dummy-host.example.com-access.log" common
+</VirtualHost>
+
+分别修改以下三项
+DocumentRoot "E:/www/ana"
+ServerName "ana.com "
+ServerAlias "www.ana.com"
+其它项无需指定
+
+3. 修改DNS（hosts）文件
+打开C:\Windows\System32\drivers\etc\hosts
+目录是固定的
+127.0.0.1       ana.com
+127.0.0.1       www.ana.com
+
+4、重启Apache
+5、浏览器访问www.ana.com
