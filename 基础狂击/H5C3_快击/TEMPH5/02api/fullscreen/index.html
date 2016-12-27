@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>全屏</title>
+	<style>
+		.box {
+			width: 200px;
+			height: 200px;
+			background: blue;
+		}
+
+		:-webkit-full-screen .box {
+			background-color: red;
+		}
+	</style>
+</head>
+<body>
+	<div class="box"></div>
+	<input type="button" class='open' value="全屏">
+	<input type="button" class='cancle' value="关闭全屏">
+	<script>
+		// 获取html元素
+		var open = document.querySelector('.open');
+		var cancle = document.querySelector('.cancle');
+		var box = document.querySelector('.box');
+
+		open.onclick = function () {
+			document.documentElement.webkitRequestFullScreen();
+			// box.webkitRequestFullScreen();
+			alert(document.webkitIsFullScreen);
+		}
+
+		cancle.onclick = function () {
+			alert(document.webkitIsFullScreen);
+			document.webkitCancelFullScreen();
+			// document.documentElement.webkitCancelFullScreen();
+		}
+	</script>
+</body>
+</html>

@@ -43,3 +43,17 @@
     Node.dataset是以对象形式存在的
     当我们如下格式设置时，则需要以驼峰格式才能正确获取
     data-my-name="itcast"，获取Node.dataset['myName']
+
+## 地理定位 
+  navigator.getCurrentPosition(successCallback, errorCallback, options) 获取当前地理信息
+  navigator.watchPosition(successCallback, errorCallback, options) 重复获取当前地理信息
+  1、当成功获取地理信息后，会调用succssCallback，并返回一个包含位置信息的对象position。
+    position.coords.latitude纬度
+    position.coords.longitude经度
+    position.coords.accuracy精度
+    position.coords.altitude海拔高度
+  2、当获取地理信息失败后，会调用errorCallback，并返回错误信息error
+  3、可选参数 options 对象可以调整位置信息数据收集方式
+    a) enableHighAccuracy 高精度模式
+    b) timeout 超时设置，单位为ms
+    c) maximumAge表示浏览器重新获取位置信息的时间间隔，单位为ms
