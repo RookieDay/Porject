@@ -13,17 +13,17 @@
             height = 0,
             count = Math.floor(_this.width() / (width + defaults.gap)),
             columns = [];
-        item.each(function(key, val) {
+        items.each(function(key, val) {
             // 计算每个元素的高度
             height = $(val).height();
             // 第一行
             if (key < count) {
                 // 每一列高度
-                column[key] = height;
+                columns[key] = height;
                 // 设置定位坐标
                 $(val).css({
                     top: 0,
-                    left: (width + defaults.gap)
+                    left: (width + defaults.gap) * key
                 })
             } else {
                 var min_h = columns[0];
@@ -39,7 +39,7 @@
                 columns[min_k] += height;
                 $(val).css({
                     top: min_h + defaults.gap,
-                    left: (width + defaults.gap)
+                    left: (width + defaults.gap) * min_k
                 })
             }
         })
