@@ -19,16 +19,16 @@
                 level = level + 1;
             }
             type = map[level];
-            select = $('[data-level]=' + level + ']');
+            select = $('[data-level=' + level + ']');
             $.ajax({
-                url: '../region.php',
-                type: 'get',
+                url: './region.php',
+                tyrpe: 'get',
                 dataType: 'json',
                 data: { type: type, pid: pid },
                 success: function(data) {
                     // 清空下一级数据
                     $('[data-level]').each(function() {
-                        if ($(this).att('[data-level]') >= level) {
+                        if ($(this).attr('data-level') >= level) {
                             $(this).empty();
                         }
                     });
