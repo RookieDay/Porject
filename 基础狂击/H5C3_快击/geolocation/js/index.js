@@ -17,7 +17,7 @@ if (navigator.geolocation) {
 
             /********************/
             // 这些都是写死
-            var map = new BMap.Map("container"); // container表示主到哪个容器
+            var map = new BMap.Map("container"); // container表示注入到哪个容器
 
             // 把经度纬度传给百度
             var point = new BMap.Point(longitude, latitude);

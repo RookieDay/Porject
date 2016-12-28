@@ -57,3 +57,90 @@
     a) enableHighAccuracy 高精度模式
     b) timeout 超时设置，单位为ms
     c) maximumAge表示浏览器重新获取位置信息的时间间隔，单位为ms
+
+
+## Web存储
+  随着互联网的快速发展，基于网页的应用越来越普遍，同时也变的越来越复杂，为了满足各种各样的需求，会经常性在本地存储大量的数据，
+  传统方式我们以document.cookie来进行存储的，但是由于其存储大小只有4k左右，并且解析也相当的复杂，给开发带来诸多不便，HTML5规范则提出解决方案。
+- 特性
+  1、设置、读取方便
+  2、容量较大，sessionStorage约5M、localStorage约20M
+  4、只能存储字符串，可以将对象JSON.stringify() 编码后存储
+- window.sessionStorage
+  1、生命周期为关闭浏览器窗口
+  2、在同一个窗口下数据可以共享
+- window.localStorage
+  1、永久生效，除非手动删除
+  2、可以多窗口共享
+- 方法详解
+  setItem(key, value) 设置存储内容
+  getItem(key) 读取存储内容
+  removeItem(key) 删除键值为key的存储内容
+  clear() 清空所有存储内容
+  key(n) 以索引值来获取存储内容
+- 其它
+  WebSQL、IndexDB
+- 全屏
+  HTML5规范允许用户自定义网页上任一元素全屏显示。
+    requestFullScreen() 开启全屏显示
+    cancleFullScreen() 关闭全屏显示
+  不同浏览器需要添加前缀如：
+    webkitRequestFullScreen、mozRequestFullScreen
+    webkitCancelFullScreen、mozCancelFullScreen
+  规范允许所有元素可以取全屏，但实际测试结果关闭全屏只能添加到document元素上
+  通过document.fullScreen检测当前是否处于全屏状态
+  不同浏览器需要添加前缀
+      document.webkitIsFullScreen、document.mozFullScreen
+  全屏伪类
+    :full-screen .box {}、:-webkit-full-screen {}、:moz-full-screen {}
+- 网络状态
+  我们可以通过window. navigator.onLine来检测，用户当前的网络状况，返回一个布尔值
+  addEventListener 进行绑定online用户网络连接时被调用
+  addEventListener 进行绑定.offline用户网络断开时被调用
+  事件是给window绑订的
+
+
+##	应用缓存
+    HTML5中我们可以轻松的构建一个离线（无网络状态）应用，只需要创建一个cache manifest文件。
+- 优势
+  1、可配置需要缓存的资源
+  2、网络无连接应用仍可用
+  3、本地读取缓存资源，提升访问速度，增强用户体验
+  4、减少请求，缓解服务器负担
+- 缓存清单
+  一个普通文本文件，其中列出了浏览器应缓存以供离线访问的资源，推荐使用.appcache为后缀名，添加MIME类型
+  AddType text/cache-manifest .appcache
+    例如我们创建了一个名为demo.appcache的文件，然后在需要应用缓存在页面的根元素(html)添加属性manifest="demo.appcache"，路径要保证正确。
+- manifest文件格式
+  1、顶行写CACHE MANIFEST
+  2、CACHE: 换行 指定我们需要缓存的静态资源，如.css、image、js等
+  3、NETWORK: 换行 指定需要在线访问的资源，可使用通配符
+  4、FALLBACK: 换行 当被缓存的文件找不到时的备用资源
+- 事件监听
+-	其它
+  1、CACHE: 可以省略，这种情况下将需要缓存的资源写在CACHE MANIFEST
+  2、可以指定多个CACHE:  NETWORK:  FALLBACK:，无顺序限制
+  3、#表示注释，只有当demo.appcache文件内容发生改变时或者手动清除缓存后，才会重新缓存。
+  4、chrome 可以通过chrome://appcache-internals/工具和离线（offline）模式来调试管理应用缓存
+## 文件读取
+  通过FileReader对象我们可以读取本地存储的文件，可以使用 File 对象来指定所要读取的文件或数据。其中File对象可以是来自用户在一个 <input> 元素上选择文件后返回的FileList 对象，也可以来自由拖放操作生成的  DataTransfer
+-	FileList对象
+  由于HTML5中我们可以通过为表单元素添加multiple属性，因此我们通过<input>上传文件后得到的是一个FileList对象（伪数组形式）。
+- FileReader对象
+  HTML5新增内建对象，可以读取本地文件内容。
+  var reader = new FileReader; 可以实例化一个对象
+  实例方法
+  1、readAsDataURL() 以DataURL形式读取文件
+  事件监听
+  onload 当文读取完成时调用
+  属性
+  result 文件读取结果
+  参考资料
+  https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader#toc
+##	多媒体
+  方法：load()、play()、pause()
+  属性：currentSrc、currentTime、duration
+  事件：
+  参考文档
+  http://www.w3school.com.cn/tags/html_ref_audio_video_dom.asp
+
