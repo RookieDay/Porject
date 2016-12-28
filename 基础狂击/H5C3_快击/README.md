@@ -72,7 +72,7 @@
 - window.localStorage
   1、永久生效，除非手动删除
   2、可以多窗口共享
-- 方法详解
+- 方法详解  window.localStorage.getItem('age');
   setItem(key, value) 设置存储内容
   getItem(key) 读取存储内容
   removeItem(key) 删除键值为key的存储内容
@@ -88,6 +88,7 @@
     webkitRequestFullScreen、mozRequestFullScreen
     webkitCancelFullScreen、mozCancelFullScreen
   规范允许所有元素可以取全屏，但实际测试结果关闭全屏只能添加到document元素上
+  document.documentElement.webkitRequestFullScreen();
   通过document.fullScreen检测当前是否处于全屏状态
   不同浏览器需要添加前缀
       document.webkitIsFullScreen、document.mozFullScreen
