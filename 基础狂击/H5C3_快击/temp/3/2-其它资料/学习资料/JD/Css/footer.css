@@ -1,0 +1,19 @@
+#help {width:1170px;margin:10px auto 20px;padding:10px 20px;border-top:1px solid #DDDDDD;border-bottom:1px solid #F1F1F1;}
+#help .help-items ul {width:148px;padding-left:44px;float:left;position:relative;}
+#help .help-items ul li.item-title {padding:6px 0;font-size:14px;font-family:'微软雅黑';}
+#help .help-items ul li.last-item {width:116px;}
+#help .help-items ul li.item-title b {display:block;width:40px;height:40px;position:absolute;left:0;}
+#help .help-items ul li.item-title b.user-guide {background:url(../Images/icon_2.png) 0 -59px no-repeat;}
+#help .help-items ul li.item-title b.trans-style {background:url(../Images/icon_2.png) -50px -59px no-repeat;}
+#help .help-items ul li.item-title b.pay-style {background:url(../Images/icon_2.png) 0 -106px no-repeat;}
+#help .help-items ul li.item-title b.after-service {background:url(../Images/icon_2.png) -50px -106px no-repeat;}
+#help .help-items ul li.item-title b.special-service {background:url(../Images/icon_2.png) 0 -153px no-repeat;}
+
+#help .service-area {width:200px;height:167px;background:url(../Images/icon_3.png) 0 -131px no-repeat;}
+#help .service-area strong {display:block;font-size:14px;font-family:'微软雅黑';padding:6px 0;}
+#help .service-area p {width:200px;margin-bottom:20px;}
+
+#footer {width:1210px;margin:0 auto 20px;text-align:center;}
+#footer .links a {margin:0 10px;}
+#footer .copyright {margin:10px 0;}
+#footer .copyright a {margin:0 3px;}
