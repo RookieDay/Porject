@@ -315,3 +315,47 @@
 			 color: #FFF;
 		}
 ```
+
+
+```
+线性渐变
+.linear:nth-child(2) {
+			width: 1000px;
+			height: 100px;
+			margin: 100px auto;
+			background-color: #FFF;
+			background-image: linear-gradient(
+				135deg,
+				black 25%,
+				transparent 25%,
+				transparent 50%,
+				black 50%,
+				black 75%,
+				transparent 75%
+			);
+
+			/*background-repeat: no-repeat;*/
+
+			background-size: 100px 100px;
+		
+			animation: move 1s linear infinite;
+			
+		}
+```
+```
+径向渐变
+.radial {
+			width: 300px;
+			height: 300px;
+			margin: 100px auto;
+			/*background-image: radial-gradient(150px at center, yellow, green);*/
+			/*中心点的位置是以盒子自身为参照*/
+			/*background-image: radial-gradient(300px at left center, yellow, green);*/
+			
+			/*盒子左上角为圆心点，我们可通过坐标来设置中心位置*/
+			background-image: radial-gradient(150px at 80px 80px, yellow, green);
+
+			/*border-radius: 150px;*/
+		}
+
+```
