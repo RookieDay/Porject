@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #F7F7F7;
+}
+
+h3 {
+    margin: 0;
+    padding: 0;
+}
+
+.box {
+    width: 500px;
+    margin: 0 auto;
+}
+
+.list h3 {
+    height: 35px;
+    line-height: 35px;
+    padding-left: 30px;
+    border-bottom: 2px solid #690;
+    font-size: 14px;
+    color: #FFF;
+    background: #369;
+    transition: all 0.3s ease 0s;
+}
+
+
+/*原先高度是0 设置动画*/
+
+.list .pictxt {
+    height: 0px;
+    background: pink;
+    transition: all 0.3s ease 0s;
+}
+
+.list:hover h3 {
+    background: #036;
+}
+
+
+/*当鼠标放上去的时候，高度变化 开始动画*/
+
+.list:hover .pictxt {
+    height: 150px;
+}
