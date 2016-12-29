@@ -236,3 +236,82 @@
     2、box-sizing: content-box  计算方式为content = width
     注：上面的标注的width指的是CSS属性里设置的width: length，content的值是会自动调整的。
     兼容性比较好
+
+## 易忽略点：
+- 伪类选择器 empty
+```
+<style>
+  /*当我的span标签内容为空的情况则选中*/
+  span:empty {
+    display: none;
+  }
+</style>
+<body>
+	<ul class="empty">
+		<li>商品分类</li>
+		<li>我的订单</li>
+    <!--当123 不存在的时候不显示-->
+		<li>购物车<span>123</span></li>   
+	</ul>
+</body>
+```
+- 伪类选择器
+```
+		/*选中的是当前的锚点 显示为红色*/
+		h2:target {
+			color: red;
+		}
+
+```
+- 伪类
+```
+		/*选中的类名不是special的元素*/
+		li:not(.special) {
+			background: red;
+		}
+```
+
+- 伪元素选择器 ::before :: after
+```
+		/*通过::before ::after; 可以添加一个子节点，并且这个子节点的样式可以像普通元素一样去设置*/
+
+		/*::before 和 ::after 是用来“动态”创建子节点的*/
+		li::before,
+		li::after {
+			/*默认的情况下是一个行内元素，所以当需要设置宽高的情况必须先转成块元素*/
+			display: block;
+			
+			/*可以为我们动态创建的子节点去添加一些内容*/
+			/*content: '放点内容';*/
+			
+			/*content这个属性必须要写，没有内容就给空*/
+			content: '';
+
+			width: 100px;
+			height: 100px;
+			background: yellow;
+			margin: 10px;
+		}
+
+		/*CSS2的版本伪元素的写法*/
+		/*:before :after;*/
+```
+
+- 伪元素选择器
+```
+    /*选中第一个字母*/
+		li::first-letter {
+			color: red;
+		}
+    
+    /*选中第一行*/
+		p::first-line {
+			color: red;
+		}
+    
+    /*选中的是选区*/
+		p::selection {
+			 background: yellow;
+			 color: #FFF;
+		}
+```
