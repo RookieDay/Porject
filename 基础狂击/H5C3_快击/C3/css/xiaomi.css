@@ -30,7 +30,7 @@ body {
 
 .desc {
     position: absolute;
-    bottom: -100px;
+    bottom: -100px;  
     width: 100%;
     height: 100px;
     background-color: #ff6700;
