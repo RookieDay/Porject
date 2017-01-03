@@ -390,5 +390,38 @@ console.log(b);
 undefined 5 6 20 1 10 10
 ```
 
+```
+var a = 1;
 
+function fn(){
+  console.log(a); 
+  var a = 5;
+  console.log(a);  
+  a++;
+  var a;
+  fn3();
+  fn2();
+  console.log(a);
+
+  function fn2(){
+    console.log(a); 
+    a = 20;
+  }
+}
+
+function fn3(){
+  console.log(a)
+  a = 200;
+}
+
+fn();
+console.log(a); 
+<!--结果-->
+undefined
+5
+1
+6
+20
+200
+```
 
