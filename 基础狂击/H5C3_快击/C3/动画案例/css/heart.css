@@ -1,0 +1,125 @@
+html body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #ffa5a5;
+    /*从上到下 颜色线性渐变*/
+    background: linear-gradient(to bottom, #ffa5a5 0%, #ffd3d3 100%);
+}
+
+
+/*div*/
+
+.chest {
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
+    position: relative;
+}
+
+
+/*心*/
+
+.heart {
+    position: absolute;
+    z-index: 2;
+    /*旋转90度 水平方向颜色线性渐变*/
+    background: linear-gradient(-90deg, #F50A45 0%, #d5093c 40%);
+    /*执行动画beat 0.7s 动画函数ease 动画延时0s 无限执行 是否逆播*/
+    animation: beat 0.7s ease 0s infinite normal;
+}
+
+
+/*中间部分 选择45度 颜色线性渐变*/
+
+.heart.ceter {
+    background: linear-gradient(-45deg, #B80734 0%, #d5093c 40%);
+}
+
+
+/*top 层叠*/
+
+.heart.top {
+    z-index: 3;
+}
+
+
+/*画左右的圆*/
+
+.side {
+    top: 100px;
+    width: 220px;
+    height: 220px;
+    border-radius: 220px;
+}
+
+
+/*画正方形*/
+
+.center {
+    width: 210px;
+    height: 210px;
+    bottom: 100px;
+    left: 145px;
+}
+
+
+/*定位左边的圆*/
+
+.left {
+    left: 62px;
+}
+
+
+/*定位右边的圆*/
+
+.right {
+    right: 62px;
+}
+
+
+/*动画*/
+
+@keyframes beat {
+    0% {
+        /*过渡 放大 并且快速旋转225度*/
+        transform: scale(1) rotate(225deg);
+        /*阴影 水平 垂直阴影 模糊距离*/
+        box-shadow: 0 0 40px #d5093c;
+    }
+    50% {
+        transform: scale(1.1) rotate(225deg);
+        box-shadow: 0 0 70px #d5093c;
+    }
+    100% {
+        transform: scale(1) rotate(225deg);
+        box-shadow: 0 0 40px #d5093c;
+    }
+}
+
+
+/*
+animation: name duration timing-function delay iteration-count direction;
+值	                       描述
+animation-name	            规定需要绑定到选择器的 keyframe 名称。。
+animation-duration	        规定完成动画所花费的时间，以秒或毫秒计。
+animation-timing-function	规定动画的速度曲线。
+animation-delay	            规定在动画开始之前的延迟。
+animation-iteration-count	规定动画应该播放的次数。
+animation-direction	        规定是否应该轮流反向播放动画。*/
+
+
+/*
+box-shadow: h-shadow v-shadow blur spread color inset;
+注释：box-shadow 向框添加一个或多个阴影。该属性是由逗号分隔的阴影列表，每个阴影由 2-4 个长度值、
+可选的颜色值以及可选的 inset 关键词来规定。省略长度的值是 0。
+值	       描述	
+h-shadow	必需。水平阴影的位置。允许负值。	
+v-shadow	必需。垂直阴影的位置。允许负值。	
+blur	    可选。模糊距离。	
+spread	    可选。阴影的尺寸。	
+color	    可选。阴影的颜色。
+inset	    可选。将外部阴影 (outset) 改为内部阴影。
