@@ -3555,3 +3555,379 @@ var f1 = new fn1();
 			// 作用
 			// 在实现继承的时候, 一般都是使用 构造函数的 prototype 属性
 			// 在分析结构与验证对象等测试与调试中, 会用到 __proto__             
+
+Object.prototype 中的成员
+// Object 原型中的常用方法
+			// 1, 带有下划线的除了 __proto__ 其他可以不考虑
+			// 2, constructor 是构造函数的引用, 就是构造函数
+			/*
+			var Person = function () {
+				this.name = 'jim';
+			};
+			var p1 = new Person();
+			var p2 = new Person.prototype.constructor();
+			
+			Person.prototype.init = Person;
+			// initial 初始化的
+			var p3 = new Person.prototype.init();
+			*/
+			
+			
+			// 3, hasOwnProperty
+			// 	has	有
+			//	own	自己的
+			// 	property 属性
+			// 有自己的属性, 检查属性是否是自己原生提供的, 如果是被继承的 则返回 false
+			// 语法
+			// boolean 对象.hasOwnProperty( 属性名字 )
+			
+			/*
+			var o = { name: 'jim' };
+			function Person() {
+				this.name = 'tom';
+			}
+			Person.prototype = o;
+			
+			var p = new Person();
+			
+			console.log( p.name );
+			
+			var isTrue = p.hasOwnProperty( 'name' );
+			console.log( isTrue );
+			*/
+			
+			
+			// 4, isPrototypeOf
+			// of 的
+			// 语法:
+			// boolean 对象1.isPrototypeOf( 对象2 );
+			// 判断 对象1 是否为 对象2 的原型对象, 如果是返回 true, 否则返回 false
+			
+			// var Person = function () {};
+			// var p = new Person();
+			
+			/*
+			console.log( p.isPrototypeOf( Person ) );
+			console.log( p.isPrototypeOf( Person.prototype ) );
+			
+			console.log( Person.prototype.isPrototypeOf( p ) );
+			
+			console.log( Person.prototype.isPrototypeOf( Person ) );
+			*/
+			
+			
+			var o = {};
+			Person.prototype = o;
+			var p = new Person();
+			Person.prototype = o;
+			alert( o.isPrototypeOf( p ) );
+						
+			
+			// 5, propertyIsEnumerable
+			// -able	表示可能性的后缀
+			// enum		枚举, 一个一个的展示出来
+			// 属性是否可以枚举, 属性是否可以被 for-in 遍历到
+			// var o = {};
+			// in
+			// alert( 'hasOwnProperty' in o );  // o.hasOwnProperty
+			// for ( var k in o ) {
+			//	console.log( k );
+			// }
+			
+			// 这个方法判断属性是否可以被枚举, 同时判断属性是否是自己提供的
+			// 因此该方法表示判断属性必须是 自己提供的, 同时可以被枚举的, 那么就返回 true, 否则返回 false
+			// 在 ES3 的基础上, 该方法没有任何意义, 是对 hsOwnProperty 的一个升级版
+			// 在 ES5 中引入了 对象特性( attribute )的概念, 才会使得该方法有点作用
+			
+			// 语法:
+			// boolean 对象.propertyIsEnumberable( 属性名字 );
+			/*
+			var o = { name: 'jim' };
+			o.__proto__.age = 10;
+			console.log( o.age );
+			console.log( o.propertyIsEnumerable( 'name' ) );
+			console.log( o.propertyIsEnumerable( 'age' ) );
+			*/
+			
+			
+			// 6, toString, toLocaleString, valueOf
+			/*
+			var d = new Date();
+			console.log( d.toString() );
+			console.log( d.toLocaleString() );
+			*/
+			
+			function Person() {
+				/*
+				this.toString = function () {
+					return 'toString 字符串';
+				}
+				this.toLocaleString = function () {
+					return '本地字符串';
+				}
+				*/
+			}
+			var d = new Person();
+			
+			console.log( d.toString() );
+			console.log( d.toLocaleString() );
+			
+			
+			// console.log( (new Number(1)).toString() );
+			// console.log( (new Number(1)).toLocaleString() );
+			
+			
+			// 借用方法
+			// console.log( Object.prototype.toString.call( 1 ) );
+			// console.log( toLocaleString.call( 1 ) );
+			
+			
+			// console.log( Object.prototype.toString.call( new Date() ) );
+			
+			/*
+			var o = {};
+			if ( !!o ) {
+				console.log( 1 );
+			}
+			*/
+			
+			// var a = [ 1, 2, 3 ];
+			// alert( a.valueOf() );
+
+                        
+			// instanceof
+			// instance	实例
+			// of		的
+			
+			// 用法
+			// boolean 对象 instanceof 构造函数
+			
+			// console.log( [] instanceof Array );
+			// console.log( [] instanceof Object );
+			
+			// instanceof 的运算规则?
+			
+			function Fn() {}
+			function Foo() {}
+			
+			// var o = new Fn();
+			
+			// console.log( o instanceof Foo );
+			
+			Fn.prototype = new Foo();
+			
+			var o = new Fn();
+			
+			console.log( o instanceof Foo );
+			
+			// 规律
+			// 任意的一个对象都有一条原型链
+			// 那么 只要是 在该链上的构造函数, 这个判断都是 true
+			
+			// 或
+			
+			// 如果直接判断的是构造函数, 那么也是 true
+
+ 求和函数：
+ <script id="engin">
+			/*
+			 
+		 		var total = 0, 
+					args = arguments, 
+					len = args.length;
+				for ( var i = 0; i < len; i++ ) {
+					total += args[ i ];
+				}
+				return total;
+		 	
+		 	
+		 	*/
+		</script>
+		<script>
+		
+			var getBody = function ( id ) {
+				var script = document.getElementById( id );
+				var body = script.innerHTML.replace('/*', '').replace('*/', '');
+				script.parentNode.removeChild( script );
+				return body;
+			}
+		
+			
+			onload = function () {
+				
+				
+				var fnSum = new Function( getBody( 'engin' ) );
+				console.log(fnSum)
+				var res = fnSum( 1, 2, 3 );
+				
+				alert( res );
+				
+			};
+			
+			
+		</script>
+
+
+ eval 与 Function使用
+ 	// Function 和 eval 都可以实现字符串执行代码
+			// 在实际开发中, 如果考虑效率可以直接使用 eval
+			// 但是考虑安全性则建议使用 Function
+			
+			// eval( 'var a = 10;' );  // eval 会污染全局变量
+			
+			// eval 等价与
+			// 直接实行 var a = 10;
+			
+			
+			// (new Function( 'var a = 10; alert( 123 );' ))();
+			// new Fucntion 等价于
+			// 定义一个函数, 在函数内部, 执行
+			// var a = 10;
+			
+			// console.log( a );
+			
+			
+			var str = '{ name: "tom" }';
+			var o = (new Function( 'return ' + str ))();
+			console.log(o)
+//			var o = (new Function( str ))(); 报错，name is not defined，因为无返回值
+			alert( o.name );
+			
+函数原型链：                  
+// 总结一下基本结论
+			// 1, 对象都有原型对象, 对象默认继承自原型对象
+			// 2, 函数被定义后, 默认就有原型属性, 原型属性也是对象
+			// 3, 函数的原型属性默认继承自 Object.prototype
+			// 4, 原型对象中 constructor 指向对应的构造函数
+			// 5, 所有的函数都是 Function 的实例
+			// 6, 函数也是对象
+			
+			// 基本的概念
+			// prototype 是函数的原型属性, 是该函数创建的对象的原型对象
+			// __proto__ 是对象的原型对象, 是创建该对象的构造函数的 原型属性
+			
+			
+			function Foo() {} 
+			
+			// Foo 有 prototype 属性
+			// 讨论 __proto__
+			// 函数 Foo 是 Function 的实例
+			// 即 Function 是 Foo 的构造函数
+			// 类比
+			//	 Person		p
+			// => p.__proto__ 就是 Person.prototype
+			// => Person.prototype.__proto__ 就是 Object.prototype
+			
+			// 替换
+			// => Foo.__proto__ 就是 Function.prototype
+			// => Function.prototype.__proto__ 就是 Object.prototype
+			
+			
+			// 原型对象就是构造函数的原型属性
+			
+			// 所以, Foo.__proto__ 就是 构造函数的原型属性, 即 Function.prototype
+			
+			// 默认函数的原型属性继承自 Object.prototype
+			// Function 是函数, Function.prototype 是函数的原型属性
+			// Function.prototype 继承自 Object.prototype
+			
+			
+			// 这里与之前唯一不同的是将 函数当做对象来看
+			
+			
+			
+			// 根据结论: Function, 和 函数, 和 Function.prototype 之间的关系, 可以得到
+			// Array 是 Function 的实例, 继承自 Fucntion.prototype
+			// Date 是 Function 的实例, 继承自 Fucntion.prototype
+			// Object 是 Function 的实例, 继承自 Fucntion.prototype
+			// ...
+			// Fucntion 是 Function 的实例, 继承自 Fucntion.prototype
+			// 	结论 Function.__proto__ 就是 Function.prototype
+
+
+实例成员 和 静态成员
+// 术语:
+			// 对象
+			// 实例: 一般在描述实例这个概念的时候, 也是指对象. 但是实例一般是用来描述一个由某个构造函数创建的对象
+			//		一般称作为 xxx 构造函数的实例
+			// 构造函数
+		
+		
+			// 实例成员就是 由构造函数创建的对象的成员
+			// 静态成员就是 构造函数的成员
+			
+			// 一般在使用的时候, 将通用的方法 由 静态成员提供, 实例成员如果要实现该功能, 调用静态成员来实现
+			
+			// 
+			/*
+			function Person() {
+				this.sayHello = function () { alert(' Hello JavaScript '); };
+			}
+			*/
+			// Person.name						静态成员, 静态属性
+			// new Person().sayHello();			实例成员, 实例方法
+			
+			
+			// alert( Person.name );
+			// ( new Person ).sayHello();
+			
+			
+			// 在 商品案例中
+			// 当页面向下滚动的时候动态的加载更多商品
+			// 当动态加载商品的时候, 应该考虑如果商品已经在页面中有了, 就不再加载该商品
+			
+			// 所以
+			// 一把来说, 展示一个商品, 就是展示商品的信息与链接
+			
+			// 就在在判断一个对象的所有属性相等, 则为同一件商品
+			
+			var data = '[{name:"神器js", price:100, img:"1234567800.jpg"},{name:"神器js", price:100, img:"12345678900.jpg"}]';
+			var o = eval( "(" + data + ")" );
+//			var o1 = o[ 0 ];
+//			var o2 = o[ 1 ];
+			
+			// alert( o1 == o2 );
+			
+			// 对象都有一个构造函数的东西
+			var Goods = function ( o ) {
+				// ...
+				for ( var k in o ) {
+					this[ k ] = o[ k ];
+				}
+			}
+			
+			var o1 = new Goods( o[ 0 ] );
+			var o2 = new Goods( o[ 1 ] );
+			
+			// 要判断是否相同, 就判断每一个属性是否相同
+//			var compare = function ( s1, s2 ) {
+//				return s1.name === s2.name &&
+//						s1.price === s2.price &&
+//						s1.img === s2.img;
+//			};
+			
+			// alert( compare( o1, o2 ) );
+			
+			
+			// 在项目中, 这种类似的判断可能会很多, 为了便于管理, 该判断是和商品息息相关的. 
+			// 因此应该将该方法与该类型绑定在一起, 以便使用与维护
+			// 函数也是对象, 也可以利用动态添加成员的办法添加成员
+			
+			Goods.compare = function ( s1, s2 ) {
+				return s1.name === s2.name &&
+						s1.price === s2.price &&
+						s1.img === s2.img;
+			};
+			
+			
+			// alert( Goods.compare( o1, o2 ) );
+			
+			
+			// 为了方便调用, 我应该同时保留 静态方法与实例方法
+			// 复用
+			Goods.prototype.isEqualsTo = function ( o ) {
+				// 比较 this 与 o 是否相等
+				return Goods.compare( this, o );
+			}
+			
+			alert( o1.isEqualsTo( o2 ) );            
