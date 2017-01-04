@@ -3930,4 +3930,358 @@ Object.prototype 中的成员
 				return Goods.compare( this, o );
 			}
 			
-			alert( o1.isEqualsTo( o2 ) );            
+			alert( o1.isEqualsTo( o2 ) );
+
+
+
+词法作用域：
+// 词法作用域
+			// 在 开发语言中 常见的作用域规则就是: 块级作用域 和 词法作用域
+			// 
+			
+			// 什么叫作用域?
+			// 起作用的区域
+			// 定义变量后, 可以在哪一个范围内使用该变量
+			
+			// 块级作用域
+			// 所谓的块级作用域就是 用一个块 结构分割变量的访问区域
+			// 所谓的块就是 {}
+			// 代表语言: C 语言( C 系 )
+			
+			
+			// 词法作用域
+			// 就是变量的作用范围, 在书写代码的时候就已经决定, 与运行时无关
+			// 分割作用域的只有函数
+
+			// 词法作用域 解释
+
+			// 只和代码的书写，定义时的顺序有关，和运行时候的顺序无关
+			// 函数内部可访问外部的变量，反之则不允许
+			
+			// 面试题
+			
+			/*
+			if ( 'a' in window ) {
+				var a = 10; // 一个是声明, 一个是赋值
+			}  
+			alert( a );
+			*/
+			// 10
+			// undefined
+			// err
+			// null
+			
+			
+			// 变式
+			/*
+			if ( 'b' in window ) {
+				var a = 10; // 一个是声明, 一个是赋值
+			}  
+			alert( a );
+			*/
+			
+	// 结论
+			// 1, 声明会提升
+			// 2, 只有函数才会限定作用域
+			
+			
+			// 规则
+			// 1> 将全部的 script 标签看做一个整体. 是一个 0 级别的链
+			// 		链中所有的全局范围内的变量, 函数, 对象... 都是链中的成员
+			//		由于声明会提升, 因此在绘制链之前将代码可以进行调整, 在开始的时候
+			//		将声明都写在前面, 绘图的时候按照顺序绘制, 较为简单.
+			//
+			// 2> 由于只有函数才可以限定作用域. 因此在函数上引出一条新链, 级别为 n + 1
+			// 		在函数内部, 又是一个完整, 独立的作用域结构
+			//		因此在函数内部定义的任何成员也按照 1> 中的规则在该链上展开
+			//
+			// 3> 如果有函数, 继续绘制下去 
+			
+			
+			
+			// 变量搜索原则
+			// 在代码的运行过程中, 如果访问某一个变量
+			// 那么首先在当前链上找 ( 无序 ), 如果没有, 在 n-1 级上找
+			// ( 在函数内部允许访问定义在函数外部的变量 )
+			// 如此往复, 直到 0 级链, 如果还没有 抛出异常
+			// 如果找到, 则结束寻找, 直接获得该链上变量的数据
+			
+			
+			/*
+			var a = 123;
+			var f = function() {
+				
+				var n = 456;
+				var o = {};
+				var arr = [];
+				var f = function() {};
+				
+			};
+			var arr = [];
+			var o = {};
+			*/			                        
+
+get set 
+function Foo() {
+				var num;
+				return {
+					get_Num: function () {
+						return num;
+					},
+					set_Num: function ( v ) {
+						num = v;
+					}
+				};
+			}
+			
+			var o = Foo();
+			
+			console.log( o.get_Num() );
+			
+			o.set_Num( 123 );
+			
+			console.log( o.get_Num() );
+
+
+
+function Foo() {
+				var num;
+				var tempO = {};
+				tempO.__num__ = num;
+				tempO.set_Num = function ( v ) {
+					num = v;
+				};
+				tempO.get_Num = function () {
+					return num;
+				};
+				return tempO;
+			}
+			
+			var o = Foo();
+			
+			console.log( o.__num__ );
+			
+			o.set_Num( 1 );
+			
+			console.log(o.__num__);  // 取不出数据
+			console.log(o.get_Num());            
+
+
+
+// 闭包的应用有两个模型
+			// 1, 实现私有数据
+			// 2, 实现缓存数据
+			
+			
+			// 1> 带有缓存功能函数
+			// var count = 0;
+//			var fib = function ( n ) {
+//				count++;
+//				// 面试求兔子数列, 要求使用 callee
+//				if ( n < 0 ) throw new Error( '数字不允许是负数' );
+//				if ( n === 0 || n === 1 ) return 1;
+//				return arguments.callee( n - 1 ) + 
+//						arguments.callee( n - 2 );
+//			};
+//			
+//			var count = 0;
+//			for ( var i= 0; i <= 10; i++ ) {
+//				count = 0;
+//				console.log( fib( i )  + ", " + count + ' 次');
+//			}
+			
+			/*
+			for ( var i= 0; i <= 10; i++ ) {
+				console.log( fib( i ) );
+			}
+			*/
+			// fib( 21 );
+			// 1, 3, 5, 9, 15, 25
+			// 41, 67
+			// console.log( count );
+			
+			
+			var fib = (function () {
+				var arr = [];
+				return function ( n ) {
+					// count++;
+					// 面试求兔子数列, 要求使用 callee
+					if ( n < 0 ) throw new Error( '数字不允许是负数' );
+					
+					var res = arr[ n ];   // 先到数组中取
+					if ( res !== undefined ) {
+						// 数组中有数据
+						return res;
+					} else {
+						// 如果是 1 或 0 则将 1 返回给 res
+						// 否则递归结果交给 res;
+						
+						if ( n === 0 || n === 1 ) {
+							res =  1;
+						} else {
+							res = arguments.callee( n - 1 ) + 
+									arguments.callee( n - 2 );
+						}
+						
+						arr[ n ] = res;  // 将计算的结果放到数组中, 那么下一次再计算的
+										 // 时候可以直接拿来用, 就不用计算量
+										 console.log(res)
+										 console.log(arr)
+						return res;
+					}
+				};
+			})();
+			
+			fib( 5 );
+			
+			// 首先计算 第 n 项
+			// 在计算的时候首先看缓存中是否有该数据
+			// 那么如果缓存里面没有数据, 就递归, 并将计算的结果放到对应的缓存位置上
+			// 那么如果缓存中有数据, 则直接返回
+			
+			
+			
+//			var count = 0;
+//			for ( var i= 0; i <= 10; i++ ) {
+//				count = 0;
+//				console.log( fib( i )  + ", " + count + ' 次');
+//			}
+			
+			// fib( 100 );
+			// 1, 3, 5, 9, 15, 25
+			// 41, 67
+			// console.log( count );
+			
+
+	// createCache
+			var fib = function ( n ) {
+				var res = fib[ n ];   // 先到函数名中取
+				if ( res !== undefined ) {
+					// 函数中有数据
+					return res;
+				} else {
+					// 如果是 1 或 0 则将 1 返回给 res
+					// 否则递归结果交给 res;
+					
+					if ( n === 0 || n === 1 ) {
+						res =  1;
+					} else {
+						res = arguments.callee( n - 1 ) + 
+								arguments.callee( n - 2 );
+					}
+					
+					fib[ n ] = res;  // 将计算的结果放到数组中, 那么下一次再计算的
+									 // 时候可以直接拿来用, 就不用计算量
+					fib.len++;
+					
+					return res;
+				}
+			};
+			
+			fib.len = 0;
+			
+			fib( 5 );
+			
+题目：            
+var Fn = function () { this.age = 1; };
+			Fn.prototype.name = 'jim';
+			// Fn.prototype.age = undefined;
+			var f = new Fn();
+			// hasOwnProperty
+			// 如何判断属性是被继承的???
+			console.log( 'age' in f && !f.hasOwnProperty( 'age' ) );
+			// age 可能存在原型链上, 也可能不存在
+			
+			// 如果属性值就是 null 或 undefined, 那么此时 f.age 就无法判断了
+			            
+		// 1> 要求每一个对象都有 inherit, 给 Object.prototype 添加即可
+			// 2> 继承自 p, 在方法中 p 用什么表示, 即 this
+			// 3> 继承自参数 obj
+			
+			Object.prototype.inherit = function ( obj ) {
+				var o = {};
+				for ( var k in this ) {
+					o[ k ] = this[ k ];
+				}
+				for ( var k in obj ) {
+					o[ k ] = obj[ k ];
+				}
+				
+				return o;
+			};
+			// 14, 函数有方法, Function.prototype
+			//	       返回的对象继承自 函数.prototype
+			// 1> 题目中的做法
+			/*
+			Function.prototype.inherit = function () {
+				return Object.create( this.prototype );
+			};
+			*/
+			// 2> 愿意
+			/*
+			Function.prototype.inherit = function ( obj ) {
+				var o = Object.create( this.prototype );
+				for ( var k in obj ) {
+					o[ k ] = obj[ k ];
+				}
+				return o;
+			};
+			*/
+
+
+            	函数的原型属性利用 函数.prototype 来获得. 表示由该函数创建的对象继承自 该函数的 prototype
+			
+			函数的原型对象利用 函数.__proto__ 来获得, 或 Function.prototype 来获得. 表示 该函数 继承自
+				Function.prototype 或 函数.__proto__
+		// 1,
+			// 原型继承: 每一个对象都可以找到一条由对象构成的, 一直到 Object.prototype 的链式结构
+			// 			每一个在链上的对象所提供的方法或属性, 当前对象都可以访问. 这个就是原型继承.
+			//			
+			//			所以原型继承就是修改原型链上的对象, 以是的当前对象具有某个属性或方法
+			
+			// 2, 
+			// 优点: 共享方法与节约内存
+			// 缺点: 增加链式搜索的负担
+			
+			
+			// 3, 
+			// 首先在当前对象中找, 如果没有在原型链上往上找. 
+			// 一直到 Object.prototype, 如果返回返回 undefined
+
+
+
+写⼀个函数, 返回⼀个有姓名, 性别, 和年龄的对象. 要求 对象的参数有函数参
+数调⽤传递得到. 并且要求对象的数据 不允许被修改.
+// 2, 
+//function	Foo()	{
+//				var	o	=	{	name:	"jim"	};
+//				return	{
+//								o:	o,
+//								set_Name:	function	(	name	)	{
+//												o.name	=	name;
+//								}
+//				};
+//}
+//var	o	=	Foo();
+//console.log(	o.name	);
+//console.log(	o.o.name	);
+//o.set_Name(	"tom"	);
+//console.log(	o.o.name	);
+
+
+No2
+var createPerson = function ( name, age, gender ) {
+				// ???
+				return {
+					get_Name: function () {
+						return name;
+					},
+					get_Age: function () {
+						return age;
+					},
+					get_Gender: function () {
+						return gender;
+					}
+				};
+			};
+			var p = createPerson( 'jim', 19, '男' );
