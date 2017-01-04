@@ -3111,3 +3111,164 @@ radial-gradient径向渐变指从一个中心点开始沿着四周产生渐变�
 </html>
 
 
+JS_OOP:
+// delete 删除
+			// 语法:  boolean  delete 数据;
+			// 在当前作用域上删除数据
+			
+			// 用法:
+			// 1, 删除数组中的一个元素
+			// 2, 删除一个对象的属性或方法
+			// 3, 删除一个没有用 var 声明 变量
+			
+			/*
+			var arr = [ 1, 2, 3, 4 ];
+			console.log( arr ); [1, 2, 3, 4]
+			console.log( arr.length )  4
+			var isTrue = delete arr[ 2 ];
+			console.log( arr ); [1, 2, 3: 4] 存储如下
+            <!--Array[4]
+            0:1
+            1:2
+            3:4
+            length:4-->
+			console.log( arr.length ) 4
+			*/
+			
+		
+//			var o = { name: "jim" };
+//			var isTrue = delete o.name;  // o[ "name" ]
+//			console.log(o.name); undefined
+//			console.log(isTrue); true
+//		
+//			
+//			var n = 1;
+//				m = 2;
+//			var isTrue1 = delete n;
+//			var isTrue2 = delete m;
+//			
+//			console.log( isTrue1 );		// => false 
+//			console.log( isTrue2 );     // => true
+//			
+//			console.log( n );			// => 1
+//			console.log( m );			// => undefined
+		</script>
+
+
+原型：
+// 对象中有一个属性 叫 __proto__
+// 通过调试可以发现 对象的 __proto__ 与创建它的构造函数的 prototype 是一个东西
+
+function F() {}
+var o = new F();
+
+console.log( o.__proto__ === F.prototype );
+
+// __proto__ 是非标准属性
+
+// 原型
+
+// F.prototype			原型属性
+// o.__proto__			原型对象
+
+// F.prototype 是构造函数 F 的原型属性
+// F.prototype 是对象 o 的原型对象
+
+// 在访问一个对象的属性的时候, 首先在当前对象中找, 如果没有在其原型对象中找
+
+
+var fn1 = function () {};
+var fn2 = function () {};
+
+var f1 = new fn1();
+
+// fn1.prototype 是 f1 的原型对象   一个对象的原型对象只和创建这个对象的构造函数有关
+        
+
+// 测试
+			
+			// 凡是函数就有属性 prototype 
+			// 由某一个函数 new 出来的对象, 会自动的链接到 该函数的 prototype
+			var Fn1 = function () {};
+			var Fn2 = function () {};
+			
+			var f1 = new Fn1();	// 自动的链接到 Fn1.prototype
+			var f2 = new Fn2(); // 自动链接到 Fn2.prototype
+			
+			// 测试
+			var o1 = new Object(),	// o1 -> Object.prototype
+				f = new Array(3),	// f -> Array.prototype
+				d = new Date();		// d -> Date.prototype
+			
+			// 链接到 prototype 上有什么用?
+			// 属性( 属性与方法 )
+			var p = {
+				name: 'jim',
+				age: 19,
+				sayHello: function() {}
+			};
+			// 如果访问对象的属性, 就在当前对象中找, 如果没有在其原型对象中找
+			// 原型对象就是对象的构造函数的 prototype 属性
+			
+			// 原型对象与原型属性
+			
+			// __proto__ 与 prototype 有什么区别?
+			// __proto__ 是站在对象的角度讨论其原型对象
+			// prototype 是站在构造函数的角度讨论原型属性, 或构造函数创建的对象的原型对象
+			
+			// 提问
+			// 1, 笔记
+			// 2, 判断有限数字		isFinite()
+			console.log( 10 / 0 ); // => 10 / x , x->0
+			console.log( isFinite( 10 / 0 ) );
+			
+			// 判断是数字
+			// 做数学运算
+			var a = '123';
+			var b = 'abc';
+			
+			console.log( a - 0 );
+			console.log( b * 1 );
+			// 判断数字是 NaN
+			// iSNaN
+			// 在 js 中有一个特性, NaN 与自己不相等
+			console.log( '123' == '123' ); // 引用类型
+			
+			var ooo = {};
+			var ooo2 = ooo;
+			console.log( ooo === ooo2 );
+			
+			var nan = NaN;
+			var nan2 = nan;
+			console.log( nan == nan2 );
+			
+			console.log( NaN == NaN )
+			
+			
+			// setTimeout 多少秒后执行 1 次
+			// setInterval 多少秒后 执行, 间隔 该描述再次执行, 直到 clearInterval
+
+// 每一个对象都可以访问到一个属性
+			// 其中有一个是 constructor ( 构造器 )
+			// 每一个对象的 constructor 属性描述的是其构造函数
+			
+			function Fn() {}
+			
+			var o = new Fn();
+			
+			console.log( o.constructor === Fn ); 
+			
+			// 每一个对象都链接到 其 原型对象上 
+			// 对象的 constructor 属性是其原型对象提供的
+			
+			var obj = {};
+			
+			console.log( obj.constructor );
+			
+			// 每一个对象都有原型对象
+
+
+
+
+            
+                        
