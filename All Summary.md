@@ -3268,7 +3268,290 @@ var f1 = new fn1();
 			// 每一个对象都有原型对象
 
 
+继承：
+// 在 js 中有两种继承模型
+			// 1, 原型继承
+			// 2, 组合继承
+			
+			// 1, 原型继承
+			// 如果需要让一个对象有某一个行为( 属性, 方法 ), 那么可以考虑将这个行为
+			//	加到原型对象中, 那么这个对象就继承自原型对象, 获得了该行为
+			
+			// 2, 组合式继承
+			// 组合式继承将其他的对象中的成员加到自己身上
+			var o1 = { name: 'jim', age:19, gender: '男' };
+			var o2 = { score: {
+				math: 100,
+				english:90,
+				chinese:120
+			} };
+			// 让 o2 继承自 o1
+			// 将 o1 的成员加到 o2 上
+//			for ( var k in o1 ) {
+//				o2[ k ] = o1[ k ];
+//			}
+			
+			// 由于 for in 循环中的对象可以随意的替代, 因此 o2 可以继承自任意的对象
+			// 因此, 这个继承方法称为组合式继承
+			// 这里希望 o2 可以继承自任意的对象. 所以为了简化继承的代码
+			// 给 o2 提供一个方法, 叫 extend
+			o2.extend = function ( obj ) {
+				for ( var k in obj ) {
+					this[ k ] = obj[ k ];
+				}	
+			}
+			
+			o2.extend( o1 );  // 继承
+			
+			o2.extend({
+				id: function( id ) {
+					
+				},
+				tag: function ( tag ) {
+					
+				},
+				showErr: function (msg) {
+					throw new Error( msg );
+				}
+			});
+			
+// 什么是原型式继承
+			// 对象继承自其原型对象
+			
+			// 所谓的原型式继承就是在 对象的 原型对象中加东西即可
+			// 如何使用原型对象
+			// 1, 利用对象的动态特性添加成员
+			/*
+			var o = {};
+			o.name = 'jim';
+			
+			var Person = function () {};
+			Person.prototype.sayHello = function () {
+				alert (' 哈哈哈 ');
+			};
+			*/
+			// 此时 原型对象是对象, 可以利用动态特性随时添加成员
+			// 添加的成员都会被 构造函数创建的对象所继承
+			
+			
+			
+			
+			
+			// 2, 利用覆盖原型对象
+//			var Person = function () {};
+//			Person.prototype.sayHello = function () {
+//				alert (' 哈哈哈 ');
+//			};
+//			Person.prototype.sayGoodbye= function () {};
+//			Person.prototype.sayLove = function () {};
+			// ...
+			
+			// 如果需要添加的内容非常多
+			// var Person = function () {};
+			function Person() {}   凡是有了函数 默认就有prototype  默认的prototype 它里面有constructor属性 指的就是构造函数
+			
+			Person.prototype = {			原来的prototype被当前的替换了
+				constructor: Person,   **************** 加上这句话后				
+				sayHello: function() {},
+				sayGoodbye: function() {},
+				sayLove: function () {}
+				
+			};
+			// 这里由 Person 创建出来的对象什么类型?
+			// Object
+			// 为什么? 合理吗?
+			var p = new Person();    
+			
+			console.log( p.constructor.name );  --> 出来的是Object 加上上面那句话  就是Peroson
+			p里面没有 就去原型对象里面找  原型里面没有，被替换了 去原型对象的原型对象去寻找 是Object  
+			
+			// 覆盖原型对象实现继承的时候, 一定要给新对象添加一个 constructor 属性
+			// 以便模拟对象的类型. 但是如果对对象的类型要求不严格可以忽略
+			
+			// 3, 利用组合式继承添加原型成员
+			// 对象.extend( 对象 )
+
+经典继承：
+// 在实际开发中, 如果希望获得一个继承自 对象 o 的对象
+			// 可以使用 Object.create 方法
+			// ES5 提供的方法
+			
+			// 新对象 Object.create( 作为原型对象的对象 )
+			
+			var o1 = { name: 'jim' };
+			// var o2 = Object.create( o1 );
+			// 类型无关
+			
+			// 明确函数调用语法
+			// 功能是什么?
+			
+			
+			// 它会创建一个新对象, 让他继承自参数 对象
+			// 创建新对象就有构造函数
+			// 继承对象就有原型对象
+			
+			
+//			function create( obj ) {
+//				function F() {}
+//				// 要有继承
+//				F.prototype = obj;
+//				return new F();
+//			}
+//			var o3 = create( o1 );
+			
+			
+			// 在实际开发中, 如果是为了兼容所有的浏览器, 有两种做法
+			// 1, 在原生对象中提供方法
+			if ( !Object.create ) {
+				Object.create = function ( obj ) {
+					function F() {}
+					// 要有继承
+					F.prototype = obj;			会造成对原生对象的污染  F new出来的对象 通通继承
+					return new F();
+				}
+			}
+			
+			var o4 = Object.create( o1 );
+			
+			var _ = 0;
+			// 2, 统一用新的方法
+			var create = function( obj ) {
+				if ( Object.create ) {
+					return Object.create( obj );
+				} else {
+					
+					function F() {}
+					F.prototype = obj;
+					return new F();
+				}
+			}
+			
+			
+			var o5 = create ( obj );
+			// 无论浏览器是否支持该方法, 都应该使用自己定义的方法来完成, 但是
+			// 在方法内部, 判断浏览器是否具有该功能, 如果有该功能
+			// 则使用浏览器提供 的功能
+			// 如果浏览器不支持该功能, 则自己实现            
 
 
-            
-                        
+经典继承：
+// 原型式继承
+			// 1, 概念: 对象继承自原型对象: 对象没有的成员, 可以又原型对象提供
+			// 2, 实现方式
+			//		-> 动态添加原型对象的成员
+			//		-> 直接替换原型对象( 如果对类型要求严格需要添加 constructor 属性 )
+			//		-> 利用 extend 函数给原型对象添加成员
+			
+			// 经典的继承代码
+			var o1 = { name: 'tom' };
+			var o2 = Object.create( o1 );
+			
+			// o2 作为对象, 他的原型对象有谁决定
+			// o2 的原型对象有构造函数的 prototype 决定
+			// o2 的原型对象是 o1
+			// 结论
+			// o2 的构造函数的 prototype = o1
+			
+			// o2 有构造函数吗?
+			// o2 是由 create 函数创建, 那么在函数内部有一个构造函数就可以了
+			var create = function ( obj ) {
+				function F() {}
+				F.prototype = obj;
+				return new F();
+			}
+			
+			
+			// 浏览器兼容性的问题
+			// 1, 直接交给原生对象, 给原生对象提供功能
+			if ( !Object.create ) {
+				Object.create = function ( obj ) {
+					function F() {}
+					F.prototype = obj;
+					return new F();
+				}
+			}
+			
+			// 2, 无论是什么浏览器, 都执行通用的方法.
+			// 在方法中判断是否使用原生方法
+			function create( obj ) {
+				if ( Object.create ) {
+					// 判断浏览器是否支持
+					return Object.create( obj );
+				} else {
+					function F() {}
+					F.prototype = obj;
+					return new F();
+				}
+			}
+
+
+// 组合式继承
+    /*
+    var o1 = { num: 123 };
+    var o2 = { num2: 456 };
+    // o2 继承自 o1
+    o2.extend = function ( obj ) {
+        for ( var k in obj ) {
+            this[ k ] = obj[ k ];
+        }
+    };
+    
+    o2.extend( o1 );
+    */
+
+    
+    function Fn() {}
+    
+    // 组合式实现 原型继承
+    // ???
+    Fn.fn = Fn.prototype;
+    Fn.fn.extend = Fn.prototype.extend = function ( obj ) {
+        for ( var k in obj ) {
+            this[ k ] = obj[ k ];
+        }
+    };
+    
+    Fn.fn.extend( {} );                        
+
+/*
+    * 直接继承与间接继承来源于 模拟 Java 等语言啊概念
+    * 
+    * 在 js 中 一个构造函数 Person 创建的对象, 上面继承自他的原型 Person.prototype
+    * 而 Person.prototype 是继承自 Object.prototype 所以
+    * 我们称 Person 的实例 直接继承自 Object.prototype, 因为中间没有切入其它对象
+    * 
+    * 
+    * 间接继承就是说 Person 的实例与 Object.prototye 中间隔了一层到多层对象
+    * 
+    * function Animal() {}
+    * var am = new Animal();
+    * 
+    * function Person() {};
+    * Person.prototype = am;
+    * 
+    * var p = new Person();
+    * 
+    * p 间接的继承自 Object.prototype
+    * 
+    * 
+			 */    
+
+// prototype 与 __proto__
+			// 
+			// 相同点?
+			// 1, 这两个都是属性, 简单说就是存储引用的变量
+			// 2, 同一个构造函数, 与构造函数的实例对象. 这两个属性的引用对象是同一个对象
+			
+			// 不同点?
+			// 1, 在不同的角度使用这两个属性
+			//		prototype 使用在构造函数后面
+			//		__proto__ 使用在对象后面
+			// 2, 描述也不相同
+			//		prototype 叫做	构造函数的原型属性
+			//		__proto__ 叫做	对象的原型对象
+			// 3, __proto__ 是非标准属性
+			//		所以我们在描述对象的时候是说 对象会连接到原型对象上
+			
+			// 作用
+			// 在实现继承的时候, 一般都是使用 构造函数的 prototype 属性
+			// 在分析结构与验证对象等测试与调试中, 会用到 __proto__             
