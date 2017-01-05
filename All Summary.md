@@ -4320,3 +4320,152 @@ var createPerson = function ( name, age, gender ) {
 			var o1 = new f('jim', 19);
 			var o2 = new f( 'tom', 20);
 			
+函数四种调用模式：
+// 函数的四种调用模式
+			// 1> 函数模式
+			// 2> 方法模式
+			// 3> 构造器模式
+			// 4> 上下文模式
+			
+			// 这里不同的东西就是 this
+			
+			// 凡是函数有一个默认的参数, 就是 this
+			
+			// 定义:
+			// 定义一个函数, 如果单独的将其调用, 不将其与任何东西关联, 那么就是函数调用模式
+			function foo1() {}
+			foo1();
+			
+			// 定义一个函数, 如果将函数赋值给一个对象的成员, 那么利用对象调用它就是方法模式
+			function foo2() {}
+			var o = {};
+			o.f = foo2;		// o[ 'f' ] = foo2; 
+							// o[ 0 ] = foo2;
+			new o.f();	
+			// o[0]()
+			
+			// 定义一个函数, 使用 new 来调用创建对象就是构造器( constructor )模式
+			// function foo3() {}
+			// new foo3();
+			var Person = function (name) {
+				this.name = name;
+			}	
+			var p = new Person("jim");
+
+
+
+			// foo3();
+			// o.foo3();
+			
+			
+			// 区别:
+			// 函数模式 this 就是全局对象( window )
+			// 方法模式 this 就是当前调用方法的对象
+			/*
+			Function.prototype.inherit = function() {
+				this
+			};
+			function foo() {}
+			foo.inherit();
+			Object.inherit
+			*/
+			// 构造器模式 this 就是 new 出来的新的对象
+
+
+
+
+				var itcast = function (selector) {
+					return new itcast.prototype.init(selector);
+				}
+				itcast.fn = itcast.prototype = {
+					constructor:1,
+					selector:2,
+					init:function () {};
+				};
+
+				var p = new itcast.prototype.init(selector);
+
+				
+				var  o = {
+					Person:function () {};
+				};
+				o.Person();
+				new o.Person();
+
+// 构造函数模式有两点不同
+			// 1> this
+			// 2> return
+			
+			// 在构造函数 如果没有 return 默认就是返回当前对象, 即 this
+			// 如果有 return
+			// 1> 如果 return 后面是基本数据类型, 忽略, 和没写一样
+			// 2> 如果 return 后面是一个有效的引用类型, 那么无论构造函数中写什么内容
+			//		都返回 return 后面的对象
+			
+			
+			var Person = function () {
+				this.name = 'jim';
+				return [];
+			};
+			var p = new Person();
+
+构造函数：
+			// 私有数据的
+			var createPerson = function ( name ) {
+				return {
+					get_name: function () {
+						return name;
+					}
+				};
+			};
+			
+			var p0 = createPerson( 'jim' );		// 工厂模式创建对象
+			var p1 = new createPerson();		// 寄生模式创建对象
+// 上下文
+			// 在函数调用模式中 函数模式, 方法模式 与 构造器模式 this 
+			// 都是固定的, 在上下文调用模式中, this 由上下文决定
+			
+			function foo() {
+				console.log( this );
+			}
+			
+			/*
+			foo();							// 函数模式
+			var o = {fn:foo, name:'xp'};	
+			o.fn();							// 方法模式
+			new foo();						// 构造器模式
+			*/
+			
+			// 上下文模式 表示可以在调用的时候指定 this 的值是多少
+			// 有两种调用方法
+			// 1> 函数名.apply( ... );
+			// 2> 函数名.call( ... );
+			
+			// 上下文模式由于可以指定 this 那么他可以模仿的调用有几种?
+			foo.apply();
+			foo.apply( null );
+			// 函数调用
+			
+			
+			var o = { name: 'xpp' };
+			foo.apply( o );  // 传入什么就相当于用什么对象调用该方法. 借用方法调用
+			
+			// apply 的参数, 第一个参数表示指定的 this 对象, 第二个参数要求是数组
+			// 表示函数的参数
+			
+			// 作业: 自己写一个函数, 带有参数与返回值, 利用上下文调用, 让多个对象调用该方法
+			// f.apply( o, [ ... ] );
+
+简单案例：
+var tag = function (tag,res){
+			res = res || [];
+			res.push.apply(res,document.getElementsByTagName(tag));
+			return res;
+		};
+		
+		var list = tag("div");
+		list = tag("p",list);
+		
+	for (var i=0; i<list.length; i++) {
+		list[i].style.backgroundColor = "red";
+	}            
