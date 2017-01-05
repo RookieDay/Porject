@@ -4285,3 +4285,38 @@ var createPerson = function ( name, age, gender ) {
 				};
 			};
 			var p = createPerson( 'jim', 19, '男' );
+
+沙箱模式：
+// 1, 为什么一定是自调用函数? 要执行, 不污染, 隔离
+//	基于这个特点有一个非常重要的应用, 模拟块级作用域
+// 2, 隔离的效果是什么?
+
+// 使用沙箱后, 在内部定义的代码, 访问数据, 在沙箱内部是一个完整的生态链
+// 也就是说只要保证变量有 var 那么内部和外部就完全隔离开了
+// 如果要声明多个数据在沙箱中 也不会出现污染全局的问题            
+
+
+经典处理：
+// 复用
+			// 1> 对象 -> 得到一个新对象
+			// 2> 函数 -> 创建新对象, 反复调用
+			(function (w) {
+				
+				var f = function ( name, age ) {
+					this.name = name;
+					this.age = age;
+				};
+				
+				// f.prototype.sayHello = function() {}
+				f.prototype = new Foo();
+				
+				function Foo() {}
+				
+				w.f = f;
+				
+			})(window);
+			
+			
+			var o1 = new f('jim', 19);
+			var o2 = new f( 'tom', 20);
+			
