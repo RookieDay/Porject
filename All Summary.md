@@ -2080,7 +2080,8 @@ artTemplate
     http://rickgray.me/2015/09/03/solutions-to-cross-domain-in-browser.html
 JSONP JSON with Padding
 1、原理剖析
-    其本质是利用了<script src=""></script>标签具有可跨域的特性，由服务端返回一个预先定义好的Javascript函数的调用，并且将服务器数据以该函数参数的形式传递过来，此方法需要前后端配合完成。
+    其本质是利用了<script src=""></script>标签具有可跨域的特性，由服务端返回一个预先定义好的Javascript函数的调用，
+    并且将服务器数据以该函数参数的形式传递过来，此方法需要前后端配合完成。
     只能以GET方式请求
 jQuery中的JSONP
     jQuery 的$.ajax() 方法当中集成了JSONP的实现，可以非常方便的实现跨域数据的访问。

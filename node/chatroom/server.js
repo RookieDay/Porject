@@ -3,7 +3,8 @@ const net = require('net');
 const server = net.createServer();
 const users = {};
 
-// 监听用户的 connection 事件，只要用户连接上来就会触发该回调处理函数，同时服务器会生成一个 socket 用来与客户端进行通信
+// 监听用户的 connection 事件，只要用户连接上来就会触发该回调处理函数，
+// 同时服务器会生成一个 socket 用来与客户端进行通信
 server.on('connection', (socket) => {
     // 服务器监听到客户端 socket 发送过来的数据之后，不知道 客户端到底发送的是什么
     // 所以我们已经按照自己约定好的 协议数据格式来解析 客户端发送给我的数据
