@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        ul {
+            list-style: none;
+            width: 550px;
+            margin-left: -1px;
+        }
+        
+        .box {
+            width: 500px;
+            height: 400px;
+            margin: 100px auto;
+            border: 1px solid pink;
+            overflow: hidden;
+        }
+        
+        .box li {
+            float: left;
+            width: 100px;
+            height: 40px;
+            font: 20px/40px "微软雅黑";
+            text-align: center;
+            border-bottom: 1px solid blue;
+            background-color: #ccc;
+            cursor: pointer;
+            padding-left: 1px;
+            padding-right: 1px;
+        }
+        
+        .box li:hover {
+            background-color: #fff;
+            border-left: 1px solid #f40;
+            border-right: 1px solid #f40;
+            padding: 0;
+            border-bottom: 0;
+            font-weight: 700;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="box">
+        <ul>
+            <li>男装</li>
+            <li>女装</li>
+            <li>鞋子</li>
+            <li>袜子</li>
+            <li>裤子</li>
+        </ul>
+    </div>
+</body>
+
+</html>
