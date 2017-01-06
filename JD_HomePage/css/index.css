@@ -1,5 +1,5 @@
 .shortcut {
-    height: 36px;
+    height: 46px;
 }
 
 .shortcut-dropdown {
@@ -8,8 +8,184 @@
     height: 46px;
     position: relative;
     z-index: 20;
+    /*overflow: hidden;*/
 }
 
 .shortcut-dropdown-top a {
     display: inline-block;
+    width: 190px;
+    height: 44px;
+    background: url(../images/img1.jpg) no-repeat;
+    padding: 0 10px;
+    font: 400 15px/44px "microsoft yahei";
+    color: #fff;
 }
+
+.shortcut-dropdown-bottom {
+    height: 466px;
+    border-top: 2px solid #B1191A;
+    border-left: 1px solid #B1191A;
+    background-color: #C81623;
+}
+
+.shortcut-item {
+    height: 31px;
+    color: #fff;
+    padding: 0 10px;
+}
+
+.shortcut-item:hover {
+    background-color: #fff;
+}
+
+.shortcut-item:hover a {
+    color: #C81623;
+}
+
+.shortcut-item h3 {
+    float: left;
+    font: 400 14px/31px "微软雅黑";
+}
+
+.shortcut-item h3 a {
+    color: #fff;
+}
+
+
+/*箭头右浮*/
+
+.shortcut-item i {
+    float: right;
+    font: 400 14px/31px consolas;
+}
+
+.shortcut-items {
+    float: left;
+    width: 680px;
+    height: 46px;
+    position: relative;
+    z-index: 10;
+}
+
+.shortcut-items ul li {
+    float: left;
+}
+
+.shortcut-items a {
+    display: block;
+    padding: 0 20px;
+    font: 400 15px/44px "microsoft yahei";
+    color: #333333;
+}
+
+.shortcut-items a:hover {
+    color: #C81623
+}
+
+.shortcut-free {
+    float: right;
+    width: 140px;
+    height: 40px;
+    margin: 2px;
+}
+
+
+/*bannerbottom部分*/
+
+.bannerbottom {
+    height: 10px;
+    background: url(../images/bannerbottom.jpg);
+    position: relative;
+    margin-top: -10px;
+}
+
+
+/*light部分
+*/
+
+.light {
+    position: relative;
+    z-index: 10;
+}
+
+.light a {
+    position: absolute;
+    width: 100%;
+    height: 450px;
+    background: url(../images/light.jpg) no-repeat center;
+    cursor: default;
+}
+
+
+/*main部分
+*/
+
+.main {
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 20;
+}
+
+.main-slider {
+    width: 730px;
+    height: 454px;
+    margin: 12px 0 0 220px;
+    float: left;
+    position: relative;
+}
+
+.circle {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    margin-left: -66px;
+    border-radius: 12px;
+    padding: 4px 8px;
+    background-color: hsla(0, 0%, 100%, .3);
+}
+
+.circle .current {
+    background-color: #B61B1F;
+}
+
+.circle li {
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    color: #fff;
+    background-color: #3E3E3E;
+    border-radius: 50%;
+    float: left;
+    cursor: pointer;
+    margin: 0 2px;
+}
+
+.arrow a {
+    display: block;
+    width: 28px;
+    height: 62px;
+    text-align: center;
+    font: 400 22px/62px "simsun";
+    color: #fff;
+    background: rgba(0, 0, 0, .3);
+    position: absolute;
+    top: 50%;
+    margin-top: -31px;
+}
+
+.arrow a:hover {
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+}
+
+.arrow-l {
+    left: 0;
+}
+
+.arrow-r {
+    right: 0;
+}
+
+
+/*右侧*/
