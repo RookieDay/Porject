@@ -126,7 +126,8 @@
     z-index: 20;
 }
 
-.main-slider {
+
+/*.main-slider {
     width: 730px;
     height: 454px;
     margin: 12px 0 0 220px;
@@ -159,7 +160,61 @@
     float: left;
     cursor: pointer;
     margin: 0 2px;
+}*/
+
+
+/*动态切换轮播图部分*/
+
+.main-slider {
+    width: 730px;
+    height: 454px;
+    margin: 12px 0 0 220px;
+    float: left;
+    position: relative;
+    overflow: hidden;
 }
+
+.main-slider ul {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4380px;
+}
+
+.main-slider li {
+    width: 730px;
+    height: 454px;
+    overflow: hidden;
+    float: left;
+}
+
+.main-slider ol {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.main-slider ol li {
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    color: #fff;
+    background-color: #3E3E3E;
+    border-radius: 50%;
+    float: left;
+    cursor: pointer;
+    margin: 0 2px;
+}
+
+.main-slider ol li.current {
+    background: yellow;
+}
+
+
+/**/
 
 .arrow a {
     display: block;
