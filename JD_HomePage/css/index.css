@@ -1,0 +1,15 @@
+.shortcut {
+    height: 36px;
+}
+
+.shortcut-dropdown {
+    float: left;
+    width: 210px;
+    height: 46px;
+    position: relative;
+    z-index: 20;
+}
+
+.shortcut-dropdown-top a {
+    display: inline-block;
+}

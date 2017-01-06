@@ -99,7 +99,7 @@ body {
 
 .clearfix {
     *zoom: 1;
-    /*IE7、6*/
+    /*IE/7/6*/
 }
 
 a {
@@ -137,7 +137,7 @@ em {
 /*公共类*/
 
 .w {
-    /*版心*/
+    /*版心 提取 */
     width: 1210px;
     margin: 0 auto;
 }
@@ -168,3 +168,203 @@ em {
 
 
 /*site-nav*/
+
+.site-nav {
+    height: 30px;
+    line-height: 30px;
+    background-color: #f1f1f1;
+}
+
+.site-nav-send,
+.site-nav-r .fore {
+    padding: 0 25px 0 10px;
+    position: relative;
+}
+
+.site-nav-send:hover {
+    background-color: #fff;
+}
+
+.site-nav-r ul li {
+    float: left;
+    padding: 0 10px;
+}
+
+.site-nav-send i,
+.fore i {
+    /*i标签:     1.控制位置。   2.显示区域。*/
+    position: absolute;
+    font: 400 15px/15px consolas;
+    top: 12px;
+    right: 5px;
+    width: 15px;
+    height: 7px;
+    overflow: hidden;
+}
+
+.site-nav-send i s,
+.fore i s {
+    position: absolute;
+    top: -7px;
+}
+
+.site-nav-r .line {
+    width: 1px;
+    height: 12px;
+    background-color: #dddddd;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.site-nav-r .jd-tel {
+    padding-left: 25px;
+}
+
+.jd-tel span {
+    position: absolute;
+    width: 15px;
+    height: 20px;
+    top: 5px;
+    left: 6px;
+    background: url(../images/tel.png) no-repeat;
+}
+
+
+/*topbanner*/
+
+.topbanner {
+    height: 80px;
+    background-color: #ff031A;
+}
+
+.tp {
+    position: relative;
+}
+
+.close-ban {
+    position: absolute;
+    width: 19px;
+    height: 19px;
+    top: 5px;
+    right: 5px;
+    background: url(../images/close-ban.png) no-repeat;
+}
+
+.close-ban:hover {
+    background-position: bottom;
+}
+
+
+/*search部分*/
+
+.search-logo {
+    width: 362px;
+    height: 100px;
+    float: left;
+    position: relative;
+}
+
+.logo-a {
+    display: block;
+    width: 270px;
+    height: 60px;
+    background: url(../images/logo.png) no-repeat;
+    margin-top: 20px;
+    text-indent: -99999em;
+}
+
+.db11 {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+}
+
+.search-input {
+    height: 36px;
+    float: left;
+    padding-top: 25px;
+}
+
+.search-input input {
+    float: left;
+    width: 440px;
+    height: 32px;
+    font: 14px/32px "microsoft yahei";
+    border: 2px solid #B61D1D;
+    color: #ccc;
+    padding-left: 14px;
+}
+
+.search-input button {
+    float: left;
+    width: 80px;
+    height: 36px;
+    font: 400 16px/36px "微软雅黑";
+    color: #fff;
+    background-color: #B61D1D;
+    cursor: pointer;
+    /*鼠标变成小手*/
+    /*cursor: text;  */
+    /*鼠标变成插入条光标*/
+    /*cursor: move;*/
+    /*鼠标变成四角箭头*/
+    /*cursor: default; */
+    /*鼠标变成白色鼠标*/
+}
+
+.search-input button:hover {
+    background-color: #B61D1D;
+}
+
+.search-car {
+    width: 96px;
+    height: 34px;
+    float: right;
+    line-height: 34px;
+    border: 1px solid #dfdfdf;
+    margin: 25px 65px 0 0;
+    /*留出位置放购物车*/
+    padding-left: 43px;
+    position: relative;
+}
+
+.search-car i {
+    position: absolute;
+}
+
+.search-icon1 {
+    top: 8px;
+    left: 12px;
+    width: 20px;
+    height: 15px;
+    background: url(../images/tel.png) no-repeat 0 -90px;
+}
+
+.search-icon2 {
+    top: 10px;
+    right: 15px;
+    font: 400 13px/13px "simsun";
+    color: #999;
+}
+
+.search-icon3 {
+    top: -5px;
+    width: 16px;
+    height: 14px;
+    line-height: 14px;
+    text-align: center;
+    color: #fff;
+    background-color: #C81623;
+    border-radius: 7px 7px 7px 0;
+}
+
+.search-more {
+    width: 500px;
+    height: 28px;
+    line-height: 28px;
+    float: left;
+}
+
+.search-more a {
+    margin-right: 8px;
+}
