@@ -178,7 +178,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 4380px;
+    width: 5110px;
 }
 
 .main-slider li {
@@ -188,15 +188,17 @@
     float: left;
 }
 
-.main-slider ol {
+.circle {
     position: absolute;
-    right: 10px;
-    bottom: 10px;
-    line-height: 20px;
-    text-align: center;
+    bottom: 5px;
+    left: 50%;
+    margin-left: -66px;
+    border-radius: 12px;
+    padding: 4px 8px;
+    background-color: hsla(0, 0%, 100%, .3);
 }
 
-.main-slider ol li {
+.circle li {
     width: 18px;
     height: 18px;
     line-height: 18px;
@@ -209,8 +211,8 @@
     margin: 0 2px;
 }
 
-.main-slider ol li.current {
-    background: yellow;
+.circle li.current {
+    background-color: #B61B1F;
 }
 
 

@@ -56,7 +56,7 @@
             playNext();
         }
         //添加自动滚动
-    // setInterval(playNext, 1000);
+    setInterval(playNext, 1000);
 
     arrLeft.onclick = function() {
         //到达第一张
