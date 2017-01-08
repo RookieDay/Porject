@@ -37,12 +37,13 @@ Page({
             //调用应用实例的方法获取全局数据
         app.getUserInfo(function(userInfo) {
             //更新数据
+            console.log(userInfo);
             that.setData({
                 userInfo: userInfo
             })
         })
     },
-    switch: function(e) {
+    switch: function(event) {
         const length = this.data.objectArray.length
         for (let i = 0; i < length; ++i) {
             const x = Math.floor(Math.random() * length)
@@ -55,6 +56,7 @@ Page({
         this.setData({
             objectArray: this.data.objectArray
         })
+        console.log(event);
     },
     addToFront: function(e) {
         const length = this.data.objectArray.length

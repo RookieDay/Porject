@@ -9,7 +9,12 @@
   </view>
 </view>
 
+<!-- 官方文档 组件部分 -->
 
+
+
+
+<!-- 官方文档 框架部分 -->
 <switch wx:for="{{objectArray}}" wx:key="unique" style="display: block;"> {{item.id}} </switch>
 <button bindtap="switch"> Switch </button>
 <button bindtap="addToFront"> Add to the front </button>
@@ -36,7 +41,7 @@
 is 属性可以使用 Mustache 语法，来动态决定具体需要渲染哪个模板：
 -->
 <template name="odd">
-  <view> odd </view>
+  <view> <text class="small-p">odd</text> </view>
 </template>
 <template name="even">
   <view> even </view>
@@ -62,3 +67,23 @@ is 属性可以使用 Mustache 语法，来动态决定具体需要渲染哪个�
 
 
 <view data-alpha-beta="1" data-alphaBeta="2" bindtap="bindViewTap"> DataSet Test </view>
+
+
+
+<!--
+引用
+-->
+<import src="item.wxml"/>
+<template is="item" data="{{text:'forbar'}}" />
+
+
+
+<!-- C.wxml -->
+<import src="b.wxml"/><!--
+<template is="A"/>   Template "A" not found. Error! Can not use tempalte when not import A. -->
+<template is="B"/>
+
+
+<include src="header.wxml"/>
+<view> body </view>
+<include src="footer.wxml"/>
