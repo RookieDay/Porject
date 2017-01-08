@@ -17,7 +17,12 @@ Page({
             { id: 1, unique: 'unique_1' },
             { id: 0, unique: 'unique_0' },
         ],
-        numberArray: [1, 2, 3, 4]
+        numberArray: [1, 2, 3, 4],
+        item: {
+            index: 0,
+            msg: 'this is a template',
+            time: '2016-09-15'
+        }
     },
     //事件处理函数
     bindViewTap: function() {
@@ -42,6 +47,7 @@ Page({
         for (let i = 0; i < length; ++i) {
             const x = Math.floor(Math.random() * length)
             const y = Math.floor(Math.random() * length)
+            console.log(x + ":" + y);
             const temp = this.data.objectArray[x]
             this.data.objectArray[x] = this.data.objectArray[y]
             this.data.objectArray[y] = temp
@@ -62,6 +68,22 @@ Page({
         this.setData({
             numberArray: this.data.numberArray
         })
+    },
+    tapName: function(event) {
+        console.log(event);
+    },
+    handleTap2: function(event) {
+        console.log(event)
+    },
+    handleTap3: function(event) {
+        console.log(event)
+    },
+    bindViewTap: function(event) {
+        // event.target.dataset.alphaBeta === 1 // - 会转为驼峰写法
+        // event.target.dataset.alphabeta === 2 // 大写会转为小写
+        // console.log(event.target.dataset.alphaBeta === 1);
+        // console.log(event.target.dataset.alphabeta === 2);
+        console.log(event);
     }
 })
 
