@@ -18,15 +18,15 @@ Page({
         userInfo: {},
         src: '',
         danmuList: [{
-                text: '第 1s 出现的弹幕',
-                color: '#ff0000',
-                time: 1
-            },
-            {
-                text: '第 3s 出现的弹幕',
-                color: '#ff00ff',
-                time: 3
-            }
+            text: '第 1s 出现的弹幕',
+            color: '#ff0000',
+            time: 1
+        },
+        {
+            text: '第 3s 出现的弹幕',
+            color: '#ff00ff',
+            time: 3
+        }
         ],
         markers: [{
             iconPath: "/resources/2.jpg",
@@ -70,9 +70,9 @@ Page({
     controltap(e) {
         console.log(e.controlId)
     },
-    onReady: function(res) {
+    onReady: function (res) {
         this.videoContext = wx.createVideoContext('myVideo')
-            // 使用 wx.createContext 获取绘图上下文 context
+        // 使用 wx.createContext 获取绘图上下文 context
         var context = wx.createContext()
 
         context.setStrokeStyle("#00ff00")
@@ -98,40 +98,40 @@ Page({
         })
     },
     inputValue: '',
-    onLoad: function() {
+    onLoad: function () {
         console.log('onLoad')
         var that = this
-            //调用应用实例的方法获取全局数据
-        app.getUserInfo(function(userInfo) {
+        //调用应用实例的方法获取全局数据
+        app.getUserInfo(function (userInfo) {
             //更新数据
             that.setData({
                 userInfo: userInfo
             })
         })
     },
-    bindInputBlur: function(e) {
+    bindInputBlur: function (e) {
         this.inputValue = e.detail.value
     },
-    bindButtonTap: function() {
+    bindButtonTap: function () {
         var that = this
         wx.chooseVideo({
             sourceType: ['album', 'camera'],
             maxDuration: 60,
             camera: ['front', 'back'],
-            success: function(res) {
+            success: function (res) {
                 that.setData({
                     src: res.tempFilePath
                 })
             }
         })
     },
-    bindSendDanmu: function() {
+    bindSendDanmu: function () {
         this.videoContext.sendDanmu({
             text: this.inputValue,
             color: getRandomColor()
         })
     },
-    canvasIdErrorCallback: function(e) {
+    canvasIdErrorCallback: function (e) {
         console.error(e.detail.errMsg)
     },
 
