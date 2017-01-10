@@ -2,116 +2,130 @@
 //获取应用实例
 var app = getApp()
 Page({
-        data: {
-            motto: 'Hello World',
-            userInfo: {},
-            animationData: {},
-            x: 0,
-            y: 0,
+    data: {
+        motto: 'Hello World',
+        userInfo: {},
+        animationData: {},
+        x: 0,
+        y: 0,
+        hidden: true
+    },
+    start: function (e) {
+        this.setData({
+            hidden: false,
+            x: e.touches[0].x,
+            y: e.touches[0].y
+        })
+        console.log(e)
+    },
+    move: function (e) {
+        this.setData({
+            x: e.touches[0].x,
+            y: e.touches[0].y
+        })
+    },
+    end: function (e) {
+        this.setData({
             hidden: true
-        },
-        start: function(e) {
-            this.setData({
-                hidden: false,
-                x: e.touches[0].x,
-                y: e.touches[0].y
+        })
+    },
+    //事件处理函数
+    bindViewTap: function () {
+        wx.navigateTo({
+            url: '../logs/logs'
+        })
+    },
+    onReady: function (e) {
+        // 使用 wx.createMapContext 获取 map 上下文 
+        this.mapCtx = wx.createMapContext("myMap");
+    },
+    onLoad: function () {
+        console.log('onLoad')
+        var that = this
+        //调用应用实例的方法获取全局数据
+        app.getUserInfo(function (userInfo) {
+            //更新数据
+            that.setData({
+                userInfo: userInfo
             })
-        },
-        move: function(e) {
-            this.setData({
-                x: e.touches[0].x,
-                y: e.touches[0].y
-            })
-        },
-        end: function(e) {
-            this.setData({
-                hidden: true
-            })
-        },
-        //事件处理函数
-        bindViewTap: function() {
-            wx.navigateTo({
-                url: '../logs/logs'
-            })
-        },
-        onReady: function(e) {
-            // 使用 wx.createMapContext 获取 map 上下文 
-            this.mapCtx = wx.createMapContext("myMap");
-        },
-        onLoad: function() {
-            console.log('onLoad')
-            var that = this
-                //调用应用实例的方法获取全局数据
-            app.getUserInfo(function(userInfo) {
-                    //更新数据
-                    that.setData({
-                        userInfo: userInfo
-                    })
-                })
-                // 创建一个 Canvas 绘图上下文 CanvasContext
-                // const ctx = wx.createCanvasContext('myCanvas');
-                // // 描述要在 Canvas 中绘制什么内容。
-                // ctx.setFillStyle('red');
-                // ctx.fillRect(10, 10, 150, 75);
-                // // 告诉 <canvas/> 组件你要将刚刚的描述绘制上去：
-                // ctx.draw();
-        },
-        getCenterLocation: function(e) {
-            this.mapCtx.getCenterLocation({
-                success: function(res) {
-                    console.log(res.longitude);
-                    console.log(res.latitude);
-                }
-            });
-        },
-        moveToLocation: function() {
-            this.mapCtx.moveToLocation()
-        },
-        onShow: function() {
-            var animation = wx.createAnimation({
-                duration: 1000,
-                timingFunction: 'ease',
-            })
+        })
+        // 创建一个 Canvas 绘图上下文 CanvasContext
+        // const ctx = wx.createCanvasContext('myCanvas');
+        // // 描述要在 Canvas 中绘制什么内容。
+        // ctx.setFillStyle('red');
+        // ctx.fillRect(10, 10, 150, 75);
+        // // 告诉 <canvas/> 组件你要将刚刚的描述绘制上去：
+        // ctx.draw();
+        const ctx = wx.createCanvasContext('myCanvas')
+        ctx.rect(10, 10, 150, 75)
+        // ctx.setStrokeStyle('red')
+        // ctx.stroke()
+        ctx.setFillStyle('red')
+        ctx.fill()
+        ctx.draw()
+    },
+    getCenterLocation: function (e) {
+        this.mapCtx.getCenterLocation({
+            success: function (res) {
+                console.log(res.longitude);
+                console.log(res.latitude);
+            }
+        });
+    },
+    moveToLocation: function () {
+        this.mapCtx.moveToLocation()
+    },
+    onShow: function () {
+        var animation = wx.createAnimation({
+            duration: 1000,
+            timingFunction: 'ease',
+        })
 
-            this.animation = animation
+        this.animation = animation
 
-            animation.scale(2, 2).rotate(45).step()
+        animation.scale(2, 2).rotate(45).step()
 
+        this.setData({
+            animationData: animation.export()
+        })
+
+        setTimeout(function () {
+            animation.translate(30).step()
             this.setData({
                 animationData: animation.export()
             })
-
-            setTimeout(function() {
-                animation.translate(30).step()
-                this.setData({
-                    animationData: animation.export()
-                })
-            }.bind(this), 1000)
-        },
-        rotateAndScale: function() {
-            // 旋转同时放大
-            this.animation.rotate(45).scale(2, 2).step()
-            this.setData({
-                animationData: this.animation.export()
-            })
-        },
-        rotateThenScale: function() {
-            // 先旋转后放大
-            this.animation.rotate(45).step()
-            this.animation.scale(2, 2).step()
-            this.setData({
-                animationData: this.animation.export()
-            })
-        },
-        rotateAndScaleThenTranslate: function() {
-            // 先旋转同时放大，然后平移
-            this.animation.rotate(45).scale(2, 2).step()
-            this.animation.translate(100, 100).step({ duration: 1000 })
-            this.setData({
-                animationData: this.animation.export()
-            })
-        }
-    })
+        }.bind(this), 1000)
+    },
+    rotateAndScale: function () {
+        // 旋转同时放大
+        this.animation.rotate(45).scale(2, 2).step()
+        this.setData({
+            animationData: this.animation.export()
+        })
+    },
+    rotateThenScale: function () {
+        // 先旋转后放大
+        this.animation.rotate(45).step()
+        this.animation.scale(2, 2).step()
+        this.setData({
+            animationData: this.animation.export()
+        })
+    },
+    rotateAndScaleThenTranslate: function () {
+        // 先旋转同时放大，然后平移
+        this.animation.rotate(45).scale(2, 2).step()
+        this.animation.translate(100, 100).step({ duration: 1000 })
+        this.setData({
+            animationData: this.animation.export()
+        })
+    }
+})
+wx.canvasToTempFilePath({
+    canvasId: 'myCanvas',
+    success(res) {
+        console.log(res.tempFilePath)
+    }
+})
     // 获取地理位置
     // wx.getLocation({
     //     type: 'gcj02', //返回可以用于wx.openLocation的经纬度
