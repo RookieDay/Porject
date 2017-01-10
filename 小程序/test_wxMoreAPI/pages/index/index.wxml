@@ -1,4 +1,18 @@
 <!--index.wxml-->
+<!--
+<canvas canvas-id="myCanvas" style="border: 1px solid;"/>
+-->
+<canvas canvas-id="myCanvas"
+  style="margin: 5px; border:1px solid #d3d3d3;"
+  bindtouchstart="start"
+  bindtouchmove="move"
+  bindtouchend="end"/>
+
+<view hidden="{{hidden}}">
+  Coordinates: ({{x}}, {{y}})
+</view>
+
+
 <view class="container">
   <view  bindtap="bindViewTap" class="userinfo">
     <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
@@ -8,8 +22,11 @@
     <text class="user-motto">{{motto}}</text>
   </view>
 </view>
-
-<!-- map.wxml -->
+<!--animation
+<view animation="{{animationData}}" style="background:red;height:100rpx;width:100rpx"></view>
+-->
+<!-- map.wxml
 <map id="myMap" show-location />
 <button type="primary" bindtap="getCenterLocation">获取位置</button>
 <button type="primary" bindtap="moveToLocation">移动位置</button>
+ -->
