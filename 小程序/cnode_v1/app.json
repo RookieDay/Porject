@@ -1,0 +1,16 @@
+{
+  "pages":[
+    "pages/topics/topics",
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/detail/detail"
+  ],
+  "window":{
+    "backgroundTextStyle":"black",
+    "backgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#000",
+    "navigationBarTitleText": "CNODE 社区",
+    "navigationBarTextStyle":"white",
+    "enablePullDownRefresh": true
+  }
+}
