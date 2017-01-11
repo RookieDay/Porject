@@ -35,7 +35,7 @@ module.exports = {
                 return HOST_URI + GET_TOPICS + '?' + obj2uri(obj);
  
     },
-    getTopicById:function(id,obj){
+    getTopicByID:function(id,obj){
                 return HOST_URI + GET_TOPIC_BY_ID + id + '?' + obj2uri(obj);
 
     }

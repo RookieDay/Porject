@@ -17,8 +17,17 @@ Page({
     // 页面初始化 options为页面跳转所带来的参数
     this.fetchData();
   },
-  onTapTag: function () {
-
+  onTapTag: function (e) {
+    var self = this;
+    var tab = e.currentTarget.id;
+    self.setData({
+      tab:tab
+    });
+    if(tab !== 'all'){
+      this.fetchData({tab:tab});
+    } else {
+      this.fetchData();
+    }
   },
   fetchData: function (data) {
     var self = this;
@@ -29,8 +38,8 @@ Page({
     if (!data.page) data.page = 1;
     if (data.page === 1) {
       self.setData({
-        postList: []
-      })
+        postsList: []
+      });
     }
     wx.request({
       url: api.getTopics(data),
@@ -38,8 +47,8 @@ Page({
         console.log(res);
         self.setData({
           postsList: self.data.postsList.concat(res.data.data.map(function (item) {
-            console.log(item.last_reply_at);
-            console.log(new Date(item.last_reply_at))
+            // console.log(item.last_reply_at);
+            // console.log(new Date(item.last_reply_at))
             item.last_reply_at = util.getDateDiff(new Date(item.last_reply_at));
             return item;
           }))
@@ -49,14 +58,26 @@ Page({
                         hidden: true
                     });
                 }, 300);
-      },
-      fail: function () {
-        // fail
-      },
-      complete: function () {
-        // complete
       }
     })
+  },
+  redictDetail:function(e){
+    var id = e.currentTarget.id,
+    url = '../detail/detail?id=' +id;
+     wx.navigateTo({
+            url: url
+        })
+  },
+  lower:function(e){
+    var self = this;
+    self.setData({
+      page:self.data.page + 1
+    });
+      if (self.data.tab !== 'all') {
+            this.fetchData({ tab: self.data.tab, page: self.data.page });
+        } else {
+            this.fetchData({ page: self.data.page });
+        }
   },
   onReady: function () {
     // 页面渲染完成
