@@ -20,6 +20,9 @@ Page({
     onTapTag: function(e) {
         var self = this;
         var tab = e.currentTarget.id;
+        // 获取操作哪个tab
+        // console.log(e)
+        // console.log(tab);
         self.setData({
             tab: tab
         });
@@ -61,6 +64,7 @@ Page({
     },
     redictDetail: function(e) {
         console.log('我要看详情');
+        console.log(e);
         var id = e.currentTarget.id,
             url = '../detail/detail?id=' + id;
         wx.navigateTo({
