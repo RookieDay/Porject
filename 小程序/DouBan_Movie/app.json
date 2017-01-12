@@ -5,7 +5,7 @@
     "pages/list/list",
     "pages/item/item",
     "pages/search/search",
-    "pages/progile/profile",
+    "pages/profile/profile",
     "pages/index/index",
     "pages/logs/logs"
   ],

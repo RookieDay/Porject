@@ -24,7 +24,7 @@ Page({
       })
     })
   },
-  handleStart:function handleStart(){
+  handelStart:function handleStart(){
         // TODO: 访问历史的问题
     wx.switchTab({
       url: '../board/board'
