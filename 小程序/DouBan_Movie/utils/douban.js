@@ -24,6 +24,7 @@ function find(type) {
 
       var params = { start: (page - 1) * count, count: count, city: getApp().data.currentCity };
 return fetchApi(type,search ? Object.assign(params, { q: search }) : params).then(function(res){
+    console.log("DouBan" + res.data);
     return res.data;
 })
 }

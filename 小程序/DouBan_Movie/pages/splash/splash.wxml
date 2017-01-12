@@ -1,2 +1,9 @@
 <!--pages/splash/splash.wxml-->
-<text>pages/splash/splash.wxml</text>
+<view class="container">
+<swiper class="splash" indicator-dots>
+    <swiper-item wx:for="{{movies}}" wx:for-index="index" wx:key="{{item.id}}">
+    <image src="{{item.images.large}}" class="slide-image" mode="aspectFill"></image>
+    <button class="start" bindtap="handelStart" wx:if="{{index == movies.length - 1}}">立即体验</button>
+    </swiper-item>
+</swiper>>
+</view>
