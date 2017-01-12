@@ -4,6 +4,7 @@
 var wechat = require('./utils/wechat.js');
 var douban = require('./utils/douban.js');
 var baidu = require('./utils/baidu.js');
+
 App({
   data: {
     // 定义全局变量
@@ -19,6 +20,18 @@ App({
   // 当小程序初始化完成时，会触发 onLaunch（全局只触发一次）
   onLaunch:function onLaunch(){
     var _this = this;
+    wechat.getLocation().then(function(res){
+      var latitude = res.latitude,
+          longitude = res.longitude;
+          return baidu.getCityName(latitude,longitude);
+    }).then(function(name){
+       _this.data.currentCity = name.replace('市', '');
+      console.log('currentCity : ' + _this.data.currentCity);
+    }).catch(function(err){
+            _this.data.currentCity = '北京';
+      console.error(err);
+    })
+    console.log('Application launched')
     
   },
   // 生命周期函数--监听小程序显示
