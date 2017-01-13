@@ -7,36 +7,36 @@ var app = getApp();
 
 
 Page({
-  data:{
+  data: {
     boards: [{ key: 'in_theaters' }, { key: 'coming_soon' }, { key: 'top250' }
 
     ],
-        loading:true
+    loading: true
   },
-  onLoad:function(options){
+  onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
     var _this = this;
-    var promises = this.data.boards.map(function(board){
-      return app.douban.find(board.key,1,10).then(function(d){
+    var promises = this.data.boards.map(function (board) {
+      return app.douban.find(board.key, 1, 10).then(function (d) {
         board.title = d.title;
         board.movies = d.subjects;
         return board;
       })
     })
-    Promise.all(promises).then(function(boards){
-      return _this.setData({boards:boards,loading:false});
+    Promise.all(promises).then(function (boards) {
+      return _this.setData({ boards: boards, loading: false });
     })
   },
-  onReady:function(){
+  onReady: function () {
     // 页面渲染完成
   },
-  onShow:function(){
+  onShow: function () {
     // 页面显示
   },
-  onHide:function(){
+  onHide: function () {
     // 页面隐藏
   },
-  onUnload:function(){
+  onUnload: function () {
     // 页面关闭
   }
 })

@@ -3,6 +3,7 @@
 var URI = 'https://api.douban.com/v2/movie';
 var fetch = require('./fetch');
 
+// https://api.douban.com/v2/movie/top250?count=10&start=4
 function fetchApi(type, params) {
     return fetch(URI, type, params);
 }
