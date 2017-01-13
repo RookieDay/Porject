@@ -1,10 +1,10 @@
 <!--pages/list/list.wxml-->
 <import src="../common/movie-list"/>
 <view class="container">
-<view class="header">
-    <text>{{subtitle}}</text>
-</view>
+  <view class="header">
+    <text>{{ subtitle }}</text>
+  </view>
 <!--使用 is 属性，声明需要的使用的模板，然后将模板所需要的 data 传入，如：-->
-<template is="movies-list" data="{{movies, loading, hasMore }}"/>
+<template is="movie-list" data="{{movies, loading, hasMore }}"/>
 </view>
 

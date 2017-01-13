@@ -15,27 +15,33 @@ Page({
     size: 20,
     movies: []
   },
-  handleLoadMore:function handleLoadMore(){
+  handleLoadMore: function handleLoadMore() {
     var _this = this;
-    if(!this.data.hasMore) return;
-    this.setData({subtitle: '加载中...', loading: true});
-    return app.douban.find(this.data.type, this.data.page++, this.data.size).then(function(d){
-      if(d.subjects.legnth){
-        _this.setData({subtitle: d.title, movies: _this.data.movies.concat(d.subjects), loading: false})
+    if (!this.data.hasMore) return;
+    this.setData({ subtitle: '加载中...', loading: true });
+    return app.douban.find(this.data.type, this.data.page++, this.data.size).then(function (d) {
+      if (d.subjects.length) {
+        _this.setData({ subtitle: d.title, movies: _this.data.movies.concat(d.subjects), loading: false });
       } else {
         _this.setData({ subtitle: d.title, hasMore: false, loading: false });
       }
-    }).catch(function(e){
-            _this.setData({ subtitle: '获取数据异常', loading: false });
+    }).catch(function (e) {
+      _this.setData({ subtitle: '获取数据异常', loading: false });
       console.error(e);
     })
   },
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
     this.data.title = options.title || this.data.title;
-        // 类型： in_theaters  coming_soon  us_box
+    // 类型： in_theaters  coming_soon  us_box
     this.data.type = options.type || this.data.type;
     this.handleLoadMore();
+  },
+   onPullDownRefresh: function onPullDownRefresh() {
+    this.setData({ movies: [], page: 1, hasMore: true });
+    this.handleLoadMore().then(function () {
+      return app.wechat.original.stopPullDownRefresh();
+    });
   },
   onReady: function () {
     // 页面渲染完成
