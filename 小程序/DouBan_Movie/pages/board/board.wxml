@@ -4,7 +4,9 @@
   <view class="slide">
     <swiper indicator-dots="true" autoplay="true" interval="5000" duration="1000">
       <swiper-item wx:for="{{ boards[0].movies }}" wx:key="{{ item.id }}">
-        <image src="{{item.images.large}}" mode="aspectFill"></image>
+        <navigator url="../item/item?id={{ item.id }}">
+          <image src="{{item.images.large}}" mode="aspectFill"></image>
+        </navigator>
       </swiper-item>
     </swiper>
   </view>
@@ -12,8 +14,7 @@
     <block wx:for="{{boards}}" wx:key="{{item.key}}">
       <view class="board-item">
 
-        <!--指定点击时的样式类，当hover-class="none"时，没有点击态效果-->
-        <!--/list/list?type=in_theaters&title=正在上映的电影-北京-->
+        <!--指定点击时的样式类，当hover-class="none"时，没有点击态效果--><!--/list/list?type=in_theaters&title=正在上映的电影-北京-->
         <navigator url="../list/list?type={{ item.key }}&title={{ item.title }}" hover-class="none">
           <view class="title">
             <text>{{ item.title }}</text>
