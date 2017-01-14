@@ -26,11 +26,11 @@ function find(type) {
 
     var params = { start: (page - 1) * count, count: count, city: getApp().data.currentCity };
 
-      var params = { start: (page - 1) * count, count: count, city: getApp().data.currentCity };
-return fetchApi(type,search ? Object.assign(params, { q: search }) : params).then(function(res){
-    console.log("DouBan" + res.data);
-    return res.data;
-})
+    var params = { start: (page - 1) * count, count: count, city: getApp().data.currentCity };
+    return fetchApi(type, search ? Object.assign(params, { q: search }) : params).then(function (res) {
+        console.log("DouBan" + res.data);
+        return res.data;
+    })
 }
 
 /**
@@ -39,10 +39,10 @@ return fetchApi(type,search ? Object.assign(params, { q: search }) : params).the
  * @return {Promise}       包含抓取任务的Promise
  */
 
-function findOne(id){
-    return fetchApi('subject/'+id).then(function(res){
+function findOne(id) {
+    return fetchApi('subject/' + id).then(function (res) {
         return res.data;
     });
 }
 
-module.exports = {find:find,findOne:findOne}
+module.exports = { find: find, findOne: findOne }

@@ -13,3 +13,7 @@
     获取单个的详细列表
     <!--../item/item?id=21324900-->
     ```
+ - search 部分 进行电影的搜索    拿到输入框里面的内容 配置进行拿数据
+  ```
+  https://api.douban.com/v2/movie/search?start=0&count=20&q=情圣&city=北京
+  ```

@@ -1,2 +1,9 @@
 <!--pages/search/search.wxml-->
-<text>pages/search/search.wxml</text>
+<import src="../common/movie-list"></import>
+
+<view class="container">
+    <view class="header">
+        <input class="search" placeholder="{{subtitle}}" placeholder-class="search-placeholder" focus="true" bindchange="handleSearch"/>
+    </view>
+    <template is="movie-list" data="{{movies,loading,hasMore}}"></template>
+</view>
