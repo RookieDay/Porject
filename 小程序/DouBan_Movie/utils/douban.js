@@ -1,5 +1,8 @@
 'use strict';
 
+// 接口形式
+// https://api.douban.com/v2/movie/coming_soon?page=1&count=3
+
 var URI = 'https://api.douban.com/v2/movie';
 var fetch = require('./fetch');
 
