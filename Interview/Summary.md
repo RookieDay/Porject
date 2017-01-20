@@ -29,15 +29,19 @@ function strEqual2(str1,str2){
 
 - 一道简单面试题
 ```
+//函数声明
 function Foo() {
+    //前面没有var let const 所以这个是全局的
     getName = function () { 
     	console.log('1');
     };
     return this;
 }
+//函数添加getName属性 ，类型是Function
 Foo.getName = function () {
 	console.log('2');
 };
+//函数原型添加方法
 Foo.prototype.getName = function () { 
 	console.log('3');
 };
@@ -48,15 +52,150 @@ function getName() {
 	console.log(5);
 }
 
-Foo.getName();  
-getName();	
-Foo().getName(); 
-getName();  
-new Foo.getName(); 
-new Foo().getName();   
-new new Foo().getName();		
+Foo.getName();     2
+getName();	       4
+Foo().getName();   //括号和点 优先级一样 从左向右执行  1
+getName();         1
+new Foo.getName();  // .操作符要比new优先级要高 new (Foo.getName)() 2
+<!--带参数的new操作符是优先级最高的
+按照(new Foo()).getName();来执行，情况就很简单了，
+(new Foo())返回了新生成的对象，该对象没有getName()方法，
+所以在prototype中找到了getName()方法
+-->
+<!--new Foo().getName();    3
+首先带参数的new操作符优先级最高，第一步划分为：
+new (new Foo().getName)();
+第二步划分为：
+new ((new Foo()).getName)();
+所以执行(new Foo()).getName这个函数是对应的Foo.prototype.getName,
+所以执行new (Foo.prototype.getName)()-->
+
+new new Foo().getName();3		
 请问上述代码在浏览器环境下，输出结果是多少？
 　　 揭晓一下最终答案:
 
 2 4 1 1 2 3 3
+```
+
+讲解:
+```
+　首先必须注意一个问题
+
+function Foo() {
+    getName = function () { 
+    	console.log('1');
+    };
+    return this;
+}
+在函数内部声明的getName变量，前面是不带有var、let,const的，所以其实根据LHS(这个的介绍可以去的我博客看一下关于LHS和RHS的总结)，声明的getName是在全局范围内(也是就window)。
+　　其次需要明确你是否知道下面代码在浏览器中的执行结果：
+
+var getName = function () { 
+	console.log('4');
+};
+function getName() { 
+	console.log(5);
+}
+getName();
+上述代码的执行结果是:4。原因是这样的，var声明的变量和函数声明function都会被提升，但是函数声明的提升的级别是比
+var要高的，所以上面的代码的实际执行结果是：
+
+function getName() { 
+	console.log(5);
+}
+var getName = function () { 
+	console.log('4');
+};
+getName();
+后一个函数表达式getName覆盖了前面的函数声明getName,实际执行的是函数表达式（也就是是为什么JavaScript永远不会有函数重载这么一说了），所以输出的是4。
+　　首先我给下面的代码添加一下必要的注释：
+
+//函数声明
+function Foo() {
+    //全局变量
+    getName = function () { 
+    	console.log('1');
+    };
+    return this;
+}
+//为函数添加属性getName,其类型是Function，所以这里也可以看出来，Function也是一种Object
+Foo.getName = function () {
+	console.log('2');
+};
+//为Foo的原型添加方法getName
+Foo.prototype.getName = function () { 
+	console.log('3');
+};
+var getName = function () { 
+	console.log('4');
+};
+function getName() { 
+	console.log(5);
+}
+下面执行第一条语句：
+
+Foo.getName();  
+函数Foo本身并没有执行，执行的是函数的属性getName，当然输出的是：2.
+　　接下来执行：
+
+getName();	
+这是在全局范围内执行了getName()，有两条对应的getName的声明，根据前面我们所提到的提升的级别来看实际执行是函数表达式：
+
+var getName = function () { 
+	console.log('4');
+};
+所以输出的是4。
+　　接下来执行
+
+Foo().getName(); 
+首先看一下JavaScript的操作符优先级,从高到低排序
+从上面可以看出来()与.优先级相同，所以Foo().getName()从左至右执行。首先运行Foo(),全局的getName被覆盖成输出console.log('1'),并且返回的this此时代表的是window。随后相当于执行的window.getName(),那么输出的实际就是1(被覆盖)。
+　　下面到了
+
+getName();  
+这个不用说了，执行的还是：1(和上面一毛一样)。
+　　下面到了三个最难的部分：
+
+new Foo.getName();
+对于这条语句的执行，有两种可能：
+
+(new Foo).getName()
+或
+
+new (Foo.getName)()
+但是我们根据操作符优先级表可以得知，其实上.操作符要比new优先级要高，所以实际执行的是第二种，所以是对
+
+Foo.getName = function () {
+	console.log('2');
+};
+函数执行了new操作，当然输出的是2。
+下面到了执行
+
+new Foo().getName();   
+这个语句的可能性也有两种：
+
+(new Foo()).getName();
+或者
+
+new (Foo().getName)();
+那么应该是那种的呢？原来我以为会是第二种的执行方式，后面通过浏览器调试发现真实的执行的方式是第一种。我看到题目的作者是这么解释的：
+
+ 首先看运算符优先级括号高于new。实际执行为(new Foo()).getName()。遂先执行Foo函数。
+
+我觉得上面的解释是有问题的，对比上面两种执行方式，第一种是先执行new，然后执行的是.操作符，然后执行的是()。第二种是先执行了(),再执行的是.，最后执行new操作符。如果真的按照引用所说的用优先级的方式判别，其实恰恰应该执行的是第二种而不是第一种。
+　　后来总算找到原因了，原来之前那个出现的比较多的JavaScript优先级的表并不完整，万能的MDN给出了最权威的JavaScript优先级表运算符优先级
+　　我列举出最重要的部分（由高到低）：
+所以带参数的new操作符是优先级最高的，这下就没有问题了，执行顺序确实应该是第一种。
+　　那么按照(new Foo()).getName();来执行，情况就就很简单了，(new Foo())返回了新生成的对象，该对象没有getName()方法，所以在prototype中找到了getName()方法。所以输出的是3。
+　　胜利就在眼前，我们看一下最后一问。
+
+new new Foo().getName();		
+和上一步一样的方法，我们按照优先级表给分析一下这个语句到底是怎么执行的。
+　　首先带参数的new操作符优先级最高，第一步划分为：
+
+new (new Foo().getName)();
+第二步划分为：
+
+new ((new Foo()).getName)();
+所以执行(new Foo()).getName这个函数是对应的Foo.prototype.getName,所以执行new (Foo.prototype.getName)()肯定输出的是3。
 ```
