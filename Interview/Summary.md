@@ -26,7 +26,12 @@ function strEqual2(str1,str2){
 [英文地址](http://igoro.com/archive/what-really-happens-when-you-navigate-to-a-url/)
 [翻译地址](http://www.cnblogs.com/wenanry/archive/2010/02/25/1673368.html)
 [stackoverflow](http://stackoverflow.com/questions/2092527/what-happens-when-you-type-in-a-url-in-browser)
-
+  + 第一步当然是输入网址
+  + 第二步浏览器查找域名对于的IP地址
+  + 第三步浏览器给web服务器发送一个HTTP请求
+  + 第四步 facebook服务的永久重定向响应 服务器给浏览器响应一个301永久重定向响应，这样浏览器就会访问“http://www.facebook.com/” 而非“http://facebook.com/”。
+  + 第五步浏览器跟踪重定向地址  现在，浏览器知道了“http://www.facebook.com/”才是要访问的正确地址，所以它会发送另一个获取请求
+  + 第六步服务器"处理"请求 服务器接收到获取请求，然后处理并返回一个响应。
 - 一道简单面试题
 ```
 //函数声明
