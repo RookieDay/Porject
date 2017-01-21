@@ -32,6 +32,38 @@ function strEqual2(str1,str2){
   + 第四步 facebook服务的永久重定向响应 服务器给浏览器响应一个301永久重定向响应，这样浏览器就会访问“http://www.facebook.com/” 而非“http://facebook.com/”。
   + 第五步浏览器跟踪重定向地址  现在，浏览器知道了“http://www.facebook.com/”才是要访问的正确地址，所以它会发送另一个获取请求
   + 第六步服务器"处理"请求 服务器接收到获取请求，然后处理并返回一个响应。
+  + 第七步服务器发回一个HTML响应 报头中把Content-type设置为“text/html”。报头让浏览器将该响应内容以HTML形式呈现，而不是以文件形式下载它。浏览器会根据报头信息决定如何解释该响应，不过同时也会考虑像URL扩展内容等其他因素。
+  + 第八步浏览器开始显示HTML 在浏览器没有完整接受全部HTML文档时，它就已经开始显示这个页面了：
+  + 第九步浏览器发送获取嵌入在HTML中的对象
+  + 第十步浏览器发送异步（AJAX）请求
+
+- 什么是DOM  
+    [Render](http://www.nowamagic.net/academy/detail/48110557)
+    [Render](http://www.cnblogs.com/RachelChen/p/5456182.html)
+    [cnblogs Render](http://www.cnblogs.com/luluping/archive/2013/04/05/3000460.html)
+    简单来说，DOM是对HTML或者XML等文档的一种结构化表示方法，通过这种方式，用户可以通过提供标准的接口来访问HTML页面中
+    的任何元素的相关属性，并可对DOM进行相应的添加、删除和更新操作等
+
+    基于DOM树的一些可视（visual）的节点，WebKit来根据需要来创建相应的RenderObject节点，这些节点也构成了一颗树，称之为Render树。
+    基于Render树，WebKit也会根据需要来为它们中的某些节点创建新的RenderLayer节点，从而形成一棵RenderLayer树。
+
+    Render树和RenderLayer树是WebKit支持渲染所提供的基础但是却非常重要的设施。
+    这是因为WebKit的布局计算依赖它们，浏览器的渲染和GPU硬件加速也都依赖于它们。幸运地是，得益于它们接口定义的灵活性，不同的浏览器可以很方便地来实现自己的渲染和加速机制。
+
+    Render树和RenderLayer树是WebKit支持渲染所提供的基础但是却非常重要的设施。这是因为WebKit的布局计算
+    依赖它们，浏览器的渲染和GPU硬件加速也都依赖于它们。幸运地是，得益于它们接口定义的灵活性，不同的浏览器可以很方便地来实现自己的渲染和加速机制。
+
+    Render树是基于DOM树建立起来的一颗新的树， 是布局和渲染等机制的基础设施。 Render树节点和DOM树节点
+    不是一一对应关系，那么哪些情况下需要建立新的Render节点呢？
+      DOM树的document节点；
+      DOM树中的可视化节点，例如HTML，BODY，DIV等，非可视化节点不会建立Render树节点，例如HEAD，META，SCRIPT等；
+      某些情况下需要建立匿名的Render节点，该节点不对应于DOM树中的任何节点；   
+      RenderObject对象在DOM树创建的同时也会被创建，当然，如果DOM中有动态加入元素时，也可能会相应地创建RenderObject对象。下图示例的是RenderObject对象被创建的函数调用过程。
+      Render树建立之后，布局运算会计算出相关的属性，这其中有位置，大小，是否浮动等。有了这些信息之后，渲染引擎才只知道在何处以及如何画这些元素。
+
+    记住"visibility:hidden"和"display：none"之间的不同，“visibility:hidden”将元素设置为不可见，但是同样在布局上占领一定空间（例如，它会被渲染成为空盒子），但是“display:none”的元素是将节点从整个render tree中移除，所以不是布局中的一部分 。 
+
+    渲染引擎首先解析HTML文档，转换为一棵DOM树，此为第一步。接下来不管是内联式，外联式还是嵌入式引入的CSS样式也会被解析，渲染出另外一棵用于渲染DOM树的树-渲染树(render tree) ，渲染树包含带有颜色，尺寸等显示属性的矩形，这些矩形的顺序与显示顺序一致。然后就是对渲染树的每个节点进行布局处理，确定其在屏幕上的显示位置。最后就是遍历渲染树并用上一章提到的ＵＩ后端层将每一个节点绘制出来。
 - 一道简单面试题
 ```
 //函数声明
@@ -204,3 +236,112 @@ new (new Foo().getName)();
 new ((new Foo()).getName)();
 所以执行(new Foo()).getName这个函数是对应的Foo.prototype.getName,所以执行new (Foo.prototype.getName)()肯定输出的是3。
 ```
+- 关于apply的错误分析 调用层数太多 Uncaught RangeError: Maximum call stack size exceeded
+```
+执行一下代码块,可能出现的问题：
+var a=[]; var b=new Array(12562214);
+a.push.apply(a,b)  --- 建议使用concat会好点
+或者下面这个
+(function a() {
+    a();
+})();
+fix as below:
+(function a(x) {
+    // The following condition 
+    // is the base case.
+    if ( ! x) {
+        return;
+    }
+    a(--x);
+})(10)
+```
+
+- 题目1
+```
+数组
+
+a = [
+{id: 10001, name: "Lisa", age: 16},
+{id: 10002, name: "Bob", age: 22},
+{id: 10003, name: "Alice", age: 20},
+];
+数组
+
+b = [
+{id: 10001, gender: "Female"},
+{id: 10002, name: "Bob King", birthday: "1996-01-22"},
+{id: 10005, name: "Tom", birthday: "2000-01-01"},
+];
+写一个函数按id用b更新a,期望得到的结果为：
+
+[
+{id: 10001, name: "Lisa", age: 16, gender: "Female"},
+{id: 10002, name: "Bob King", birthday: "1996-01-22", age: 22},
+{id: 10003, name: "Alice", age: 20},
+{id: 10005, name: "Tom", birthday: "2000-01-01"},
+]
+```
+```
+const map = a.reduce((acc, curr, index) => {
+  acc[curr.id] = index;
+  return acc;
+}, {});
+// 返回的acc 如下内容： 
+<!-- 箭头函数
+10001:0
+10002:1
+10003:2
+-->
+b.forEach(o => {
+  const index = map[o.id];
+
+  if (index !== undefined) {
+    a[index] = Object.assign(a[index], o);
+  }
+  else {
+    a.push(o);
+  }
+});
+```
+
+- 题目2 
+```
+接口数据：
+{
+ rows: [
+  ["Lisa", 16, "Female", "2000-12-01"],
+  ["Bob", 22, "Male", "1996-01-21"]
+ ],
+ metaData: [
+  {name: "name", note: ''},
+  {name: "age", note: ''},
+  {name: "gender", note: ''},
+  {name: "birthday", note: ''}
+ ]
+}
+
+期待输出：
+[
+ {name: "Lisa", age: 16, gender: "Female", birthday: "2000-12-01"},
+ {name: "Bob", age: 22, gender: "Male", birthday: "1996-01-21"},
+]
+```
+
+```
+解法：
+//外循环走 各种数据
+var result = data.rows.reduce(function(prev1, cur1) {
+    //内循环走要出来的数据属性
+    prev1.push(data.metaData.reduce(function(prev, cur, index) {
+        prev[cur.name] = cur1[index];
+        return prev;
+    }, {}))
+    return prev1;
+}, []);
+
+console.log(result);
+console.log(result[0]);
+console.log(result[1]);
+```
+- [严格和非严格模式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode)
+- 
