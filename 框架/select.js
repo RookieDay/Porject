@@ -15,10 +15,27 @@ var select = (function() {
         return results;
     }
     var getId = function(id, results) {
-        results = results || [];
-        results.push(document.getElementById(id));
-        return results;
-    }
+            results = results || [];
+            results.push(document.getElementById(id));
+            return results;
+        }
+        // 能力检测是否支持
+        // support.getElementsByClassName = !!document.getElementsByClassName;
+        // 在 jq 中不仅判断他是否存在, 还要判断其能力是否符合要求
+
+    // var support = {};
+    // support.getElementsByClassName = (function() {
+    //     var isExist = !!document.getElementsByClassName;
+    //     if (isExist && typeof document.getElementsByClassName == 'function') {
+    //         // 自己创建一些元素, 并且加上 class 属性, 看是否可以获得到加上的所有元素
+    //         var div = document.createElement('div'),
+    //             divWithClass = document.createElement('div');
+    //         divWithClass.className = 'c';
+    //         div.appendChild(divWithClass);
+    //         return document.getElementsByClassName('c')[0] === divWithClass;
+    //     }
+    //     return false;
+    // })();
 
 
     var getClass = function(className, context, results) {
@@ -27,7 +44,7 @@ var select = (function() {
             results.push.apply(results, context.getElementsByClassName(className));
         } else {
             each(getTag("*", context), function(i, v) {
-                if ((' ' + className + ' ').indexOf(' ' + className + ' ') != -1) {
+                if ((' ' + v.className + ' ').indexOf(' ' + className + ' ') != -1) {
                     results.push(v);
                 }
             })
@@ -50,11 +67,20 @@ var select = (function() {
         var rquickExpr = /^(?:#([\w-]+)|\.([\w-]+)|([\w-]+)|([\*]))$/,
             m = rquickExpr.exec(selector);
         if (m) {
+            // context是document的时候
             if (context.nodeType) {
                 context = [context];
             }
             // context --- string
             // context --- array
+            // 字符串的案例
+            // 在页面中找到所有的 .c3 的节点, 然后在 .c3 的后代元素中
+            // 找符合 .c 的节点, 并返回
+            // each( get( '.c', '.c3' ), function () { 
+            // 	this.style.backgroundColor = 'pink';
+            // } );
+
+
             if (typeof context === 'string') {
                 context = get(context);
             }
