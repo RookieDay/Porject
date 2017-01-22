@@ -8,10 +8,13 @@
         concat = arr.concat;
 
     // 构造函数
+
     var ana = function ana(selector) {
         return new ana.fn.init(selector);
     };
     // 核心原型
+    //ana.fn.extend 是给我们的原型添加 使得我们的对象、实例有这个成员
+    //ana.extend 是给我们的函数添加 作为工具和方法
     ana.fn = ana.prototype = {
         constructor: ana,
         selector: null,

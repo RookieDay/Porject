@@ -344,4 +344,5 @@ console.log(result[0]);
 console.log(result[1]);
 ```
 - [严格和非严格模式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode)
-- 
+- ana.js / select.js
+- Object Array 方法
