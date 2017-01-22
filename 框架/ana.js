@@ -560,6 +560,7 @@
             width: 'offsetWidth',
             height: 'offsetHeight'
         },
+        // 目标位置 距离
         getDisctance: function(dom, target) {
             var o = {};
             for (var k in target) {
@@ -567,7 +568,7 @@
             }
             return o;
         },
-
+        //位置
         getLocation: function(dom, target) {
             var o = {};
             for (var k in target) {
@@ -576,7 +577,7 @@
             return o;
         },
 
-
+        // 执行动画
         easings: function(x, time, startLocations, target, dur, easingName) {
             var o = {};
             for (var k in target) { // top, left ...
@@ -586,13 +587,14 @@
             }
             return o;
         },
-
+        // 设置样式 缓动
         setStyle: function(dom, startLocations, tweens, target) {
             // 给 dom 的每一个样式设置值
             for (var k in target) {
                 dom.style[k] = startLocations[k] + tweens[k] + 'px';
             }
         },
+        // 一系列函数
         easing: {
             liner: function(x, t, b, c, d) {
                 // console.log( '匀速' );
