@@ -8,7 +8,9 @@
         concat = arr.concat;
 
     // 构造函数
-
+    // 我们需要的是一个 通用函数 ( 类似 jq 中 $ ). 实际上不是 创建 html 的函数
+    // 返回自定对象. 而是要 通用函数 返回自定义对象. 如果通用函数参数是一个 html 
+    // 字符串, 则创建该 dom 对象, 加到通用函数返回的对象中.
     var ana = function ana(selector) {
         return new ana.fn.init(selector);
     };
@@ -65,6 +67,7 @@
 
             if (ana.isFunction(selector)) {
                 // window.onload = selector;
+                // 事件累加 一层套一层
                 var oldFn = window.onload;
                 if (typeof oldFn === 'function') {
                     // 如果已经有了函数
@@ -75,6 +78,7 @@
                         selector();
                     };
                 } else {
+                    // 初始第一次赋给他
                     window.onload = selector;
                 }
             }
@@ -238,6 +242,7 @@
             // 将 this 加到 objs 中
             for (i = 0; i < len1; i++) {
                 for (j = 0; j < len2; j++) {
+                    // 不是最后一个元素的话的需要克隆
                     node = i === len1 - 1 ?
                         this[j] :
                         this[j].cloneNode(true);

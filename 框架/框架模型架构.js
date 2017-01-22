@@ -53,3 +53,23 @@ ana.extend({
 
 
 // $.each
+
+
+
+// // 构造函数
+// var ana = function ( selector ) {
+// 	return new ana.fn.init( selector );
+// };
+// // 核心原型
+// ana.fn = ana.prototype = {
+// 	constructor: ana,
+// 	init: function ( selector ) {
+
+// 	}
+// };
+// ana.fn.init.prototype = ana.prototype;
+
+// // 可扩展
+// ana.extend = ana.fn.extend = function ( obj ) {
+
+// };

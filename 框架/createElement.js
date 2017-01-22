@@ -14,3 +14,52 @@ var cElem = function(html) {
     // 5, 获得其子元素返回
     return docfrag;
 }
+
+
+// 关于上面的问题，可以从这得到解答
+// <!DOCTYPE html>
+// <html>
+// 	<head>
+// 		<meta charset="UTF-8">
+// 		<title></title>
+// 		<script type="text/javascript">
+
+// 			var id = function ( id ) {
+// 				return document.getElementById( id );
+// 			};
+
+
+// 			onload = function () {
+// 				var d1 = id( 'dv1' );
+// 				var d2 = id( 'dv2' );
+// 				var list = d1.getElementsByTagName("p");
+// 				var len;
+// //				for ( var i = 0, len = list.length; i < len; i++ ) {
+// //					
+// //					d2.appendChild( list[ 0 ] );
+// //					
+// //				}
+
+// //				while ( list[ 0 ] ) {
+// //					d2.appendChild( list[ 0 ] );
+// //				}
+
+// 				while ( d1.firstChild ) {
+// 					d2.appendChild( d1.firstChild );
+// 				}
+// 			};
+
+// 		</script>
+// 	</head>
+// 	<body>
+// 		<div id="dv1">
+// 			<p>p1</p>
+// 			<p>p2</p>
+// 			<p>p3</p>
+// 			<p>p4</p>
+// 		</div>
+// 		<div id="dv2">
+
+// 		</div>
+// 	</body>
+// </html>
