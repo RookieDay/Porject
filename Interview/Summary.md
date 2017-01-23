@@ -346,3 +346,47 @@ console.log(result[1]);
 - [严格和非严格模式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode)
 - ana.js / select.js
 - Object Array 方法
+- 继承
+```
+组合继承
+var o1 = {num:123};
+var o2 = {num2:345};
+o2.extend = function(obj){
+    for(var k in obj){
+        this[k] = obj[k];
+    }
+}
+o2.extend(o1);
+
+组合式实现 原型继承 原型继承修改的是对象的原型对象 函数的原型属性
+function Fn(){}
+Fn.fn = Fn.prototype;
+Fn.fn = function(obj){
+    for(var k in obj){
+        this[k] = obj[k]; //这里的this指的是Fn.prototype的
+    }
+}
+Fn.fn.extend({});
+```
+
+- prototype + __proto__
+```
+// 相同点?
+// 1, 这两个都是属性, 简单说就是存储引用的变量
+// 2, 同一个构造函数, 与构造函数的实例对象. 这两个属性的引用对象是同一个对象
+
+// 不同点?
+// 1, 在不同的角度使用这两个属性
+//		prototype 使用在构造函数后面
+//		__proto__ 使用在对象后面
+// 2, 描述也不相同
+//		prototype 叫做	构造函数的原型属性
+//		__proto__ 叫做	对象的原型对象
+// 3, __proto__ 是非标准属性
+//		所以我们在描述对象的时候是说 对象会连接到原型对象上
+
+// 作用
+// 在实现继承的时候, 一般都是使用 构造函数的 prototype 属性
+// 在分析结构与验证对象等测试与调试中, 会用到 __proto__
+
+```
