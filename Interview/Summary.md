@@ -358,6 +358,13 @@ o2.extend = function(obj){
 }
 o2.extend(o1);
 
+原型继承
+Fn.prototype.fn = function(){}
+Fn.prototype = {
+    constructor:Fn,
+    fn:function(){}
+}
+
 组合式实现 原型继承 原型继承修改的是对象的原型对象 函数的原型属性
 function Fn(){}
 Fn.fn = Fn.prototype;
@@ -388,5 +395,8 @@ Fn.fn.extend({});
 // 作用
 // 在实现继承的时候, 一般都是使用 构造函数的 prototype 属性
 // 在分析结构与验证对象等测试与调试中, 会用到 __proto__
+
+obj.name--->当前对象找  当前对象没有去原型对象里面找
+obj.__proto__.name 直接去原型对象里面去找
 
 ```

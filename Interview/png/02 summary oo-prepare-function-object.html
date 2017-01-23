@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>oo-prepare-function-object.md—C:\Users\JUS\Desktop\extend-2days</title>
+    <style type="text/css">
+    html{font-family: sans-serif;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%}body{margin: 0}article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display: block}audio,canvas,progress,video{display: inline-block;vertical-align: baseline}audio:not([controls]){display: none;height: 0}[hidden],template{display: none}a{background: transparent}a:active,a:hover{outline: 0}abbr[title]{border-bottom: 1px dotted}b,strong{font-weight: bold}dfn{font-style: italic}h1{font-size: 2em;margin: 0.67em 0}mark{background: #ff0;color: #000}small{font-size: 80%}sub,sup{font-size: 75%;line-height: 0;position: relative;vertical-align: baseline}sup{top: -0.5em}sub{bottom: -0.25em}img{border: 0}svg:not(:root){overflow: hidden}figure{margin: 1em 40px}hr{box-sizing: content-box;height: 0}pre{overflow: auto}code,kbd,pre,samp{font-family: monospace, monospace;font-size: 1em}button,input,optgroup,select,textarea{color: inherit;font: inherit;margin: 0}button{overflow: visible}button,select{text-transform: none}button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance: button;cursor: pointer}button[disabled],html input[disabled]{cursor: default}button::-moz-focus-inner,input::-moz-focus-inner{border: 0;padding: 0}input{line-height: normal}input[type="checkbox"],input[type="radio"]{box-sizing: border-box;padding: 0}input[type="number"]::-webkit-inner-spin-button,input[type="number"]::-webkit-outer-spin-button{height: auto}input[type="search"]{-webkit-appearance: textfield;box-sizing: content-box}input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance: none}fieldset{border: 1px solid #c0c0c0;margin: 0 2px;padding: 0.35em 0.625em 0.75em}legend{border: 0;padding: 0}textarea{overflow: auto}optgroup{font-weight: bold}table{border-collapse: collapse;border-spacing: 0}td,th{padding: 0}*{box-sizing: border-box}input,select,textarea,button{font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"}body{min-width: 1020px;font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";color: #333;background-color: #fff}a{color: #4183c4;text-decoration: none}a:hover,a:active{text-decoration: underline}hr,.rule{height: 0;margin: 15px 0;overflow: hidden;background: transparent;border: 0;border-bottom: 1px solid #ddd}hr:before,.rule:before{display: table;content: ""}hr:after,.rule:after{display: table;clear: both;content: ""}h1,h2,h3,h4,h5,h6{margin-top: 15px;margin-bottom: 15px;line-height: 1.1}h1{font-size: 30px}h2{font-size: 21px}h3{font-size: 16px}h4{font-size: 14px}h5{font-size: 12px}h6{font-size: 11px}small{font-size: 90%}blockquote{margin: 0}.lead{margin-bottom: 30px;font-size: 20px;font-weight: 300;color: #555}.text-muted{color: #999}.text-danger{color: #bd2c00}.text-emphasized{font-weight: bold;color: #333}ul,ol{padding: 0;margin-top: 0;margin-bottom: 0}ol ol,ul ol{list-style-type: lower-roman}ul ul ol,ul ol ol,ol ul ol,ol ol ol{list-style-type: lower-alpha}dd{margin-left: 0}tt,code{font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;font-size: 12px}pre{margin-top: 0;margin-bottom: 0;font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace}#realtime .status{overflow: visible;position: absolute;top: -5px;left: 0;background: url("/public/images/github-status.png");width: 26px;height: 26px;display: block;margin: 0 5px 0 0}#realtime .up{background-position: 0 0}#realtime .problem{background-position: 0 -53px}#realtime .down{background-position: 0 -26px}.container{max-width: 920px;margin: 0 auto 20px auto}#header{background: #FAFAFA;background: -moz-linear-gradient(#FAFAFA, #EAEAEA);background: -webkit-linear-gradient(#FAFAFA, #EAEAEA);-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#fafafa', endColorstr='#eaeaea')";border-bottom: 1px solid #CACACA;box-shadow: 0 1px 0 rgba(255, 255, 255, 0.4),0 0 10px rgba(0, 0, 0, 0.1)}#markup{padding: 3px}#markup article{padding-top: 30px}.markdown-body{overflow: hidden;font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;font-size: 16px;line-height: 1.6;word-wrap: break-word}.markdown-body>*:first-child{margin-top: 0 !important}.markdown-body>*:last-child{margin-bottom: 0 !important}.markdown-body .absent{color: #c00}.markdown-body .anchor{position: absolute;top: 0;left: 0;display: block;padding-right: 6px;padding-left: 30px;margin-left: -30px}.markdown-body .anchor:focus{outline: none}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{position: relative;margin-top: 1em;margin-bottom: 16px;font-weight: bold;line-height: 1.4}.markdown-body h1 .octicon-link,.markdown-body h2 .octicon-link,.markdown-body h3 .octicon-link,.markdown-body h4 .octicon-link,.markdown-body h5 .octicon-link,.markdown-body h6 .octicon-link{display: none;color: #000;vertical-align: middle}.markdown-body h1:hover .anchor,.markdown-body h2:hover .anchor,.markdown-body h3:hover .anchor,.markdown-body h4:hover .anchor,.markdown-body h5:hover .anchor,.markdown-body h6:hover .anchor{padding-left: 8px;margin-left: -30px;text-decoration: none}.markdown-body h1:hover .anchor .octicon-link,.markdown-body h2:hover .anchor .octicon-link,.markdown-body h3:hover .anchor .octicon-link,.markdown-body h4:hover .anchor .octicon-link,.markdown-body h5:hover .anchor .octicon-link,.markdown-body h6:hover .anchor .octicon-link{display: inline-block}.markdown-body h1 tt,.markdown-body h1 code,.markdown-body h2 tt,.markdown-body h2 code,.markdown-body h3 tt,.markdown-body h3 code,.markdown-body h4 tt,.markdown-body h4 code,.markdown-body h5 tt,.markdown-body h5 code,.markdown-body h6 tt,.markdown-body h6 code{font-size: inherit}.markdown-body h1{padding-bottom: 0.3em;font-size: 2.25em;line-height: 1.2;border-bottom: 1px solid #eee}.markdown-body h1 .anchor{line-height: 1}.markdown-body h2{padding-bottom: 0.3em;font-size: 1.75em;line-height: 1.225;border-bottom: 1px solid #eee}.markdown-body h2 .anchor{line-height: 1}.markdown-body h3{font-size: 1.5em;line-height: 1.43}.markdown-body h3 .anchor{line-height: 1.2}.markdown-body h4{font-size: 1.25em}.markdown-body h4 .anchor{line-height: 1.2}.markdown-body h5{font-size: 1em}.markdown-body h5 .anchor{line-height: 1.1}.markdown-body h6{font-size: 1em;color: #777}.markdown-body h6 .anchor{line-height: 1.1}.markdown-body p,.markdown-body blockquote,.markdown-body ul,.markdown-body ol,.markdown-body dl,.markdown-body table,.markdown-body pre{margin-top: 0;margin-bottom: 16px}.markdown-body hr{height: 4px;padding: 0;margin: 16px 0;background-color: #e7e7e7;border: 0 none}.markdown-body ul,.markdown-body ol{padding-left: 2em}.markdown-body ul.no-list,.markdown-body ol.no-list{padding: 0;list-style-type: none}.markdown-body ul ul,.markdown-body ul ol,.markdown-body ol ol,.markdown-body ol ul{margin-top: 0;margin-bottom: 0}.markdown-body li>p{margin-top: 16px}.markdown-body dl{padding: 0}.markdown-body dl dt{padding: 0;margin-top: 16px;font-size: 1em;font-style: italic;font-weight: bold}.markdown-body dl dd{padding: 0 16px;margin-bottom: 16px}.markdown-body blockquote{padding: 0 15px;color: #777;border-left: 4px solid #ddd}.markdown-body blockquote>:first-child{margin-top: 0}.markdown-body blockquote>:last-child{margin-bottom: 0}.markdown-body table{display: block;width: 100%;overflow: auto;word-break: normal;word-break: keep-all}.markdown-body table th{font-weight: bold}.markdown-body table th,.markdown-body table td{padding: 6px 13px;border: 1px solid #ddd}.markdown-body table tr{background-color: #fff;border-top: 1px solid #ccc}.markdown-body table tr:nth-child(2n){background-color: #f8f8f8}.markdown-body img{max-width: 100%;box-sizing: border-box}.markdown-body span.frame{display: block;overflow: hidden}.markdown-body span.frame>span{display: block;float: left;width: auto;padding: 7px;margin: 13px 0 0;overflow: hidden;border: 1px solid #ddd}.markdown-body span.frame span img{display: block;float: left}.markdown-body span.frame span span{display: block;padding: 5px 0 0;clear: both;color: #333}.markdown-body span.align-center{display: block;overflow: hidden;clear: both}.markdown-body span.align-center>span{display: block;margin: 13px auto 0;overflow: hidden;text-align: center}.markdown-body span.align-center span img{margin: 0 auto;text-align: center}.markdown-body span.align-right{display: block;overflow: hidden;clear: both}.markdown-body span.align-right>span{display: block;margin: 13px 0 0;overflow: hidden;text-align: right}.markdown-body span.align-right span img{margin: 0;text-align: right}.markdown-body span.float-left{display: block;float: left;margin-right: 13px;overflow: hidden}.markdown-body span.float-left span{margin: 13px 0 0}.markdown-body span.float-right{display: block;float: right;margin-left: 13px;overflow: hidden}.markdown-body span.float-right>span{display: block;margin: 13px auto 0;overflow: hidden;text-align: right}.markdown-body code,.markdown-body tt{padding: 0;padding-top: 0.2em;padding-bottom: 0.2em;margin: 0;font-size: 85%;background-color: rgba(0,0,0,0.04);border-radius: 3px}.markdown-body code:before,.markdown-body code:after,.markdown-body tt:before,.markdown-body tt:after{letter-spacing: -0.2em;content: "\00a0"}.markdown-body code br,.markdown-body tt br{display: none}.markdown-body del code{text-decoration: inherit}.markdown-body pre>code{padding: 0;margin: 0;font-size: 100%;word-break: normal;white-space: pre;background: transparent;border: 0}.markdown-body .highlight{margin-bottom: 16px}.markdown-body .highlight pre,.markdown-body pre{padding: 16px;overflow: auto;font-size: 85%;line-height: 1.45;background-color: #f7f7f7;border-radius: 3px}.markdown-body .highlight pre{margin-bottom: 0;word-break: normal}.markdown-body pre{word-wrap: normal}.markdown-body pre code,.markdown-body pre tt{display: inline;max-width: initial;padding: 0;margin: 0;overflow: initial;line-height: inherit;word-wrap: normal;background-color: transparent;border: 0}.markdown-body pre code:before,.markdown-body pre code:after,.markdown-body pre tt:before,.markdown-body pre tt:after{content: normal}.markdown-body kbd{display: inline-block;padding: 3px 5px;font-size: 11px;line-height: 10px;color: #555;vertical-align: middle;background-color: #fcfcfc;border: solid 1px #ccc;border-bottom-color: #bbb;border-radius: 3px;box-shadow: inset 0 -1px 0 #bbb}.codehilite{background: #ffffff}.codehilite .c{color: #999988;font-style: italic}.codehilite .err{color: #a61717;background-color: #e3d2d2}.codehilite .k{color: #000000;font-weight: bold}.codehilite .o{color: #000000;font-weight: bold}.codehilite .cm{color: #999988;font-style: italic}.codehilite .cp{color: #999999;font-weight: bold}.codehilite .c1{color: #999988;font-style: italic}.codehilite .cs{color: #999999;font-weight: bold;font-style: italic}.codehilite .gd{color: #000000;background-color: #ffdddd}.codehilite .gd .x{color: #000000;background-color: #ffaaaa}.codehilite .ge{color: #000000;font-style: italic}.codehilite .gr{color: #aa0000}.codehilite .gh{color: #999999}.codehilite .gi{color: #000000;background-color: #ddffdd}.codehilite .gi .x{color: #000000;background-color: #aaffaa}.codehilite .go{color: #888888}.codehilite .gp{color: #555555}.codehilite .gs{font-weight: bold}.codehilite .gu{color: #aaaaaa}.codehilite .gt{color: #aa0000}.codehilite .kc{color: #000000;font-weight: bold}.codehilite .kd{color: #000000;font-weight: bold}.codehilite .kp{color: #000000;font-weight: bold}.codehilite .kr{color: #000000;font-weight: bold}.codehilite .kt{color: #445588;font-weight: bold}.codehilite .m{color: #009999}.codehilite .s{color: #d14}.codehilite .na{color: #008080}.codehilite .nb{color: #0086B3}.codehilite .nc{color: #445588;font-weight: bold}.codehilite .no{color: #008080}.codehilite .ni{color: #800080}.codehilite .ne{color: #990000;font-weight: bold}.codehilite .nf{color: #990000;font-weight: bold}.codehilite .nn{color: #555555}.codehilite .nt{color: #000080}.codehilite .nv{color: #008080}.codehilite .ow{color: #000000;font-weight: bold}.codehilite .w{color: #bbbbbb}.codehilite .mf{color: #009999}.codehilite .mh{color: #009999}.codehilite .mi{color: #009999}.codehilite .mo{color: #009999}.codehilite .sb{color: #d14}.codehilite .sc{color: #d14}.codehilite .sd{color: #d14}.codehilite .s2{color: #d14}.codehilite .se{color: #d14}.codehilite .sh{color: #d14}.codehilite .si{color: #d14}.codehilite .sx{color: #d14}.codehilite .sr{color: #009926}.codehilite .s1{color: #d14}.codehilite .ss{color: #990073}.codehilite .bp{color: #999999}.codehilite .vc{color: #008080}.codehilite .vg{color: #008080}.codehilite .vi{color: #008080}.codehilite .il{color: #009999}
+    </style>
+    <style type="text/css">
+      .markdown-body hr{background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC")}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="markup">
+        <article id="content" class="markdown-body">
+          <h1>JavaScript函数和对象复习和提高</h1>
+<h2>主要内容介绍</h2>
+<ul>
+<li>函数<ul>
+<li>函数的概念</li>
+<li>函数的参数</li>
+<li>函数的返回值</li>
+<li>函数的作用域</li>
+<li>变量提升和函数提升</li>
+<li>函数参数传递方式</li>
+</ul>
+</li>
+<li>对象<ul>
+<li>什么是JavaScript对象</li>
+<li>创建对象的两种方式</li>
+<li>对象属性的基本操作</li>
+<li>创建自定义对象</li>
+<li>函数的4种调用方式（简单介绍）</li>
+</ul>
+</li>
+</ul>
+<h2>一、函数</h2>
+<ul>
+<li>函数小测验
+<a href="./exercise/01-function.html">函数复习测试题</a>  </li>
+</ul>
+<h3>1.1 函数基本概念</h3>
+<h4>1.1.1 什么是函数</h4>
+<div class="codehilite"><pre>函数是定义一次但可以调用或执行任意多次的一段JavaScript代码。
+</pre></div>
+
+
+<ul>
+<li>函数也叫做方法（了解概念）<blockquote>
+<p>当一个函数在一个对象上被调用的时候，这个函数就叫做方法。
+此时， 它的调用所在的对象就会作为函数的一个隐式的参数来传递。</p>
+</blockquote>
+</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// 函数</span>
+<span class="kd">function</span> <span class="nx">func</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">age</span><span class="o">:</span> <span class="mi">18</span><span class="p">,</span>
+    <span class="nx">getAge</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// 方法</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+
+
+<ul>
+<li>函数的作用：封装代码，实现代码的复用</li>
+</ul>
+<h4>1.1.2 函数的重要性</h4>
+<div class="codehilite"><pre>函数对任何语言来说都是一个核心的概念。通过函数可以封装任意多条语句，而且可以在任何地方、任何时候调用执行。
+
+函数是JavaScript的&quot;一等公民&quot;。
+</pre></div>
+
+
+<h4>1.1.3 JavaScript中的函数能做什么？</h4>
+<ul>
+<li>1 封装代码，实现代码复用（最基本的作用）</li>
+<li>2 作为数据来传递（回调函数）</li>
+<li>3 作为构造函数，创建对象</li>
+<li>4 作为一个作用域</li>
+</ul>
+<h3>1.2 函数的语法</h3>
+<div class="codehilite"><pre><span class="c1">// 函数声明的基本语法</span>
+<span class="c1">// function关键字、funcname、小括号、大括号都是必需的</span>
+<span class="c1">// 参数不是必需的</span>
+<span class="kd">function</span> <span class="nx">funcname</span><span class="p">([</span><span class="nx">arg1</span> <span class="p">[,</span><span class="nx">arg2</span> <span class="p">[...,</span> <span class="nx">argn</span><span class="p">]]])</span> <span class="p">{</span>
+    <span class="nx">statements</span>
+<span class="p">}</span>
+
+<span class="c1">// 函数调用语法：函数名后面跟运算符()来调用</span>
+<span class="nx">funcname</span><span class="p">();</span>
+</pre></div>
+
+
+<ul>
+<li>函数声明的注意点：</li>
+</ul>
+<div class="codehilite"><pre>1 函数声明不能出现在类似：if语句中（尽管不报错，但这是糟糕的做法！如果这么做了，容易出现混乱）
+2 funcname是要定义的函数名，必须是一个标识符（不要使用保留字或关键字），而不能是字符串或者表达式。
+3 包含在小括号中的0个或多个参数，参数用逗号隔开
+4 大括号内的是函数主体，包含了多条语句
+5 return语句，可有可无。
+6 函数命名推荐使用帕斯卡命名法，即第一个单词后的所有单词都以一个大写字母开始。
+</pre></div>
+
+
+<ul>
+<li>练习: 求圆的面积（面积公式：S=π<em>r</em>r）</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">calcCircularArea</span><span class="p">(</span><span class="nx">radius</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">*</span> <span class="nx">radius</span> <span class="o">*</span> <span class="nx">radius</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">calcCircularArea</span><span class="p">(</span><span class="mi">10</span><span class="p">));</span>
+</pre></div>
+
+
+<h3>1.3 函数参数</h3>
+<div class="codehilite"><pre><span class="c1">//形参（函数声明时候的参数）</span>
+<span class="kd">function</span> <span class="nx">f</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">// a,b是形参，占位用，函数定义时形参无值</span>
+
+<span class="c1">//实参（函数调用时候的参数）</span>
+<span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="nx">y</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+<span class="nx">f</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span> <span class="c1">//x,y实参，有具体的值，会把x,y复制一份给函数内部的a和b</span>
+</pre></div>
+
+
+<h4>1.3.1 函数参数特点</h4>
+<ul>
+<li>1 函数参数不区分类型</li>
+<li>2 函数的形参和实参个数不必相同</li>
+</ul>
+<div class="codehilite"><pre>解释：
+  1 JavaScript是弱类型的语言，可以用来保存任何类型的变量
+  2 即便你定义的函数只接收两个参数，在调用这个函数时也未必一定要传递两个参数。可以传递一个、三个甚至不传递参数
+  3 函数参数只能在函数体内使用
+如果形参个数比实参个数多，那么多出来的参数值为：undefined（相当于声明变量，未初始化变量的值）
+如果实参个数比形参个数多，那么多出来的参数将被忽略掉（不考虑 arguments）
+
+  4 JavaScript中的函数没有重载的概念（相对于其他强类型的语言来说，
+  例如：.Net、Java，并且这些语言中的函数，形参个数必须和实参个数相同）
+
+补充：
+    所谓的重载是指：方法的签名(函数名称)相同，参数顺序、个数、类型不同
+</pre></div>
+
+
+<div class="codehilite"><pre><span class="c1">// 具有一个参数的函数</span>
+<span class="kd">function</span> <span class="nx">addNum</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">num</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// 具有两个参数的函数</span>
+<span class="kd">function</span> <span class="nx">addNum</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">num1</span> <span class="o">+</span> <span class="nx">num2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 此时调用 addNum 会执行哪个？</span>
+<span class="nx">addNum</span><span class="p">(</span><span class="mi">20</span> <span class="o">+</span> <span class="mi">30</span><span class="p">);</span>
+
+<span class="c1">//三个参数的f1把两个参数的f1覆盖，调用的是三个参数的f1</span>
+<span class="c1">//证明JavaScript中没有重载</span>
+</pre></div>
+
+
+<ul>
+<li>函数调用的时候，会先计算参数的值</li>
+<li>函数参数是局部变量（只能在函数内部使用）</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">add</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">num1</span><span class="p">);</span> <span class="c1">// ??</span>
+<span class="p">}</span>
+<span class="nx">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</pre></div>
+
+
+<ul>
+<li>练习 1: 求2个数中的最大值，求3个数中的最大值</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// 求两个数中的最大值</span>
+<span class="kd">function</span> <span class="nx">getMaxNum</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">num1</span> <span class="o">&gt;</span> <span class="nx">num2</span> <span class="o">?</span> <span class="nx">num1</span> <span class="o">:</span> <span class="nx">num2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">getMaxNum</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
+
+<span class="c1">// 求三个数中的最大值</span>
+<span class="kd">function</span> <span class="nx">getMaxNum1</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">,</span> <span class="nx">num3</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">getMaxNum</span><span class="p">(</span><span class="nx">getMaxNum</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">),</span> <span class="nx">num3</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">getMaxNum1</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">));</span>
+</pre></div>
+
+
+<ul>
+<li>练习 2: 求一组数中的最大值</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">getArrMaxNum</span><span class="p">(</span><span class="nx">array</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">tempArr</span> <span class="o">=</span> <span class="nx">array</span> <span class="o">||</span> <span class="p">[],</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">maxNum</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">tempArr</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;请输入长度为1以上的数组&quot;</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">maxNum</span> <span class="o">=</span> <span class="nx">tempArr</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">for</span><span class="p">(;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">array</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">maxNum</span> <span class="o">=</span> <span class="nx">array</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">maxNum</span> <span class="o">?</span> <span class="nx">array</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">:</span> <span class="nx">maxNum</span><span class="p">;</span> 
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">maxNum</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">getArrMaxNum</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">]));</span>
+</pre></div>
+
+
+<h4>1.3.2 arguments介绍</h4>
+<ul>
+<li>作用：保存函数的实际参数</li>
+<li>arguments仅在函数内部有效。</li>
+<li>arguments是一个伪数组（即，只是与数组类似，并非一个真正的数组）<blockquote>
+<p>因为可以使用方括号语法访问它的每一个元素（即第一个元素是 arguments[0] ，第二个元素是 argumetns[1] ，以此类推），使用 length 属性来确定参数长度。
+没有传递值的命名参数将自动被赋予 undefined 值，跟定义了变量但又没有初始化一样。</p>
+</blockquote>
+</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">testArguments</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;第一个参数为：&quot;</span> <span class="o">+</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="nx">testArguments</span><span class="p">(</span><span class="s2">&quot;123&quot;</span><span class="p">);</span> <span class="c1">// 第一个参数为：123</span>
+</pre></div>
+
+
+<ul>
+<li>练习：求多个数值中的最大值（非函数）</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">getMaxNum</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
+        <span class="nx">maxNum</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nx">len</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">maxNum</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="p">(;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">maxNum</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nx">maxNum</span> <span class="o">?</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">:</span> <span class="nx">maxNum</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">maxNum</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">maxNum</span> <span class="o">=</span> <span class="nx">getMaxNum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">maxNum</span><span class="p">);</span> <span class="c1">// ??</span>
+</pre></div>
+
+
+<ul>
+<li>思考：如何得到当一个函数定义时的该函数的参数数量？</li>
+</ul>
+<h4>1.3.3 函数的命名参数和arguments的关系</h4>
+<ul>
+<li>面试题：</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">b</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">arguments</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">b</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span> <span class="c1">// ??</span>
+
+<span class="nx">b</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="c1">// ??</span>
+</pre></div>
+
+
+<div class="codehilite"><pre>函数的命名参数和arguments，它们的内存空间是独立的，而不是说读取这两个值会访问相同的内存空间。
+只不过，它们的值会同步。
+但是，如果调用时候有的参数未传入，那么通过修改 arguments 对应的值不会反映到命名参数中。
+</pre></div>
+
+
+<h3>1.4 函数返回值</h3>
+<ul>
+<li>使用 return 语句</li>
+<li>作用：使函数停止运行，并且把表达式的值（如果存在这样的表达式）返回给函数调用者。</li>
+</ul>
+<div class="codehilite"><pre>注意点：
+  1 如果return语句没有一个相关的表达式，它会返回undefined值
+  2 如果函数不包含return语句，它就只执行函数体中的每条语句，然后返回给调用者undefined
+</pre></div>
+
+
+<div class="codehilite"><pre><span class="c1">// 有return语句，但是什么都不返回</span>
+<span class="kd">function</span> <span class="nx">returnNothing</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;函数被调用了&quot;</span><span class="p">);</span>
+  <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nx">returnNothing</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ret</span><span class="p">);</span> <span class="c1">// undefined</span>
+
+<span class="c1">// 没有return语句</span>
+<span class="kd">function</span> <span class="nx">noRetrun</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;函数被调用了&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nx">noRetrun</span><span class="p">();</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">ret</span><span class="p">);</span> <span class="c1">// undefined</span>
+</pre></div>
+
+
+<h3>1.5 函数表达式（函数直接量、函数字面量）</h3>
+<h4>1.5.1 基本语法</h4>
+<div class="codehilite"><pre><span class="c1">// funcname 可以省略</span>
+<span class="kd">var</span> <span class="nx">func</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">funcname</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">statements</span>
+<span class="p">};</span>
+</pre></div>
+
+
+<ul>
+<li>注意点：函数表达式中function后面的函数名，只能在函数内部使用；函数外部访问会报错！</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">var</span> <span class="nx">func</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">fun</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fun</span><span class="p">);</span> <span class="c1">// 函数体</span>
+<span class="p">};</span>
+
+<span class="nx">func</span><span class="p">();</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fun</span><span class="p">);</span> <span class="c1">// Uncaught ReferenceError: fun is not defined</span>
+</pre></div>
+
+
+<ul>
+<li>练习：<ul>
+<li>求阶乘（n! = 1 * 2 * 3 * ... <em>(n-1)</em>n）</li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">var</span> <span class="nx">func</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">num</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">num</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">num</span> <span class="o">*</span> <span class="nx">factorial</span><span class="p">(</span><span class="nx">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">func</span><span class="p">(</span><span class="mi">4</span><span class="p">));</span>
+</pre></div>
+
+
+<ul>
+<li>练习：<ul>
+<li>求斐波那契数列Fibonacci中的第n个数是多少 1 1 2 3 5 8 13 21...</li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">var</span> <span class="nx">fibonacci</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">num</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">||</span> <span class="nx">num</span> <span class="o">===</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">result</span> <span class="o">=</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">fib</span><span class="p">(</span><span class="nx">num</span> <span class="o">-</span> <span class="mi">2</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fibonacci</span><span class="p">(</span><span class="mi">3</span><span class="p">));</span>
+</pre></div>
+
+
+<h4>1.5.2 函数表达式与函数声明的异同</h4>
+<ul>
+<li>不同点：<ul>
+<li>1 语法不同，函数表达式被用作表达式，而不是用作语句，而且也无需指定函数名</li>
+<li>2 函数表达式中，function后面的funcname可以省略</li>
+<li>3 函数声明整个函数都会被提升，函数表达式只有变量名被提升</li>
+</ul>
+</li>
+<li>相同点：<ul>
+<li>除了上述语法不同外，其他用法都相同。</li>
+</ul>
+</li>
+</ul>
+<h3>1.6 作为数据的函数（数组的sort方法）</h3>
+<blockquote>
+<p>JavaScript中的函数，不只是一种语法（即，声明函数或函数表达式），还可以是数据，
+这意味着能够把函数赋给变量、存储在数组的元素中或作为对象的属性，甚至作为函数参数传递</p>
+</blockquote>
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">add</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="nx">add</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span> <span class="c1">// 18</span>
+<span class="kd">var</span> <span class="nx">otherAdd</span> <span class="o">=</span> <span class="nx">add</span><span class="p">;</span> <span class="c1">// 把add赋值为变量 otherAdd</span>
+<span class="kd">var</span> <span class="nx">otherRet</span> <span class="o">=</span> <span class="nx">otherAdd</span><span class="p">(</span><span class="mi">89</span><span class="p">);</span> <span class="c1">// 99</span>
+
+
+<span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">x</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+
+<span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="nx">arr</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="c1">// 18</span>
+</pre></div>
+
+
+<h3>1.6 函数作用域</h3>
+<ul>
+<li>问题分析：</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// if() {} 语句块</span>
+<span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;window&quot;</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;if语句&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">str</span><span class="p">);</span> <span class="c1">// ??</span>
+
+<span class="c1">// for 循环语句块</span>
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span> <span class="c1">// ?</span>
+<span class="c1">// 思考： 页面中有10个li，单击每个li弹出其索引号</span>
+
+<span class="c1">// function 语句块</span>
+<span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;window&quot;</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">test</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;local&quot;</span><span class="p">;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">str</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">test</span><span class="p">();</span> <span class="c1">// ??</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">str</span><span class="p">);</span>
+</pre></div>
+
+
+<ul>
+<li>
+<p>结论：JavaScript函数形成了一个作用域</p>
+</li>
+<li>
+<p>面试题：</p>
+</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">staticFunc</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">num</span><span class="p">);</span> <span class="c1">// ??</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">test</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="nx">staticFunc</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nx">test</span><span class="p">();</span>
+</pre></div>
+
+
+<h4>1.6.1 词法作用域</h4>
+<div class="codehilite"><pre>JavaScript中的函数是通过词法来划分作用域的（而不是动态地划分作用域的）。
+即，函数在定义它们的作用域运行（而不是在执行它们的作用域里运行）。
+</pre></div>
+
+
+<ul>
+<li>定义和执行的区别：</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// 定义指的是这个语句被解析执行的时候</span>
+<span class="kd">function</span> <span class="nx">func</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="p">}</span>
+<span class="c1">// 执行指的是这个函数被调用的时候</span>
+<span class="nx">func</span><span class="p">();</span>
+</pre></div>
+
+
+<ul>
+<li>图解作用域链
+<img alt="作用域图片" src="data:image/png;base64,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"></li>
+<li>分析作用域链</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">func</span><span class="p">(</span><span class="nx">num1</span><span class="p">,</span> <span class="nx">num2</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sum</span> <span class="o">=</span> <span class="nx">num1</span> <span class="o">+</span> <span class="nx">num2</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nx">sum</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">func</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+
+<span class="c1">// 复杂点的情况</span>
+<span class="kd">var</span> <span class="nx">age</span> <span class="o">=</span> <span class="mi">18</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Tom&quot;</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">getAge</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">age</span> <span class="o">=</span> <span class="mi">19</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;hello&quot;</span><span class="p">;</span>
+
+  <span class="kd">function</span> <span class="nx">getStr</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="s2">&quot;world&quot;</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">age</span><span class="p">);</span> <span class="c1">// ??</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// ??</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">str</span><span class="p">);</span> <span class="c1">// ??</span>
+  <span class="p">}</span>
+  <span class="nx">getStr</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="nx">getAge</span><span class="p">();</span>
+</pre></div>
+
+
+<div class="codehilite"><pre>解释：
+当定义（声明）一个函数，当前的作用域链就保存起来，并且成为函数内部状态的一部分。
+在最顶级，作用域链仅由全局对象组成，而并不和词法作用域相关。
+然后，当定一个嵌套的函数时，作用域链就包含外围的包含函数。这意味着嵌套的函数可以访问包含函数的所有参数和局部变量。
+</pre></div>
+
+
+<h4>1.6.2 执行环境和作用域</h4>
+<div class="codehilite"><pre>执行环境定义了变量或函数有权访问的其他数据，决定了它们各自的行为。每个执行环境都有一个
+与之关联的变量对象（variable object），环境中定义的所有变量和函数都保存在这个对象中。
+虽然我们编写的代码无法访问这个对象，但解析器在处理数据时会在后台使用它。
+
+全局执行环境是最外围的一个执行环境，在 Web 浏览器中，全局执行环境是 window 对象。
+所有全局变量和函数都是作为 window 对象的属性和方法创建的
+
+当代码在一个环境中执行时，会创建变量对象的一个作用域链（scope chain）。作用域链的用途，是
+保证对执行环境有权访问的所有变量和函数的有序访问。
+
+作用域链本质上是一个指向变量对象的指针列表，它只引用但不实际包含变量对象。
+函数调用的执行过程：
+    1. 设置作用域链
+        当JavaScript的解释器调用一个函数，将此函数的作用域设置为定义函数的时候起作用的那个作用域链。
+    2. 创建调用对象（其他名称：激活对象、活动对象），添加到作用域链的前端
+        在作用域的前面添加一个新的对象：调用对象(call object)，它用一个名为arguments的属性来初始化，
+        即：局部变量、函数参数和Arguments对象、内部函数都在函数内的作用域中，放到了调用对象里面。
+        这样就隐藏了作用域链更上层的任何同名的属性。
+    3. 调用结束后，调用对象从作用域链中移除。（一般情况下）
+        当没有涉及嵌套的函数的时候，作用域链是对调用对象的唯一引用。当对象从链中移除，也就是没有对它的引用了，
+        最终通过对它的垃圾收集而完结。
+
+注意：this是一个关键字，而不是调用对象的一个属性，所以，this并不一定指的是函数自身。
+</pre></div>
+
+
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;很平常的一个函数&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">func</span><span class="p">();</span>
+
+<span class="c1">// 嵌套的函数</span>
+<span class="kd">function</span> <span class="nx">outerFunc</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="kd">function</span> <span class="nx">innerFunc</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span> <span class="o">+</span> <span class="nx">b</span> <span class="o">+</span> <span class="nx">c</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">innerFunc</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nx">outerFunc</span><span class="p">();</span>
+
+<span class="c1">// 函数被作为返回值返回（了解）</span>
+<span class="kd">function</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="k">return</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">num</span><span class="p">);</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+<span class="c1">// bar引用了 foo 的内部函数</span>
+<span class="kd">var</span> <span class="nx">bar</span> <span class="o">=</span> <span class="nx">foo</span><span class="p">();</span>
+<span class="nx">bar</span><span class="p">();</span> <span class="c1">// ??</span>
+</pre></div>
+
+
+<h4>1.6.3 变量提升和函数提升</h4>
+<ul>
+<li>面试题：</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// 1. </span>
+<span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">test</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">foo</span><span class="p">);</span> <span class="c1">// ??</span>
+    <span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">foo</span><span class="p">);</span> <span class="c1">// ??</span>
+<span class="p">}</span>
+<span class="nx">test</span><span class="p">();</span>
+</pre></div>
+
+
+<ul>
+<li>分析题：</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// ??</span>
+<span class="nx">func</span><span class="p">();</span>
+<span class="kd">function</span> <span class="nx">func</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;函数被调用了&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// ??</span>
+<span class="nx">func</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">func</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;函数被调用了&quot;</span><span class="p">);</span>
+<span class="p">};</span>
+</pre></div>
+
+
+<ul>
+<li>变量提升<ul>
+<li>1 使用 var 声明的变量会自动被添加到最接近的环境中</li>
+<li>2 在函数内部，最接近的环境就是函数的局部环境</li>
+<li>3 未声明就使用的变量会成为全局变量（糟糕的做法，不推荐！！！）</li>
+<li>4 建议在初始化变量之前，一定要先声明</li>
+</ul>
+</li>
+<li>函数提升</li>
+</ul>
+<div class="codehilite"><pre>每个作用域都会进行提升操作。
+包括变量和函数在内的所有声明都会在任何代码被执行前先被处理。
+
+函数声明会被提升，但是函数表达式却不会被提升。
+函数会首先被提升，然后才是变量
+    如果函数声明和变量声明的名称相同，此时，var foo; 尽管出现在 function foo(){}
+    的声明之前，但它是重复的声明（因此var foo;被忽略了），因为函数声明会被提升到普通变量之前。
+    如果是 var foo = 123; 即：声明同时初始化了，那么foo的值为123。
+</pre></div>
+
+
+<h4>1.6.5 模仿块级作用域</h4>
+<ul>
+<li>立即执行的函数表达式（高大上的名字）<ul>
+<li>立即执行：声明了就立即调用执行</li>
+<li>函数表达式</li>
+</ul>
+</li>
+<li>注意：函数声明后面不能跟圆括号。然而，函数表达式的后面可以跟圆括号。</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// 第一个小括号的作用是将函数声明转化为函数表达式</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// 这里是模拟出来的块级作用域</span>
+<span class="p">})();</span>
+
+<span class="c1">// 另外一种形式（了解）</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+
+<span class="p">}());</span>
+</pre></div>
+
+
+<h3>1.7 函数参数传递方式</h3>
+<div class="codehilite"><pre><span class="c1">// 基本数据类型</span>
+<span class="kd">function</span> <span class="nx">add</span><span class="p">(</span><span class="nx">num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">num</span> <span class="o">=</span> <span class="nx">num</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">num</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">add</span><span class="p">(</span><span class="nx">count</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;count的值为：&quot;</span> <span class="o">+</span> <span class="nx">count</span><span class="p">);</span> <span class="c1">// ??</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;result的值为：&quot;</span> <span class="o">+</span> <span class="nx">result</span><span class="p">);</span> <span class="c1">// ??</span>
+
+<span class="c1">// 复杂数据类型</span>
+<span class="c1">// 1.</span>
+<span class="kd">function</span> <span class="nx">setAge</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">obj</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="mi">18</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="p">();</span>
+<span class="nx">person</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="mi">30</span><span class="p">;</span>
+
+<span class="nx">setAge</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span> <span class="c1">// ??</span>
+
+<span class="c1">// 2.</span>
+<span class="kd">function</span> <span class="nx">setName</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">obj</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;小明&quot;</span><span class="p">;</span>
+    <span class="nx">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="p">();</span>
+    <span class="nx">obj</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;小红&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="p">();</span>
+<span class="nx">person</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Jack&quot;</span><span class="p">;</span>
+
+<span class="nx">setName</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// ??</span>
+</pre></div>
+
+
+<ul>
+<li>JavaScript中所有函数的参数都是按值传递的。也就是说，把函数外部的值复制给函数内部的参
+数，就和把值从一个变量赋值到另一个变量一样。</li>
+<li>
+<p>参数实际上是函数的局部变量，那么这些局部变量（包括：函数参数、函数内部声明的变量），
+在函数执行完毕后会被立即销毁掉。</p>
+</li>
+<li>
+<p>练习：输入某年某月某日，判断这一天是这一年的第几天？</p>
+<ul>
+<li>闰年计算方法：能被4整除并且不能被100整除，或者能被400整除</li>
+<li>2月到底是28天还是29天？</li>
+<li>1-12月的天数？<br>
+<a href="./exercise/getDays.html">案例：一年中的第几天</a>  </li>
+</ul>
+</li>
+</ul>
+<h2>二、对象</h2>
+<ul>
+<li>JavaScript中如何创建对象？</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// 创建一个对象</span>
+<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="p">();</span>
+<span class="c1">// 给对象设置属性</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;小明&quot;</span><span class="p">;</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="mi">18</span><span class="p">;</span>
+</pre></div>
+
+
+<h3>2.1 什么是JavaScript对象</h3>
+<div class="codehilite"><pre>JavaScript中的对象：无序属性的集合，其属性可以包含基本值、对象或者函数。
+严格来讲，这就相当于说对象是一组没有特定顺序的值。对象的每个属性或方法都有一个名字，
+而每个名字都映射到一个值。
+</pre></div>
+
+
+<ul>
+<li>对象和基本类型的区别：</li>
+</ul>
+<div class="codehilite"><pre>对象与数字、字符串、布尔值这样的数据类型不同，它们不是表示一个单个的值，而是值的集合。
+对象是已命名值的一个集合。
+
+数字、字符串、布尔值是简单数据类型
+对象是复杂数据类型
+</pre></div>
+
+
+<ul>
+<li>函数也是对象</li>
+</ul>
+<h3>2.2 如何创建JavaScript对象</h3>
+<h4>2.2.1 创建对象的两种方式</h4>
+<ul>
+<li>1、构造函数方式</li>
+<li>2、对象字面量</li>
+</ul>
+<h4>2.2.2 创建对象的两种方式对比</h4>
+<ul>
+<li>方式一：使用构造函数创建对象</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// 使用 new 操作符，后面跟 Object构造函数调用，来创建对象</span>
+<span class="c1">// 此时，返回值：obj，就是新创建出来的对象</span>
+<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="p">();</span>
+<span class="c1">// 给对象添加属性</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;静静&quot;</span><span class="p">;</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="mi">18</span><span class="p">;</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">getName</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span> <span class="c1">// 静静</span>
+<span class="p">};</span>
+</pre></div>
+
+
+<ul>
+<li>方式二：使用对象字面量（推荐）</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// 语法规则</span>
+<span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// 属性名: 属性的值</span>
+    <span class="c1">// 使用逗号来分隔不同的属性（如果当前属性后面还有其他属性的话）</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Nicholas&quot;</span><span class="p">,</span>
+    <span class="nx">age</span><span class="o">:</span> <span class="mi">18</span>
+<span class="p">};</span>
+
+<span class="c1">// 创建对象设置属性</span>
+<span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;加引号的属性名称&quot;</span><span class="p">,</span>
+    <span class="mi">0</span><span class="o">:</span> <span class="s2">&quot;属性名为数值类型，那么这里的数值属性名会自动转换为字符串&quot;</span>
+<span class="p">};</span>
+
+<span class="c1">// 创建一个空对象，没有任何属性</span>
+<span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{};</span>
+</pre></div>
+
+
+<ul>
+<li>对象字面量的说明：</li>
+</ul>
+<div class="codehilite"><pre>    1. 对象字面量是对象定义的一种简写形式，目的在于简化创建包含大量属性的对象的过程。
+    2. 语法规则中，左边的花括号（{）表示对象字面量的开始，因为它出现在了表达式上下文中。
+    3. 对象字面量的属性名，可以不加引号 也可以加引号（单引号或者双引号都可以）
+</pre></div>
+
+
+<h3>2.3 对象的基本操作</h3>
+<h4>2.3.1 属性的设置</h4>
+<div class="codehilite"><pre><span class="c1">// 创建一个空对象</span>
+<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="c1">// 使用点运算符（.）来设置属性的值</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;这是name属性的值&quot;</span><span class="p">;</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="mi">18</span><span class="p">;</span> <span class="c1">// 给age属性设置值：18</span>
+<span class="c1">// 使用方括号[]来设置属性的值，注意：要访问的属性是字符串的形式或者是变量</span>
+<span class="nx">obj</span><span class="p">[</span><span class="s2">&quot;font-size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;30px&quot;</span><span class="p">;</span>
+</pre></div>
+
+
+<h4>2.3.2 属性的读取</h4>
+<div class="codehilite"><pre><span class="c1">// 获取属性的两种方式</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]);</span>
+</pre></div>
+
+
+<div class="codehilite"><pre>区别：
+    1. 都可以用来设置或者获取对象的属性。
+    2. 方括号（[]）可以通过变量来访问属性。
+    3. 属性名中包含会导致语法错误的字符，或者属性名使用的是关键字和保留字，使用方括号表示法。
+       例如：obj[&quot;first name&quot;]，由于&quot;first name&quot;中包含一个空格，所以不能使用点表示法来访问它。
+             然后，属性名中是可以包含非字母非数字的，这时候就可以使用方括号表示法来访问它们。
+    4. 除非必须使用变量来访问属性，否则推荐使用点表示法。
+</pre></div>
+
+
+<h4>2.3.3 属性的遍历</h4>
+<ul>
+<li>如何获取对象的一个属性？</li>
+<li>如果要获取对象的所有属性，怎么获取？<ul>
+<li>for-in</li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;明哥&quot;</span><span class="p">,</span>
+    <span class="nx">age</span><span class="o">:</span> <span class="mi">18</span><span class="p">,</span>
+    <span class="nx">weight</span><span class="o">:</span> <span class="mi">50</span>
+<span class="p">};</span>
+
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">ob</span> <span class="k">in</span> <span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// ob 为属性名</span>
+    <span class="c1">// obj[ob] 为属性名对应的值</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;属性 &quot;</span> <span class="o">+</span> <span class="nx">ob</span> <span class="o">+</span> <span class="s2">&quot; 的值为：&quot;</span> <span class="o">+</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">ob</span><span class="p">]);</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>2.4 如何创建自定义对象</h3>
+<ul>
+<li>1 使用函数，函数名首字母大写（为了区分普通函数）（此时的函数叫做：构造函数）</li>
+<li>2 使用this关键字</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="nx">age</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="s2">&quot;猴哥&quot;</span><span class="p">,</span> <span class="mi">18</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span>
+</pre></div>
+
+
+<ul>
+<li>new 操作符的作用<ul>
+<li>1 创建一个对象</li>
+<li>2 将构造函数的作用域赋给新对象, 所以this == p</li>
+<li>3 执行构造函数，为对象设置属性</li>
+<li>4 返回新对象</li>
+</ul>
+</li>
+</ul>
+<h3>额外补充</h3>
+<h4>把对象属性用作参数（了解）</h4>
+<ul>
+<li>问题：有一个函数有10个参数，那此时有什么痛点？<ul>
+<li>1 函数定义或者调用的时候，就要写一堆的参数，十分繁琐</li>
+<li>2 函数调用的时候，要记住正确的参数调用顺序</li>
+</ul>
+</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// 声明一个包含10个参数的函数</span>
+<span class="kd">function</span> <span class="nx">moreArgsFunc</span><span class="p">(</span><span class="nx">arg1</span><span class="p">,</span><span class="nx">arg2</span><span class="p">,</span><span class="nx">arg3</span><span class="p">,</span><span class="nx">arg4</span><span class="p">,</span><span class="nx">arg5</span><span class="p">,</span><span class="nx">arg6</span><span class="p">,</span><span class="nx">arg7</span><span class="p">,</span><span class="nx">arg8</span><span class="p">,</span><span class="nx">arg9</span><span class="p">,</span><span class="nx">arg10</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// 函数处理</span>
+<span class="p">}</span>
+<span class="c1">// 调用函数</span>
+<span class="nx">moreArgsFunc</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+</pre></div>
+
+
+<ul>
+<li>解决方式：把对象作为函数的参数</li>
+</ul>
+<div class="codehilite"><pre><span class="kd">function</span> <span class="nx">objArgsFunc</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span>
+    <span class="c1">// 函数处理</span>
+    <span class="c1">// 使用参数 obj.arg1</span>
+<span class="p">}</span>
+
+<span class="nx">obj</span><span class="p">({</span>
+    <span class="cm">/*arg1: true,</span>
+<span class="cm">    arg2: false,</span>
+<span class="cm">    ...*/</span>
+<span class="p">});</span>
+</pre></div>
+
+
+<h4>函数的4种调用方式（理解）</h4>
+<ul>
+<li>1 作为函数调用</li>
+<li>2 作为对象的方法调用</li>
+<li>3 作为构造函数调用</li>
+<li>4 使用call或者apply调用</li>
+</ul>
+<div class="codehilite"><pre><span class="c1">// 1 作为函数调用</span>
+<span class="kd">function</span> <span class="nx">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="mi">18</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">age</span><span class="p">);</span><span class="c1">// this 指向 window</span>
+<span class="p">}</span>
+<span class="nx">func</span><span class="p">();</span> 
+
+<span class="c1">// 2 作为对象方法调用</span>
+<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;functionName&quot;</span><span class="p">,</span>
+    <span class="nx">age</span><span class="o">:</span> <span class="mi">19</span><span class="p">,</span>
+    <span class="nx">getName</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span><span class="c1">// this指向obj</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">getName</span><span class="p">();</span> 
+
+<span class="c1">// 3 作为构造函数调用</span>
+<span class="kd">function</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span><span class="c1">// this 指向新创建出来的对象p</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="s2">&quot;小明&quot;</span><span class="p">);</span> 
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+
+<span class="c1">// 4 使用call或者apply调用</span>
+<span class="c1">// call和apply的区别：参数不同</span>
+<span class="c1">// call(上下文, arg1, arg2, ...)</span>
+<span class="c1">// apply(上下文，[arg1, arg2, ...])</span>
+<span class="nx">func</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span> <span class="c1">// this 指向传入的参数：obj</span>
+</pre></div>
+        </article>
+      </div>
+    </div>
+  </body>
+</html>
