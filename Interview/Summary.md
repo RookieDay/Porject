@@ -400,3 +400,25 @@ obj.name--->当前对象找  当前对象没有去原型对象里面找
 obj.__proto__.name 直接去原型对象里面去找
 
 ```
+
+- 
+```
+Object 中的成员：
+// Object 原型中的常用方法
+propertyIsEnumerable
+// -able	表示可能性的后缀
+// enum		枚举, 一个一个的展示出来
+// 属性是否可以枚举, 属性是否可以被 for-in 遍历到
+// var o = {};
+// in
+// alert( 'hasOwnProperty' in o );  // o.hasOwnProperty
+// for ( var k in o ) {
+//	console.log( k );
+// }
+// 这个方法判断属性是否可以被枚举, 同时判断属性是否是自己提供的
+// 因此该方法表示判断属性必须是 自己提供的, 同时可以被枚举的, 那么就返回 true, 否则返回 false
+// 在 ES3 的基础上, 该方法没有任何意义, 是对 hsOwnProperty 的一个升级版
+// 在 ES5 中引入了 对象特性( attribute )的概念, 才会使得该方法有点作用
+// console.log( Object.prototype.toString.call( 1 ) );
+// console.log( toLocaleString.call( 1 ) );
+```
