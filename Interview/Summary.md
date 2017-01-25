@@ -422,3 +422,53 @@ propertyIsEnumerable
 // console.log( Object.prototype.toString.call( 1 ) );
 // console.log( toLocaleString.call( 1 ) );
 ```
+- 创建函数的方式
+ + 声明式
+ + 表达式
+ + new function
+```
+// new Function 的语法规则
+// 语法
+// var 函数名 = new Function( arg1, arg2, arg3, ..., argN, body );
+// 解释
+// 	Function 构造函数所有的参数都是字符串类型的
+//	除了最后一个参数, 所有的参数都作为生成函数的参数. 这里可以没有参数
+//	最后一个参数也是字符串, 表示的是生成函数的函数体
+举例：
+<script id="engin">
+			/*
+			 
+		 		var total = 0, 
+					args = arguments, 
+					len = args.length;
+				for ( var i = 0; i < len; i++ ) {
+					total += args[ i ];
+				}
+				return total;
+		 	
+		 	
+		 	*/
+		</script>
+		<script>
+		
+			var getBody = function ( id ) {
+				var script = document.getElementById( id );
+				var body = script.innerHTML.replace('/*', '').replace('*/', '');
+				script.parentNode.removeChild( script );
+				return body;
+			}
+		
+			
+			onload = function () {
+				
+				
+				var fnSum = new Function( getBody( 'engin' ) );
+				
+				var res = fnSum( 1, 2, 3 );
+				
+				alert( res );
+				
+			};			
+		</script>
+        
+ ```
