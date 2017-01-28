@@ -526,3 +526,100 @@ propertyIsEnumerable
 			// 	结论 Function.__proto__ 就是 Function.prototype
 
  ```
+ - 
+ ```
+ 			// 疑点
+			function Fn() {} 
+			function Foo() {} 
+			var o = new Fn(); 
+			console.log(o instanceof Fn); 	//true 
+			Fn.prototype = new Foo(); 
+			Fn.prototype.constructor = Fn;
+			console.log(o instanceof Fn); 	// false 
+            // new Foo() 是否在o的原型链上
+			console.log(o instanceof Foo);  // false 
+
+            function Fn() {} 
+			function Foo() {}
+			var f = new Fn();
+			// f -> Fn.prototype -> Object.prototype -> null
+			// 覆盖
+			var o;
+			Fn.prototype = o = new Foo();
+			var f = new Fn();
+			// f -> o -> Foo.prototype -> Object.prototype -> null
+ ```
+ - 实例成员 和 静态成员
+```
+// 实例成员就是 由构造函数创建的对象的成员
+// 静态成员就是 构造函数的成员
+
+// 一般在使用的时候, 将通用的方法 由 静态成员提供, 实例成员如果要实现该功能, 调用静态成员来实现
+ 
+
+ 递归：
+ // 获得 node 的子节点
+		// 化归一下, 已经完成获得节点的子节点, 那么子节点的子节点也或得到, 如此下去就是所有的后代的节点
+		var getChildren = function ( node, list ) {
+			// 要将 node 中所有的子元素 放到 list 中( 只要元素 )
+			for ( var i = 0; i < node.childNodes.length; i++ ) {   // 遍历node的子节点
+				var subNode = node.childNodes[ i ];	// 就是子节点
+				// 判断是否为 元素标签
+				if ( subNode.nodeType === 1 ) {
+					// 如果是元素节点就存到 list 中
+					list.push( subNode );
+					
+					getChildren( subNode, list );
+				}
+			}
+		}
+		function find() {
+			var arr = [];
+			// 获得元素
+			getChildren( document.body, arr );
+			return arr;
+		}
+		
+		var nodes = find();
+		for (var i= 0; i < nodes.length; i++) {
+			nodes[ i ].style.border = "3px solid red"; 
+		}		
+高级写法：
+<script>
+			
+			var find = function ( node ) {
+				
+				var arr = [];
+				for ( var i = 0; i < node.childNodes.length; i++ ) {
+					if ( node.childNodes[ i ].nodeType === 1 ) {
+						arr.push( node.childNodes[ i ] );
+						
+						// 获得子节点的子节点
+						arr = arr.concat( find( node.childNodes[ i ] ) );
+						
+					}
+				}
+				
+				return arr;
+			}
+			
+			
+			onload = function () {
+				var nodes = find( document.body );
+			
+				for ( var i = 0; i < nodes.length; i++ ) {
+					nodes[i].style.border = "2px solid black";
+				}
+				
+			};
+			
+ 			
+		</script>
+ ```
+
+ - 词法作用域
+ ```
+// 词法作用域 解释
+// 只和代码的书写，定义时的顺序有关，和运行时候的顺序无关
+// 函数内部可访问外部的变量，反之则不允许
+ ```
