@@ -2638,3 +2638,21 @@ body　比例是　640*960
 <meta name="viewport" content="initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no">
 
 ```
+
+- node
+```
+path 使用：
+console.log(path.parse('c:/foo/bar/baz/asdf/quux.html'));
+// { root: 'c:/',
+//   dir: 'c:/foo/bar/baz/asdf',
+//   base: 'quux.html',
+//   ext: '.html',
+//   name: 'quux' }
+console.log(path.format({
+    root: 'c:\\',
+    dir: 'c:\\a\\b',
+    name: 'hello',
+    ext: '.html'
+}));
+// c:\a\b\hello.html
+```
