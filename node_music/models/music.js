@@ -7,6 +7,7 @@ function Music(music) {
     this.singer = music.singer;
     this.src = music.src;
 }
+// 函数上添加
 Music.getAll = function(callback) {
     db.query('select * from music', (err, rows) => {
         if (err) {
@@ -40,6 +41,8 @@ Music.remove = function(id, callback) {
         callback(null, rows);
     })
 }
+
+// 原型上添加 对象访问
 Music.prototype.save = function(callback) {
     db.query(`
     insert into music 

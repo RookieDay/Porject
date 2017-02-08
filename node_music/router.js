@@ -10,13 +10,16 @@ const user = require('./controllers/user');
 
 
 module.exports = function(req, res) {
+    // 解析url 为urlObj
     let urlObj = url.parse(req.url, true);
-
+    // 放置queryParm
     req.query = urlObj.query;
+    // 解码url
     let pathname = decodeURI(urlObj.pathname);
     req.pathname = pathname;
     let method = req.method;
 
+    // 根据不同的method 和路径 进行不同的操作
     if (method === 'GET' && pathname === '/') {
         music.renderIndex(req, res);
     } else if (method === 'GET' && pathname.startsWith('/node_modules/')) {

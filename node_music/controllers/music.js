@@ -6,10 +6,12 @@ const musicPath = require('../config').musicPath;
 const musicList = require('../models/music');
 const Music = musicList;
 
+// 直接将内容渲染出来
 exports.renderIndex = (req, res) => {
     res.render('index');
 }
 
+// 获取所有的音乐信息
 exports.getMusicList = (req, res) => {
     Music.getAll((err, rows) => {
         if (err) {
@@ -28,18 +30,23 @@ exports.transferMusic = (req, res) => {
     readStream.pipe(res);
 }
 
+// 添加页面
 exports.renderAdd = (req, res) => {
     res.render('add');
 }
 
+// 执行添加过程
 exports.doAdd = (req, res) => {
     let data = '';
+    // 监听数据接受事件
     req.on('data', (chunk) => {
-        data += chunk;
-    })
+            data += chunk;
+        })
+        // 数据接收完以后 添加 保存数据
     req.on('end', () => {
         let obj = querystring.parse(data);
         let music = new Music(obj);
+        // 首先在当前对象中找, 如果没有在原型链上往上找
         music.save((err, rows) => {
             if (err) {
                 return res.end(err.message);
@@ -53,6 +60,7 @@ exports.doAdd = (req, res) => {
 }
 
 
+// 根据ID进行渲染编辑的歌曲
 exports.renderEdit = (req, res) => {
     let mid = req.query.mid;
     Music.getColumn(mid, (err, rows) => {
@@ -70,6 +78,7 @@ exports.renderEdit = (req, res) => {
     })
 }
 
+// 执行进行编辑的操作
 exports.doEdit = (req, res) => {
     let mid = req.query.mid;
     // let index = musicList.findIndex(m => m.id === mid);
@@ -81,7 +90,7 @@ exports.doEdit = (req, res) => {
             })
         }
         let selectTitle = rows[0].title;
-
+        // req的数据内容
         let data = '';
         req.on('data', (chunk) => {
             data += chunk;
