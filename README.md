@@ -6,8 +6,8 @@
 ```
 克隆 git clone git@github.com:RookieDay/Porject.git
 进入 cd node_music
-安装 install MySQL 修改./models/db.js 里面的user password
-执行 execute music.sql on MySQL 生成数据
+安装 MySQL 修改./models/db.js 里面的user password
+执行 music.sql 在 MySQL 生成数据
 运行 nodemon app.js
 访问 http://127.0.0.1:3000/  即可看到效果
 ```
