@@ -4470,3 +4470,376 @@ var tag = function (tag,res){
 	for (var i=0; i<list.length; i++) {
 		list[i].style.backgroundColor = "red";
 	}            
+```
+
+DOM 设置属性
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.c {
+				border: 1px solid red;
+				width: 400px;
+				height: 150px;
+			}
+		</style>
+		<script type="text/javascript">
+			
+			// 2, 在页面中创建 3 个 div, 要求 设置其边框与颜色以及大小
+			// 1> 直接设置 style 属性
+			// 2> 使用 类样式
+			// -> setAttribute
+			// -> .语法
+			
+//			onload = function () {
+//				var i, node;
+//				for ( i = 0; i < 3; i++ ) {
+//					node = document.createElement( 'div' );
+//					// node.setAttribute( 'class', 'c' );
+//					node.className = 'c';
+//					document.body.appendChild( node );
+//				}
+//			};
+			
+			
+			// 1, 方法比较多, 练习的过程的中每一个做法都要熟练
+			// 2, 由于每次循环都使用 document.body.appenChild 因此
+			//		会导致每次 for 都要刷新页面结构. 应该采用一个临时的数据
+			//		存储这些 dom 对象, 在 全部创建完成以后, 再一并加入
+					
+					
+			// 只有创建一个 节点标签, 才可以不影响 整个页面布局, 同时允许存储其他标签
+//			onload = function () {
+//				var i, node, container = document.createElement( 'div' );
+//				for ( i = 0; i < 3; i++ ) {
+//					node = document.createElement( 'div' );
+//					// node.setAttribute( 'class', 'c' );
+//					node.className = 'c';
+//					container.appendChild( node );
+//				}
+//				document.body.appendChild( container );
+//			};
+
+			// 用于缓存文档片段的 DOM 对象 DocumentFragment
+			onload = function () {
+				var i, node, 
+					container = document.createDocumentFragment();
+					
+				for ( i = 0; i < 3; i++ ) {
+					node = document.createElement( 'div' );
+					// node.setAttribute( 'class', 'c' );
+					node.className = 'c';
+					container.appendChild( node );
+				}
+				document.body.appendChild( container );
+			};
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+或者使用下面的innerHTML：
+	<script type="text/javascript">
+		onload = function () {
+			var i,s = '';
+			for (var i = 0; i < 10; i++) {
+				s += '<div>' + i + '</div>';
+			}
+			document.body.innerHTML = s;
+		}
+	</script>
+
+性能分析：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			
+			// 在页面中添加 1000 个div
+			
+			var count = 50000;
+			
+			var test1 = function () {
+				var start = +new Date(),
+					i, end, node, docfrag;
+				
+				docfrag = document.createDocumentFragment();
+				for ( i = 0; i < count; i++ ) {
+					node = document.createElement( 'div' );
+					docfrag.appendChild( node );
+				}
+				document.body.appendChild( docfrag );
+				
+				end = +new Date();
+				
+				console.log( 'test1 = ' + ( end - start ) );
+			};
+			
+			
+			var test2 = function () {
+				var start = +new Date(),
+					i, end, s;
+				
+				s = '';
+				for ( i = 0; i < 1000; i++ ) {
+					s += '<div></div>';
+					// document.body.innerHTML += '<div></div>';
+				}
+				document.body.innerHTML = s;
+				
+				end = +new Date();
+				
+				console.log( 'test2 = ' + ( end - start ) );
+			};
+			
+			
+			onload = function() {
+				// test1();
+				test2()
+			};
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+dom中创建代码：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			
+			// jq 中
+			// $( '<div style=""></div>' );
+			
+			// itcast -> I
+			// var dom = I( '<a href="http://www.baidu.com">一个链接</a>' )
+			
+			var cElem = function ( html ) {
+				// 1, 在内部创建一个 docfrag
+				var docfrag = document.createDocumentFragment();
+				// 2, 创建真正的 div, 然后设置其 innerHTMl 为出入的字符串
+				// 然后在遍历该子元素, 将内容加入到 docfrag 中
+				var div = document.createElement( 'div' );
+				// 3, 将字符串设置为 它的 innerHTML
+				div.innerHTML = html;
+				// 4, 遍历div的子元素, 加入 docfrag 下面为什么这么写呢
+				// 因为在 DOM 元素中默认有一个特征, 即元素只允许有一个 父节点
+				// 如果添加元素到另一个节点中, 该元素会自动的离开原来的父节点
+				//最好不用for循环
+				while( div.firstChild ) {
+					docfrag.appendChild( div.firstChild );
+				}
+				// 5, 获得其子元素返回
+				return docfrag;
+			};
+			
+		</script>
+	</head>
+	<body>
+	</body>
+	<script>
+		var dom = cElem( '<a href="http://www.baidu.com">一个链接</a><br />' + 
+						 '<a href="http://www.itcast.cn">传智播客</a>'	);
+						 
+		document.body.appendChild( dom );
+		
+		// I( ... ).appendTo( 'body' );
+	</script>
+</html>
+
+
+解析while 
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			
+			var id = function ( id ) {
+				return document.getElementById( id );
+			};
+			
+			
+			onload = function () {
+				var d1 = id( 'dv1' );
+				var d2 = id( 'dv2' );
+				var list = d1.getElementsByTagName("p");
+				var len;
+				// dom 节点只能有一个父节点 你把这个节点append到了
+				//另一个节点上 ，当前这个节点就少了一个节点
+				//i继续累加 节点本身length也在减少 总在变化
+				//所以这里让他固定不动就可以了
+				//这种写法不太好
+				//比较好使用while循环
+//				for ( var i = 0, len = list.length; i < len; i++ ) {
+//					
+//					d2.appendChild( list[ 0 ] );
+//					
+//				}
+				
+//				while ( list[ 0 ] ) {
+//					d2.appendChild( list[ 0 ] );
+//				}
+				
+				while ( d1.firstChild ) {
+					d2.appendChild( d1.firstChild );
+				}
+			};
+			
+		</script>
+	</head>
+	<body>
+		<div id="dv1">
+			<p>p1</p>
+			<p>p2</p>
+			<p>p3</p>
+			<p>p4</p>
+		</div>
+		<div id="dv2">
+			
+		</div>
+	</body>
+</html>
+
+
+抽离出一种方法， 分析：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			
+			// 将字符串转换成 DOM 对象
+			var cElem = function ( html ) {
+				var docfrag = document.createDocumentFragment();
+				var div = document.createElement( 'div' );
+				div.innerHTML = html;
+				while( div.firstChild ) {
+					docfrag.appendChild( div.firstChild );
+				}
+				return {
+					element: docfrag,
+					appendTo: function ( dom ) {
+						dom.appendChild( this.element );
+					}
+				};
+			};
+			
+			
+			
+			// cElem( '...' ).appendTo( document.body );
+			// 函数返回 DOM 对象, 没有该方法
+			// 但是现在需要该方法. 在原型中添加??? 在哪一个原型中添加呢?
+			// 首先不确定 dom 对象的共有原型, 同时可能引起原型链搜索性能问题
+			// 其次开发的原则是不影响内置对象成员
+			
+			// 因此不应该直接在 DOM 对象上添加成员
+			
+			// 给 DOM 对象提供一个包装对象
+			// 可以考虑将 cELem 函数返回的对象做一个修改, 然后其是一个 自定义对象
+			// 该对象中有 appendTo 方法
+			
+			
+			onload = function () {
+				
+				cElem( '<div style="border: 1px solid red; width: 200px; height: 100px;"></div>' )
+					.appendTo( document.body );
+					
+			};
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+
+
+DOM疑问：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			
+			// jq 
+			// $( '<div></div>' ).appendTo( 'body' );
+			
+			// createElement 可以创建 HTML 的 DOM 对象
+			
+			// <DOM 对象>.appendTo( ... )
+			
+			// 原则: 不要直接的修改原生的内置对象的成员
+			
+			// 也就是说 DOM 对象不应该提供 appendTo 方法
+			
+			// 谁添加该方法?
+			// -> DOM对象		错误
+			// -> 原型对象		jq 对象的原型对象; 包装对象( 自定义对象 )的原型对象
+			// -> jq 对象
+			
+			// $( '...' ).appendTo( $( 'body' ) )
+			// 框架的结构
+//			var itcast = function ( selector ) {
+//				return new F( selector );
+//			};
+//			var F = function ( selector ) {
+//				
+//			};
+//			F.prototype = {
+//				appendTo: function( selector ) {}
+//			};
+			
+			// 缺点???
+			// 首先在沙箱中 F 对外不可见, 无法实现扩展
+			// 同时在描述中容易造成多个变量暴漏与全局中
+			
+			// 解决方案, 直接将 F 绑定到 itcast 的上面 有两种方法
+			// -> 1. itcast.init = F  这个是放在了构造函数上 静态方法 作为工具来使用
+			// -> 2. itcast.prototype.init = F 放在了原型对象上
+			// 法1 --如果想要扩展
+			// -> itcast.init.prototype.xx = xxx;
+			
+			// 由于在方法中提供的方法一般是静态方法, 作为工具使用
+			// 但是 jq 中并不是如此操作
+			// 同时根据代码的组织规范, 初始化方法放在原型中更加合理( 与实例相关 )
+			
+			//类似如下：
+			var itcast = function ( selector ) {
+				return new itcast.prototype.init( selector );
+			};
+			itcast.prototype = {
+				appendTo: function( selector ) {}
+			};
+			itcast.prototype.init = function(selector) {}
+			itcast.prototype.init.prototype = itcast.prototype;
+
+
+			//继续优化
+			var itcast = function ( selector ) {
+				return new itcast.prototype.init( selector );
+			};
+			itcast.prototype = {
+				appendTo: function( selector ) {},
+				init: function ( selector ) {}
+			};
+			
+			itcast.prototype.init.prototype = itcast.prototype;
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+```
