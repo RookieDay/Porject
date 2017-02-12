@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <style type="text/css">
+    div {
+        background-color: green;
+    }
+    </style>
+</head>
+
+<body>
+    <p>大爷，楼上322住的是马冬梅家吧？</p>
+    <div id="d">
+        <span>马什么梅？</span>
+    </div>
+    <div>
+        <form name="form1">
+            <input type="radio" name="radioGroup" />
+            <input type="radio" name="radioGroup" />
+            <input type="radio" name="radioGroup" />
+            <input type="radio" name="radioGroup" />
+            <input type="submit" />
+        </form>
+    </div>
+    <script type="text/javascript">
+    var radios = document.getElementsByTagName('input');
+    for(var i = 0, len = radios.length; i < len; i++) {
+    	if(radios[i].type === "radio") {
+    		/*radios[i].index = i;
+    		radios[i].onclick = function() {
+    			alert(this.index);
+    		};*/
+
+    		radios[i].onclick = (function(num) {
+    			return function() {
+    				alert(num);
+    			};
+    		})(i);
+    	}
+    }
+
+
+
+    /*function foo() {
+            //在此处添加代码
+            var rdo = document.form1.radioGroup; //表单下面的所有的单选框
+            for (var i = 0; i < rdo.length; i++) {
+                if (rdo[i].checked) {
+                    alert("您选择的是第" + (i + 1) + "个单选框");
+                }
+            }
+        }
+        document.getElementsByTagName("input")[4].onclick = function(e) {
+            foo();
+            e.preventDefault();
+        };*/
+    </script>
+    <!-- <script type="text/javascript">
+    	document.write("asdfasdfasd");
+    </script> -->
+    <script type="text/javascript">
+    // split
+    // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/split
+    /*var str = "红鲤鱼与绿鲤鱼与驴";
+    var arr = str.split("");
+    console.log(arr);*/
+
+    // join
+    /*var arr = [1, 3, {}, 7, 9];
+    var str = arr.join("|");
+    console.log(str); // 1,3,[object Object],7,9*/
+
+    // push 和 pop
+    /*var arr = [1];
+    var ret = arr.push(8);
+    console.log(ret);
+    console.log(arr);
+
+    var ret1 = arr.pop();
+    console.log(ret1);
+    console.log(arr);*/
+
+    // insertBefore
+    /*var d = document.getElementById('d');
+    var p = document.getElementsByTagName("p")[0];
+    var span = d.getElementsByTagName("span")[0];
+    // 把 p 插入到 span 之前
+    var p1 = d.insertBefore(p, span);*/
+
+    // indexOf
+    /*var arr = [1, 3, 9];
+    var ret = arr.indexOf(9);
+    console.log(ret);*/
+
+    // replace
+    /*var str = "ab1c";
+    var index = 0;
+    var ret = str.replace(/[a-z]/g, function() {
+    	console.log(index++);
+    	return "x";
+    });
+    console.log(str);
+    console.log(ret);*/
+
+    // Math.random()
+    /*function getRandom(start, end) {
+    	return Math.floor(Math.random() * (end - start + 1) + start);
+    }
+
+    for (var i = 100; i >= 0; i--) {
+    	
+    	console.log(getRandom(10, 12));
+    }*/
+    // Math.floor(Math.random() * 10)  => 0 - 9
+    // Math.floor(Math.random() * 100) => 0 - 99
+    // 
+    // Math.floor(Math.random() * (100 - 10)) => 0 - 90
+    // Math.floor(Math.random() * (100 - 10) + 10) => 10 - 100
+    // for( var i = 0; i < 100; i++) {
+    // 	console.log(Math.floor(Math.random() * 10));
+    // }
+
+    // concat
+    /*var arr = [1, 2, 3];
+    var ret = arr.concat(["a", "b", "c", [4, 6]]);
+    // console.log(ret);
+    // var ret = arr.concat({"a": "b"});
+    console.log(ret);
+    console.dir(ret);*/
+
+    // splice
+    /*var arr = [1, 3, 5];
+    var ret = arr.splice(0, 1);
+    console.log(arr);
+    console.log(ret);*/
+
+    // window.status = "薛之谦人红歌不红";
+
+    /*for (var i = 0, j = 0; j < 6, i < 10; i++, j++) {
+        //循环结束条件：j=5 i=5
+        // k = i + j; //k=10
+        console.log(i);
+    }*/
+
+    for (var i = 0, j = 0;i < 10, j < 6; i++, j++) {
+        //循环结束条件：j=5 i=5
+        // k = i + j; //k=10
+        console.log(i);
+    }
+    // 逗号运算符的副作用
+    /*var i = 6, j = 6;
+    var s = (j < 10, i < 6);
+    console.log(s);*/
+
+    // var i = 0, j = 1;
+    // var i = (0, 1, 4, 6, alert)("adfadsfas");
+    // console.log(i);
+    // var o = (1, 3, 5, 7);
+
+
+    /*var arr = new Array(1, 3, 5);
+    arr[4] = 'z'; //arr=[1,3,5,undefined,’z’]
+
+    arr2 = arr.reverse(); //arr2=[’z’,undefined,5,3,1]; arr=[’z’,undefined,5,3,1]
+    arr3 = arr.concat(arr2);
+    alert(arr3);*/
+
+    // document.write("树大招风");
+    // 
+
+    /*for(var i = 0; i < 3; i++) {
+    	setTimeout((function(num) {
+    		return function() {
+    			console.log(num);
+    		};
+    	})(i), 0);
+    }*/
+    /*for(var i = 0; i < 3; i++) {
+    	setTimeout((function() {
+    		var j = i;
+    		return function() {
+    			console.log(j);
+    		};
+    	})(), 0);
+    }*/
+
+    /*Number.prototype.N = function() {
+        var re = 1;
+        for (var i = 1; i <= this; i++) {
+            re *= i;
+        }
+        return re;
+    }
+    var num = 5;
+    alert(num.N());*/
+
+    // console.log(window.location.search);
+
+    // 作用域
+    /*var a = 6;
+    setTimeout(function() {
+        alert(a);
+        var a = 66;
+    }, 1000);
+    a = 666;
+    alert(a);
+    //结果：666 undefined*/
+
+    // 函数和构造函数
+    /*function foo() {
+        foo.a = function() {
+            alert(1)
+        };
+        this.a = function() {
+            alert(2)
+        };
+        a = function() {
+            alert(3)
+        };
+        var a = function() {
+            alert(4)
+        };
+    };
+    foo.prototype.a = function() {
+        alert(5)
+    };
+    foo.a = function() {
+        alert(6)
+    };
+
+    foo.a(); //6
+    var obj = new foo();
+    obj.a(); //2
+    foo.a(); //1*/
+
+    // charCodeAt
+    /*function getByte(s) {
+        if (!arguments.length || !s) return null;
+        if ("" == s) return 0; //无效代码，因为上一句!s已经判断过
+        var l = 0;
+        for (var i = 0; i < s.length; i++) {
+            if (s.charCodeAt(i) > 255) l += 2;
+            else l += 1; //charCodeAt()得到的是uniCode码   
+        } //汉字的uniCode码大于 255bit 就是两个字节
+        alert(l);
+    }
+    getByte("hello world!\uD800");*/
+
+
+    // outerHTML
+    /*function $(id) {
+        return document.getElementById(id);
+    }
+    function getOuerHtml(node) {
+    	var tempD = document.createElement("div");
+    	tempD.appendChild(node);
+
+    	return tempD.innerHTML;
+    }
+    console.log(getOuerHtml($("d")));*/
+
+
+
+
+    function sortDesc(arr) {
+        for (var i = 0, len = arr.length; i < len; i++) {
+            for (var j = i + 1, len2 = arr.length; j < len2; j++) {
+                //>就是降序 <就是升序
+                if (arr[j] > arr[i]) {
+                    var temp = arr[j];
+                    arr[j] = arr[i];
+                    arr[i] = temp;
+                }
+            }
+        }
+        return arr;
+    }
+
+    sortDesc([1, 3, 4, 5, 2]);
+    </script>
+</body>
+
+</html>

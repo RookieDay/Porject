@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="d">
+    	
+    	<span>这是页面中存在的span</span>
+
+    </div>
+    <input type="button" name="" value="按钮" id="btn">
+    
+    <script type="text/javascript">
+    var d = document.getElementById("d");
+    // 这个事件是页面加载的时候绑定的
+	d.onclick = function(e) {
+		// 不过我们可以模拟一下 ，拿到这个元素，就拿到了所有信息 看第二个Html
+		// console.log(e);
+		// // 获取到你点击的这个元素， 然后弹出你要的东西
+		// // 我们这个是给div元素绑定单击事件，现在是我点哪个元素
+		// // 就可以获取当前这个元素 这个是利用事件冒泡的机制
+		// // 点击哪个span元素 都会触发innerhtml
+ 	// 	var tar = e.target;
+
+		// if(tar.nodeName !== "SPAN") {
+		// 	return;
+		// }
+
+		// alert(tar.innerHTML);
+		alert(123);
+	};
+
+
+	var spans = d.getElementsByTagName("span");
+	for(var i = 0; i < spans.length; i++) {
+		spans[i].onclick = function(e) {
+			e.stopPropagation();  //这样就不会继续向上冒泡
+			alert(this.innerHTML);
+		};
+	}
+
+
+	
+    var btn = document.getElementById('btn')
+    btn.onclick = function() {
+        // 动态创建div元素
+        var span = document.createElement("span");
+        span.innerHTML = "动态创建的元素";
+
+        d.appendChild(span);
+    };
+    </script>
+</body>
+
+</html>

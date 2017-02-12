@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>createDocumentFragment</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+
+<body>
+<p>
+	DocumentFragments 是一些DOM节点。它们不是DOM树的一部分。通常的使用场景是创建一个文档片段，然后将创建的DOM元素插入到文档片段中，最后把文档片段插入到DOM树中。在DOM树中，文档片段会被替换为它所有的子元素。
+	<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Document/createDocumentFragment">createDocumentFragment</a>
+</p>
+<ul></ul>
+    <script type="text/javascript">
+    var ul = document.getElementsByTagName("ul")[0]; // assuming it exists
+    var docfrag = document.createDocumentFragment();
+    var browserList = ["Internet Explorer", "Mozilla Firefox", "Safari", "Chrome", "Opera"];
+
+    /*browserList.forEach(function(e) {
+        var li = document.createElement("li");
+        li.textContent = e;
+        docfrag.appendChild(li);
+    });*/
+    for(var i = 0, len = browserList.length; i < len; i++) {
+    	var li = document.createElement("li");
+    	li.innerHTML = browserList[i];
+    	docfrag.appendChild(li);
+    }
+
+    ul.appendChild(docfrag);
+    // a list with well-known web browsers
+    </script>
+</body>
+
+</html>

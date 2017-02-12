@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+	<script type="text/javascript">
+		/*try {
+			throw "";
+		} catch(e) {
+			出错以后会有一个上下文改成了e		
+			var i = 0;
+		}
+
+		console.log(i); */
+
+		var obj = {
+			name: "jim",
+			age: 18
+		};
+
+		with(obj) {
+			console.log(name);
+		}
+
+		// obj.name
+		// console.log(age);
+	</script>
+</body>
+</html>

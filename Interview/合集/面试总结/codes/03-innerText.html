@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+
+	<div id="d">div的内容</div>
+	<script type="text/javascript">
+		var d = document.getElementById("d");
+		d.onclick = function() {
+			// var txt = d.innerText || d.textContent; // FF ：低版本的火狐浏览器不支持
+			d.innerText = "<span>啊怕你啊怕你啊怕你</span>";  //内容原封不动输出，是一个文本
+
+			console.log(d.innerHTML); 
+			//&lt;span&gt;啊怕你啊怕你啊怕你&lt;/span&gt;
+			// 获取html内容 如果我们想要输出的话 需要转义
+		
+		};
+
+
+	</script>
+</body>
+</html>
