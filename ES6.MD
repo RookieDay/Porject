@@ -463,3 +463,164 @@ m1({z: 3}) // [0, 0]
 m2({z: 3}) // [undefined, undefined]
 ```
 
+函数的 length 属性
+指定了默认值以后，函数的length属性，将返回没有指定默认值的参数个数。也就是说，指定了默认值后，length属性将失真。
+```
+(function (a) {}).length // 1
+(function (a = 5) {}).length // 0
+(function (a, b, c = 5) {}).length // 2
+```
+
+
+rest参数
+ES6 引入 rest 参数（形式为“...变量名”），用于获取函数的多余参数，这样就不需要使用arguments对象了。rest 参数搭配的变量是一个数组，该变量将多余的参数放入数组中。
+```
+function add(...values) {
+  let sum = 0;
+
+  for (var val of values) {
+    sum += val;
+  }
+
+  return sum;
+}
+
+add(2, 5, 3) // 10
+```
+
+rest 参数中的变量代表一个数组，所以数组特有的方法都可以用于这个变量。下面是一个利用 rest 参数改写数组push方法的例子。
+```
+function push(array,...items){
+  items.forEach(function(item){
+      array.push(item);
+      console.log(item);
+  })
+}
+var a = [];
+push(a,1,2,3,4);
+```
+
+扩展运算符 
+含义
+扩展运算符（spread）是三个点（...）。它好比 rest 参数的逆运算，将一个数组转为用逗号分隔的参数序列。
+```
+console.log(...[1, 2, 3])
+// 1 2 3
+
+console.log(1, ...[2, 3, 4], 5)
+// 1 2 3 4 5
+
+[...document.querySelectorAll('div')]
+// [<div>, <div>, <div>]
+```
+
+扩展运算符的应用
+（1）合并数组
+
+扩展运算符提供了数组合并的新写法。
+```
+// ES5
+[1, 2].concat(more)
+// ES6
+[1, 2, ...more]
+
+var arr1 = ['a', 'b'];
+var arr2 = ['c'];
+var arr3 = ['d', 'e'];
+
+// ES5的合并数组
+arr1.concat(arr2, arr3);
+// [ 'a', 'b', 'c', 'd', 'e' ]
+
+// ES6的合并数组
+[...arr1, ...arr2, ...arr3]
+// [ 'a', 'b', 'c', 'd', 'e' ]
+```
+
+（2）与解构赋值结合
+
+扩展运算符可以与解构赋值结合起来，用于生成数组。
+```
+const [first, ...rest] = [1, 2, 3, 4, 5];
+first // 1
+rest  // [2, 3, 4, 5]
+
+const [first, ...rest] = [];
+first // undefined
+rest  // []
+
+const [first, ...rest] = ["foo"];
+first  // "foo"
+rest   // []
+```
+
+如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错。
+```
+const [...butLast, last] = [1, 2, 3, 4, 5];
+// 报错
+
+const [first, ...middle, last] = [1, 2, 3, 4, 5];
+// 报错
+```
+
+（3）函数的返回值
+
+JavaScript的函数只能返回一个值，如果需要返回多个值，只能返回数组或对象。扩展运算符提供了解决这个问题的一种变通方法。
+```
+var dateFields = readDateFields(database);
+var d = new Date(...dateFields);
+```
+上面代码从数据库取出一行数据，通过扩展运算符，直接将其传入构造函数Date。
+
+（4）字符串
+
+扩展运算符还可以将字符串转为真正的数组。
+```
+[...'hello']
+// [ "h", "e", "l", "l", "o" ]
+```
+上面的写法，有一个重要的好处，那就是能够正确识别32位的Unicode字符。
+```
+'x\uD83D\uDE80y'.length // 4
+[...'x\uD83D\uDE80y'].length // 3
+```
+上面代码的第一种写法，JavaScript会将32位Unicode字符，识别为2个字符，采用扩展运算符就没有这个问题。因此，正确返回字符串长度的函数，可以像下面这样写。
+```
+function length(str) {
+  return [...str].length;
+}
+length('x\uD83D\uDE80y') // 3
+```
+凡是涉及到操作32位Unicode字符的函数，都有这个问题。因此，最好都用扩展运算符改写。
+```
+let str = 'x\uD83D\uDE80y';
+
+str.split('').reverse().join('')
+// 'y\uDE80\uD83Dx'
+
+[...str].reverse().join('')
+// 'y\uD83D\uDE80x'
+```
+上面代码中，如果不用扩展运算符，字符串的reverse操作就不正确。
+
+（5）实现了Iterator接口的对象
+
+任何Iterator接口的对象，都可以用扩展运算符转为真正的数组。
+```
+var nodeList = document.querySelectorAll('div');
+var array = [...nodeList];
+```
+上面代码中，querySelectorAll方法返回的是一个nodeList对象。它不是数组，而是一个类似数组的对象。这时，扩展运算符可以将其转为真正的数组，原因就在于NodeList对象实现了Iterator接口。
+
+对于那些没有部署Iterator接口的类似数组的对象，扩展运算符就无法将其转为真正的数组。
+```
+let arrayLike = {
+  '0': 'a',
+  '1': 'b',
+  '2': 'c',
+  length: 3
+};
+```
+// TypeError: Cannot spread non-iterable object.
+let arr = [...arrayLike];
+上面代码中，arrayLike是一个类似数组的对象，但是没有部署Iterator接口，扩展运算符就会报错。这时，可以改为使用Array.from方法将arrayLike转为真正的数组。
