@@ -624,3 +624,27 @@ let arrayLike = {
 // TypeError: Cannot spread non-iterable object.
 let arr = [...arrayLike];
 上面代码中，arrayLike是一个类似数组的对象，但是没有部署Iterator接口，扩展运算符就会报错。这时，可以改为使用Array.from方法将arrayLike转为真正的数组。
+
+
+name 属性 § ⇧
+函数的name属性，返回该函数的函数名。
+```
+function foo() {}
+foo.name // "foo"
+
+const bar = function baz() {};
+
+// ES5
+bar.name // "baz"
+
+// ES6
+bar.name // "baz"
+
+(new Function).name // "anonymous"
+
+
+function foo() {};
+foo.bind({}).name // "bound foo"
+
+(function(){}).bind({}).name // "bound "
+```
