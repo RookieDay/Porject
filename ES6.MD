@@ -1145,3 +1145,1491 @@ function* demo() {
   let input = yield; // OK
 }
 ```
+
+// prototype 是函数的原型属性, 是该函数创建的对象的原型对象
+			// __proto__ 是对象的原型对象, 是创建该对象的构造函数的 原型属性
+			
+			
+			function Foo() {} 
+			
+			// Foo 有 prototype 属性
+			// 讨论 __proto__
+			// 函数 Foo 是 Function 的实例
+			// 即 Function 是 Foo 的构造函数
+			// 类比
+			//	 Person		p
+			// => p.__proto__ 就是 Person.prototype
+			// => Person.prototype.__proto__ 就是 Object.prototype
+			
+			// 替换
+			// => Foo.__proto__ 就是 Function.prototype
+			// => Function.prototype.__proto__ 就是 Object.prototype
+			
+			
+			// 原型对象就是构造函数的原型属性
+			
+			// 所以, Foo.__proto__ 就是 构造函数的原型属性, 即 Function.prototype
+			
+			// 默认函数的原型属性继承自 Object.prototype
+			// Function 是函数, Function.prototype 是函数的原型属性
+			// Function.prototype 继承自 Object.prototype
+			
+			
+			// 这里与之前唯一不同的是将 函数当做对象来看
+			
+			
+			
+			// 根据结论: Function, 和 函数, 和 Function.prototype 之间的关系, 可以得到
+			// Array 是 Function 的实例, 继承自 Fucntion.prototype
+			// Date 是 Function 的实例, 继承自 Fucntion.prototype
+			// Object 是 Function 的实例, 继承自 Fucntion.prototype
+			// ...
+			// Fucntion 是 Function 的实例, 继承自 Fucntion.prototype
+			// 	结论 Function.__proto__ 就是 Function.prototype
+
+```
+var find = function(node){
+  var arr = [];
+  for(var i = 0; i < node.childNodes.length;i++){
+    arr.push(node.childNodes[i]);
+    arr = arr.concat(find(node.childNodes[i]));
+  }
+  return arr;
+}
+
+onload = function(){
+  var nodes = find(document.body);
+  for(var i = 0 ; i < nodes.length; i++){
+    nodes[i].style.border = "1px solid black";
+  }
+}
+```
+
+词法作用域：
+// 词法作用域
+			// 在 开发语言中 常见的作用域规则就是: 块级作用域 和 词法作用域
+			// 
+			
+			// 什么叫作用域?
+			// 起作用的区域
+			// 定义变量后, 可以在哪一个范围内使用该变量
+			
+			// 块级作用域
+			// 所谓的块级作用域就是 用一个块 结构分割变量的访问区域
+			// 所谓的块就是 {}
+			// 代表语言: C 语言( C 系 )
+			
+			
+			// 词法作用域
+			// 就是变量的作用范围, 在书写代码的时候就已经决定, 与运行时无关
+			// 分割作用域的只有函数
+
+			// 词法作用域 解释
+
+			// 只和代码的书写，定义时的顺序有关，和运行时候的顺序无关
+			// 函数内部可访问外部的变量，反之则不允许
+
+//这两句话
+//    var getName = function(){ alert(4); }; 提升了名字
+//    function getName(){ alert(5); }		 提升了函数
+
+// 1, 函数覆盖名字
+//var  getName;
+//function getName() {}
+
+// 2, 
+//function getName() {}
+//var getName; 这个声明无效了  假如有数值 那就是有效的 var getName = 7;
+
+var f = function f() {}; 表达式
+function f() {}  声明 这两个不是一回事
+
+
+闭包的应用：
+<script>
+			// 闭包的应用有两个模型
+			// 1, 实现私有数据
+			// 2, 实现缓存数据
+			
+			
+			// 1> 带有缓存功能函数
+			// var count = 0;
+//			var fib = function ( n ) {
+//				count++;
+//				// 面试求兔子数列, 要求使用 callee
+//				if ( n < 0 ) throw new Error( '数字不允许是负数' );
+//				if ( n === 0 || n === 1 ) return 1;
+//				return arguments.callee( n - 1 ) + 
+//						arguments.callee( n - 2 );
+//			};
+//			
+//			var count = 0;
+//			for ( var i= 0; i <= 10; i++ ) {
+//				count = 0;
+//				console.log( fib( i )  + ", " + count + ' 次');
+//			}
+			
+			/*
+			for ( var i= 0; i <= 10; i++ ) {
+				console.log( fib( i ) );
+			}
+			*/
+			// fib( 21 );
+			// 1, 3, 5, 9, 15, 25
+			// 41, 67
+			// console.log( count );
+			
+			
+			var fib = (function () {
+				var arr = [];
+				return function ( n ) {
+					// count++;
+					// 面试求兔子数列, 要求使用 callee
+					if ( n < 0 ) throw new Error( '数字不允许是负数' );
+					
+					var res = arr[ n ];   // 先到数组中取
+					if ( res !== undefined ) {
+						// 数组中有数据
+						return res;
+					} else {
+						// 如果是 1 或 0 则将 1 返回给 res
+						// 否则递归结果交给 res;
+						
+						if ( n === 0 || n === 1 ) {
+							res =  1;
+						} else {
+							res = arguments.callee( n - 1 ) + 
+									arguments.callee( n - 2 );
+						}
+						
+						arr[ n ] = res;  // 将计算的结果放到数组中, 那么下一次再计算的
+										 // 时候可以直接拿来用, 就不用计算量
+						return res;
+					}
+				};
+			})();
+			
+			fib( 5 );
+			
+			// 首先计算 第 n 项
+			// 在计算的时候首先看缓存中是否有该数据
+			// 那么如果缓存里面没有数据, 就递归, 并将计算的结果放到对应的缓存位置上
+			// 那么如果缓存中有数据, 则直接返回
+			
+			
+			
+//			var count = 0;
+//			for ( var i= 0; i <= 10; i++ ) {
+//				count = 0;
+//				console.log( fib( i )  + ", " + count + ' 次');
+//			}
+			
+			// fib( 100 );
+			// 1, 3, 5, 9, 15, 25
+			// 41, 67
+			// console.log( count );
+			
+			
+		</script>		
+
+函数名存储数据：
+		// createCache
+			var fib = function ( n ) {
+				var res = fib[ n ];   // 先到函数名中取
+				if ( res !== undefined ) {
+					// 函数中有数据
+					return res;
+				} else {
+					// 如果是 1 或 0 则将 1 返回给 res
+					// 否则递归结果交给 res;
+					
+					if ( n === 0 || n === 1 ) {
+						res =  1;
+					} else {
+						res = arguments.callee( n - 1 ) + 
+								arguments.callee( n - 2 );
+					}
+					
+					fib[ n ] = res;  // 将计算的结果放到数组中, 那么下一次再计算的
+									 // 时候可以直接拿来用, 就不用计算量
+					fib.len++;
+					
+					return res;
+				}
+			};
+			
+			fib.len = 0;
+			
+			fib( 5 );
+
+	// 10,如何判断属性或者方法是被继承的 而不是被自己实现的
+			严谨的话 使用递归判断实现
+			var Fn = function () { this.age = 1; };
+			Fn.prototype.name = 'jim';
+			// Fn.prototype.age = undefined;
+			var f = new Fn();
+			// hasOwnProperty
+			// 如何判断属性是被继承的??? 
+			f.hasOwnProperty('age') 只能说明这个属性或者方法是f提供的
+			f.age 保证有这个属性
+			console.log( f.age && !f.hasOwnProperty( 'age' ) );
+			有age这个属性 并且不是自己提供的
+			console.log( 'age' in f && !f.hasOwnProperty( 'age' ) );
+			// age 可能存在原型链上, 也可能不存在
+			
+			// 如果属性值就是 null 或 undefined, 那么此时 f.age 就无法判断了      
+
+
+	// 14, 函数有方法, Function.prototype
+			//	       返回的对象继承自 函数.prototype
+			// 1> 题目中的做法
+			/*
+			Function.prototype.inherit = function () {
+				return Object.create( this.prototype );
+			};
+			*/
+			// 2> 原意
+			/*
+			Function.prototype.inherit = function ( obj ) {
+				var o = Object.create( this.prototype );
+				for ( var k in obj ) {
+					o[ k ] = obj[ k ];
+				}
+				return o;
+			};
+			*/
+			函数的原型属性利用 函数.prototype 来获得. 表示由该函数创建的对象继承自 该函数的 prototype
+			
+			函数的原型对象利用 函数.__proto__ 来获得, 或 Function.prototype 来获得. 表示 该函数 继承自
+				Function.prototype 或 函数.__proto__      
+
+开发中使用到的缓存：
+var createCache = function() {
+  var internalCache = {};
+  var arr = [];
+  return function(k,v){
+    if(v){
+      if(!internalCache[k]){
+        if(arr.length >= 3){
+          var deleteKey = arr.shift();
+          delete internalCache[deleteKey];
+        }
+        arr.push(k);
+      }
+      internalCache[k] = v;
+    } else {
+      return internalCache[k];
+    }
+  }
+}       
+var cc = createCache();
+
+
+var s = 'qdqsadaewrq ';
+var i = -1,arr = [];
+do {
+  i = s.indexOf('e',i+1);
+  if(i != -1){
+    arr.push(i);
+  }
+} while(i != -1);
+
+var s = 'adqwrsaf';
+var r  = /e/g;
+var arr = [];
+var m;
+while((m = r.exec(s)) != null) {
+  arr.push(m.index);
+}
+
+简写形式的元字符：
+			// 
+			// \w	文字		\W	代表的是非文字		word 文字		默认表示英文和下划线
+			// \d	数字		\D	代表的是非数字		digit 数字
+			// \s	空白		\S	代表的是非空白		spcae 空白
+			
+			. 代表除了换行符以外的任何字符
+			// 有些开发者使用 [\s\S] 表示增强的 .  ---> [\s\S] 代表任意的一个字符
+			
+			
+			var get = function ( str ) {
+				
+				// 		      1                   2                 3
+				var r = /^(?:#([\w\-]+)|\.([\w\-]+)|([\w\-]+))$/;
+//				var r = /^(?:#([\w-]+)|\.([\w-]+)|([\w-]+)|(\*)+)$/;
+				var m = r.exec( str );
+				
+				if ( m[ 1 ]  ) {
+					return [ document.getElementById( m[ 1 ] ) ];
+				} else if ( m[ 2 ] ) {
+					return document.getElementsByClassName( m[ 2 ] );
+				} else if ( m[ 3 ] ){
+					return document.getElementsByTagName( m[ 3 ] );
+				}
+				
+			};
+
+// 分组
+// 1> 基本元字符
+// .	[]	()	|    
+. 代表任意的非 换行字符
+[] 
+() 代表分组 和 提高优先级 ， 如果仅仅是为了提高优先级 不捕获的话 ， 需要使用(?:) 取消捕获
+|  代表二者中的一个 
+
+// 2> 限定元字符
+// +		前面紧跟的字符或组至少 1 个			{1,}
+// *		前面紧跟的字符或组至少 0 个			{0,}
+// ?		前面紧跟的字符或组出现0次或1次; 如果跟在其他限定符后面表示取消贪婪模式
+// 			{0,1}
+// {n}		前面紧跟的字符或组 n 个
+// {n,}		前面紧跟的字符或组至少 n 个
+// {n,m}	前面紧跟的字符或组 n 到 m 个
+
+// 3> 首尾元字符
+//	^			hat   字符串里表示以什么什么开头 方括号里面表示以什么开头 
+//	$			字符串以什么结尾 引导符 
+
+// 4> 简写元字符
+// \w	\W
+// \s	\S
+// \d	\D
+
+DOM 设置属性
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.c {
+				border: 1px solid red;
+				width: 400px;
+				height: 150px;
+			}
+		</style>
+		<script type="text/javascript">
+			
+			// 2, 在页面中创建 3 个 div, 要求 设置其边框与颜色以及大小
+			// 1> 直接设置 style 属性
+			// 2> 使用 类样式
+			// -> setAttribute
+			// -> .语法
+			
+//			onload = function () {
+//				var i, node;
+//				for ( i = 0; i < 3; i++ ) {
+//					node = document.createElement( 'div' );
+//					// node.setAttribute( 'class', 'c' );
+//					node.className = 'c';
+//					document.body.appendChild( node );
+//				}
+//			};
+			
+			
+			// 1, 方法比较多, 练习的过程的中每一个做法都要熟练
+			// 2, 由于每次循环都使用 document.body.appenChild 因此
+			//		会导致每次 for 都要刷新页面结构. 应该采用一个临时的数据
+			//		存储这些 dom 对象, 在 全部创建完成以后, 再一并加入
+					
+					
+			// 只有创建一个 节点标签, 才可以不影响 整个页面布局, 同时允许存储其他标签
+//			onload = function () {
+//				var i, node, container = document.createElement( 'div' );
+//				for ( i = 0; i < 3; i++ ) {
+//					node = document.createElement( 'div' );
+//					// node.setAttribute( 'class', 'c' );
+//					node.className = 'c';
+//					container.appendChild( node );
+//				}
+//				document.body.appendChild( container );
+//			};
+
+			// 用于缓存文档片段的 DOM 对象 DocumentFragment
+			onload = function () {
+				var i, node, 
+					container = document.createDocumentFragment();
+					
+				for ( i = 0; i < 3; i++ ) {
+					node = document.createElement( 'div' );
+					// node.setAttribute( 'class', 'c' );
+					node.className = 'c';
+					container.appendChild( node );
+				}
+				document.body.appendChild( container );
+			};
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+或者使用下面的innerHTML：
+	<script type="text/javascript">
+		onload = function () {
+			var i,s = '';
+			for (var i = 0; i < 10; i++) {
+				s += '<div>' + i + '</div>';
+			}
+			document.body.innerHTML = s;
+		}
+	</script>
+
+性能分析：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			
+			// 在页面中添加 1000 个div
+			
+			var count = 50000;
+			
+			var test1 = function () {
+				var start = +new Date(),
+					i, end, node, docfrag;
+				
+				docfrag = document.createDocumentFragment();
+				for ( i = 0; i < count; i++ ) {
+					node = document.createElement( 'div' );
+					docfrag.appendChild( node );
+				}
+				document.body.appendChild( docfrag );
+				
+				end = +new Date();
+				
+				console.log( 'test1 = ' + ( end - start ) );
+			};
+			
+			
+			var test2 = function () {
+				var start = +new Date(),
+					i, end, s;
+				
+				s = '';
+				for ( i = 0; i < 1000; i++ ) {
+					s += '<div></div>';
+					// document.body.innerHTML += '<div></div>';
+				}
+				document.body.innerHTML = s;
+				
+				end = +new Date();
+				
+				console.log( 'test2 = ' + ( end - start ) );
+			};
+			
+			
+			onload = function() {
+				// test1();
+				test2()
+			};
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+dom中创建代码：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			
+			// jq 中
+			// $( '<div style=""></div>' );
+			
+			// itcast -> I
+			// var dom = I( '<a href="http://www.baidu.com">一个链接</a>' )
+			
+			var cElem = function ( html ) {
+				// 1, 在内部创建一个 docfrag
+				var docfrag = document.createDocumentFragment();
+				// 2, 创建真正的 div, 然后设置其 innerHTMl 为出入的字符串
+				// 然后在遍历该子元素, 将内容加入到 docfrag 中
+				var div = document.createElement( 'div' );
+				// 3, 将字符串设置为 它的 innerHTML
+				div.innerHTML = html;
+				// 4, 遍历div的子元素, 加入 docfrag 下面为什么这么写呢
+				// 因为在 DOM 元素中默认有一个特征, 即元素只允许有一个 父节点
+				// 如果添加元素到另一个节点中, 该元素会自动的离开原来的父节点
+				//最好不用for循环
+				while( div.firstChild ) {
+					docfrag.appendChild( div.firstChild );
+				}
+				// 5, 获得其子元素返回
+				return docfrag;
+			};
+			
+		</script>
+	</head>
+	<body>
+	</body>
+	<script>
+		var dom = cElem( '<a href="http://www.baidu.com">一个链接</a><br />' + 
+						 '<a href="http://www.itcast.cn">传智播客</a>'	);
+						 
+		document.body.appendChild( dom );
+		
+		// I( ... ).appendTo( 'body' );
+	</script>
+</html>
+
+
+解析while 
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			
+			var id = function ( id ) {
+				return document.getElementById( id );
+			};
+			
+			
+			onload = function () {
+				var d1 = id( 'dv1' );
+				var d2 = id( 'dv2' );
+				var list = d1.getElementsByTagName("p");
+				var len;
+				// dom 节点只能有一个父节点 你把这个节点append到了
+				//另一个节点上 ，当前这个节点就少了一个节点
+				//i继续累加 节点本身length也在减少 总在变化
+				//所以这里让他固定不动就可以了
+				//这种写法不太好
+				//比较好使用while循环
+//				for ( var i = 0, len = list.length; i < len; i++ ) {
+//					
+//					d2.appendChild( list[ 0 ] );
+//					
+//				}
+				
+//				while ( list[ 0 ] ) {
+//					d2.appendChild( list[ 0 ] );
+//				}
+				
+				while ( d1.firstChild ) {
+					d2.appendChild( d1.firstChild );
+				}
+			};
+			
+		</script>
+	</head>
+	<body>
+		<div id="dv1">
+			<p>p1</p>
+			<p>p2</p>
+			<p>p3</p>
+			<p>p4</p>
+		</div>
+		<div id="dv2">
+			
+		</div>
+	</body>
+</html>
+
+
+抽离出一种方法， 分析：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			
+			// 将字符串转换成 DOM 对象
+			var cElem = function ( html ) {
+				var docfrag = document.createDocumentFragment();
+				var div = document.createElement( 'div' );
+				div.innerHTML = html;
+				while( div.firstChild ) {
+					docfrag.appendChild( div.firstChild );
+				}
+				return {
+					element: docfrag,
+					appendTo: function ( dom ) {
+						dom.appendChild( this.element );
+					}
+				};
+			};
+			
+			
+			
+			// cElem( '...' ).appendTo( document.body );
+			// 函数返回 DOM 对象, 没有该方法
+			// 但是现在需要该方法. 在原型中添加??? 在哪一个原型中添加呢?
+			// 首先不确定 dom 对象的共有原型, 同时可能引起原型链搜索性能问题
+			// 其次开发的原则是不影响内置对象成员
+			
+			// 因此不应该直接在 DOM 对象上添加成员
+			
+			// 给 DOM 对象提供一个包装对象
+			// 可以考虑将 cELem 函数返回的对象做一个修改, 然后其是一个 自定义对象
+			// 该对象中有 appendTo 方法
+			
+			
+			onload = function () {
+				
+				cElem( '<div style="border: 1px solid red; width: 200px; height: 100px;"></div>' )
+					.appendTo( document.body );
+					
+			};
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+
+
+DOM疑问：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			
+			// jq 
+			// $( '<div></div>' ).appendTo( 'body' );
+			
+			// createElement 可以创建 HTML 的 DOM 对象
+			
+			// <DOM 对象>.appendTo( ... )
+			
+			// 原则: 不要直接的修改原生的内置对象的成员
+			
+			// 也就是说 DOM 对象不应该提供 appendTo 方法
+			
+			// 谁添加该方法?
+			// -> DOM对象		错误
+			// -> 原型对象		jq 对象的原型对象; 包装对象( 自定义对象 )的原型对象
+			// -> jq 对象
+			
+			// $( '...' ).appendTo( $( 'body' ) )
+			// 框架的结构
+//			var itcast = function ( selector ) {
+//				return new F( selector );
+//			};
+//			var F = function ( selector ) {
+//				
+//			};
+//			F.prototype = {
+//				appendTo: function( selector ) {}
+//			};
+			
+			// 缺点???
+			// 首先在沙箱中 F 对外不可见, 无法实现扩展
+			// 同时在描述中容易造成多个变量暴漏与全局中
+			
+			// 解决方案, 直接将 F 绑定到 itcast 的上面 有两种方法
+			// -> 1. itcast.init = F  这个是放在了构造函数上 静态方法 作为工具来使用
+			// -> 2. itcast.prototype.init = F 放在了原型对象上
+			// 法1 --如果想要扩展
+			// -> itcast.init.prototype.xx = xxx;
+			
+			// 由于在方法中提供的方法一般是静态方法, 作为工具使用
+			// 但是 jq 中并不是如此操作
+			// 同时根据代码的组织规范, 初始化方法放在原型中更加合理( 与实例相关 )
+			
+			//类似如下：
+			var itcast = function ( selector ) {
+				return new itcast.prototype.init( selector );
+			};
+			itcast.prototype = {
+				appendTo: function( selector ) {}
+			};
+			itcast.prototype.init = function(selector) {}
+			itcast.prototype.init.prototype = itcast.prototype;
+
+
+			//继续优化
+			var itcast = function ( selector ) {
+				return new itcast.prototype.init( selector );
+			};
+			itcast.prototype = {
+				appendTo: function( selector ) {},
+				init: function ( selector ) {}
+			};
+			
+			itcast.prototype.init.prototype = itcast.prototype;
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+
+
+双等号：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			
+			var itcast = function ( selector ) {
+				return new itcast.prototype.init( selector );
+			};
+			itcast.prototype = {
+				appendTo: function( selector ) {},
+				init: function ( selector ) {}
+			};
+			
+			itcast.prototype.init.prototype = itcast.prototype;
+			
+			//构造函数和原型都有这个方法
+			itcast.extend = itcast.prototype.extend = function ( obj ) {}; 
+			
+			// 前面给大家描述过, 代码在逻辑上组织时候是需要按照特定功能分组的
+			 
+			// 工具型方法 并非是每个实例必须的方法  在原有方法的基础上功能增强
+			// 例如要实现 nextSibling
+			// jq 中就是 next()
+			//	.next()					获得下一个元素
+			//  .next( selector )		获得下一个元素,如果该元素是符合说选择器的取出来, 否则没有获得到元素
+			
+			// 如果要实现该方法
+			// 实际上就是内部循环调用 获得下一个元素的方法
+			// 就是一个 dom 数组, 获得每一个元素的下一个元素, 组成一个新数组
+			// [ div1, div2 ]
+			// [ div1.nextSibling, div2.nextSibling ]
+			
+			// 由于浏览器的不同, 该方法可能会获得空的文本节点, 这个不应该在元素上考虑
+			// 需要一个通用的工具方法, 来获得某一个元素的下一个元素
+			//缺点： 外界无法使用 因为已经在沙箱里了
+			// 外界要使用它== 框架的扩展用 
+//			var next = function ( dom ) {
+//				var newDom = dom;
+//				while( newDom = newDom.nextSibling ) {
+//					if ( newDom.nodeType == 1 ) {
+//						return newDom;
+//					}
+//				}
+//			};
+//			[ next( divs ), next( div2 ) ];
+//			
+
+			// 实际上该方法如果放到沙箱中, 外部是无法访问, 也就是说必须只能在沙箱内部使用
+			// 而该方法如果在框架扩展的时候是需要使用该功能的, 那么就出现无法共享的问题
+			// 因此为了共享应该将其作为静态方法存在
+			// 那么在代码中如何添加该方法呢?
+			
+			// -> itcast.next = function () ...
+			// -> itcast.extend({ next: function() {} });
+			
+			// 实例方法
+			// -> itcast.prototype.next = function () {}
+			// -> itcast.prototype.extend({ next: function() {} });
+			
+			
+			
+			// 将来在添加方法的时候
+			
+			// 1>
+			itcast.prototype.css = function () {};
+			itcast.prototype.hasClass = function () {};
+			itcast.prototype.addClass = function () {};
+			itcast.prototype.removeClass = function () {};
+			itcast.prototype.toggleClass = function () {};
+			
+			
+			// 2>
+			itcast.prototype.extend({
+				css: function () {
+				},
+				hasClass: function () {
+				},
+				addClass: function () {
+				},
+				removeClass: function () {
+				},
+				toggleClass: function () {
+				}
+			});
+			
+			
+			// 工具型方法
+			
+			
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+双等号：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			
+			// itcast
+			// itcast.prototype
+			
+			// 是要给这两个对象添加 extend 方法
+			// 怎么添加
+			
+//			itcast.extend = function ( obj ) {
+//				for ( var k in obj ) {
+//					this[ k ] = obj[ k ];  
+//				}
+//			};
+//			
+//			itcast.prototype.extend = function ( obj ) {
+//				for ( var k in obj ) {
+//					this[ k ] = obj[ k ];  
+//				}
+//			};
+			
+			
+			// console.log( {} == {} );   false
+			// alert( function () {} == function () {} );  false
+			
+			
+			// 优化一下: 减少一个函数, 共享
+//			var fn = function ( obj ) {
+//				for ( var k in obj ) {
+//					this[ k ] = obj[ k ];  
+//				}
+//			};
+//			itcast.extend = fn;
+//			itcast.prototype.extend = fn;
+			
+			// 浪费一个变量名
+			
+			/*  从右往左 先把123 赋给b  再把整个表达式值b=123 当成整体赋给a
+			var a, b;
+			a = b = 123;
+			*/
+			
+			// 现将 123 赋值给 b, 然后整个赋值表达式的值就是 123, 接着讲 123 赋值给 a
+			itcast.extend = itcast.prototype.extend = function ( obj ) {
+				for ( var k in obj ) {
+					this[ k ] = obj[ k ];  
+				}
+			};
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+
+
+循环克隆：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			// 将问题简化
+			I( '<div></div><div></div>' ).appendTo( 'div' );
+			
+			// 将一个 div 数组( 2 个元素 ) 添加到 页面中的 div 中( 2 个 )
+			// [ d1, d2 ]						[ div1, div2 ]
+			// 将 d1 加到 div1 和 div2 中
+			// 将 d2 加到 div1 和 div2 中
+			
+			// 单个元素要克隆几个由需要添加的元素个数决定, 刚刚是需要添加的个数 - 1
+			
+			// 再简化
+			// 将 dv 加到 [ div1, div2, div3 ] 中
+			/*
+			div1.appendChild( dv.cloneNode( true ) );
+			div2.appendChild( dv.cloneNode( true ) );
+			div3.appendChild( dv );
+			*/
+			
+			// 最后一个不克隆, 前面的所有都要克隆
+			/*
+			for ( var i = 0; i < list.length; i++ ) {
+				list[ i ].appendChild( i === list.length - 1 ?
+										dv : 
+										dv.cloneNode( true ) );
+			}
+			*/
+			
+			
+			
+			// 接下来讨论两个循环
+			// ds = [ d1, d2 ]						list = [ div1, div2, dv3 ]
+			div1.appendChild( d1.cloneNode( true ) );
+			div1.appendChild( d2.cloneNode( true ) );
+			
+			div2.appendChild( d1.cloneNode( true )  );
+			div2.appendChild( d2.cloneNode( true )  );
+			
+			div3.appendChild( d1 );
+			div3.appendChild( d2 );
+			
+			// 添加一层循环
+			for ( var i = 0; i < ds.length; i++ ) {
+				div1.appendChild( ds[ i ].cloneNode( true ) );
+			}
+			for ( var i = 0; i < ds.length; i++ ) {
+				div2.appendChild( ds[ i ].cloneNode( true ) );
+			}
+			for ( var i = 0; i < ds.length; i++ ) {
+				div3.appendChild( ds[ i ] );
+			}
+			// 合并
+			for ( var j = 0; j < list.length; j++ ) {
+				for ( var i = 0; i < ds.length; i++ ) {
+					list[ j ].appendChild( j === list.length - 1 ? 
+												ds[ i ] : 
+												ds[ i ].cloneNode( true ) );
+				}
+			}
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+
+
+
+简单封装一下：
+// by itcast
+// xxxx-xx-xx
+//这里使用window -- 减少变量作用域的搜索 提高性能, 
+//这里使用undefined  --- 下面没有传参 所以我们这个值就是undefined 这是为了解决早期浏览器有的
+//没有实现undefined 功能， 有的没有实现undefined功能， 如果没有实现undefined功能，在浏览器使用的时候，他会把undefined当做变量来用， 一旦把他当做变量来使用，就表明改变量未定义，报错，所以参数里面给一个undefined,但是不给他传参，所以表明这个变量就是undefined,他的值也就是undefined， 这里巧妙的用到了
+值和名字是一样的情况，那么在代码里面使用undefined的话 就不会出现这种报错的情况
+(function ( window, undefined ) {
+	
+	
+// 构造函数
+var itcast = function ( selector ) {
+	return new itcast.fn.init( selector );
+};
+// 核心原型
+itcast.fn = itcast.prototype = {
+	constructor: itcast,
+	selector: null,
+	init: function ( selector ) {
+		// 字符串: 选择器, html
+		if ( typeof selector == 'string' ) {
+			if ( selector.charAt( 0 ) === '<' ) {
+				this.elements = parseHTML( selector );
+			} else {
+				this.elements = select( selector );
+			}
+		}
+		this.selector = selector;
+	}
+};
+itcast.fn.init.prototype = itcast.prototype;
+
+// 可扩展
+itcast.extend = itcast.fn.extend = function ( obj ) {
+	// 将 obj 的成员加到 this 上
+	var k;
+	for ( k in obj ) {
+		this[ k ] = obj[ k ];
+	}
+};
+
+var select = function ( selector ) {
+	var first = selector.charAt( 0 ), arr = [];
+	if ( first === '#' ) {
+		arr.push.call( arr, document.getElementById( selector.slice( 1 ) ) )
+	} else if ( first === '.' ) {
+		arr.push.apply( arr, document.getElementsByClassName( selector.slice( 1 ) ) )
+	} else {
+		arr.push.apply( arr, document.getElementsByTagName( selector ) );
+	}
+	return arr;
+};
+
+var parseHTML = function ( html ) {
+	var div = document.createElement( 'div' ),
+		arr = [], i;
+	div.innerHTML = html;
+	for ( i = 0; i < div.childNodes.length; i++ ) {
+		arr.push( div.childNodes[ i ] );
+	}
+	return arr;
+};
+
+// 基本的工具方法
+itcast.extend({
+	each: function ( arr, fn ) {
+		var i, l = arr.length, 
+			isArray = itcast.isLikeArray( arr );
+		if ( isArray ) {
+			// 数组
+			for ( i = 0; i < l; i++ ) {
+				if ( fn.call( arr[ i ], i, arr[ i ] ) === false ) {
+					break;
+				}
+			}
+		} else {
+			// 对象
+			for ( i in arr ) {
+				if ( fn.call( arr[ i ], i, arr[ i ] ) === false ) {
+					break;
+				}
+			}
+		}
+		return arr;
+	}
+});
+
+// 判断类型的方法
+itcast.extend({
+	isFunction: function ( obj ) {
+		return typeof obj === 'function';
+	},
+	isString: function ( obj ) {
+		return typeof obj === 'string';
+	},
+	isLikeArray: function ( obj ) {
+		return obj && obj.length && obj.length >= 0;
+	},
+	isItcast: function ( obj ) {
+		return !!obj.selector;
+	},
+	isDOM: function ( obj ) {
+		return !!obj.nodeType;
+	}
+});
+
+
+// 基本的 DOM 操作
+itcast.fn.extend({
+	appendTo: function ( selector ) {
+		// var objs = itcast( selector ).elements,
+		// 	i, j,
+		// 	len1 = objs.length,
+		// 	len2 = this.elements.length;
+		// // 将 this.elements 加到 objs 中
+		// for ( i = 0; i < len1; i++ ) {
+		// 	for ( j = 0; j < len2; j++ ) {
+		// 		objs[ i ].appendChild( i === len1 - 1 ? 
+		// 								this.elements[ j ] :
+		// 								this.elements[ j ].cloneNode( true ) );
+		// 	}
+		// }
+		var objs = itcast(selector).elements, i,j,
+				len1 = objs.length,
+				len2 = this.elements.length;
+		for( i = 0; i < len1; i++) {
+			for( j = 0; j < len2; j++) {
+				objs[i].appendChild(i === len1 - 1 ? 
+								this.elements[j] 
+								:this.elements[j].cloneNode(true));
+			}
+		}
+	}
+});
+
+
+
+
+// 对外公开
+window.I = window.itcast = itcast;
+//这里使用window -- 减少变量作用域的搜索 提高性能
+})( window );
+
+
+
+关于appendTo中elements的思考：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			
+			// obj.elements
+			// 特点就是数据都在 elements 中
+			// 方法与它并列, 也就是说方法与数据分离了
+			
+			// 这样的组织方式管理非常方便
+			// 但是在给予它的开发变得每次都要使用 elements, 很繁琐
+			
+			// jq 中将数据直接存储到 this 中, 也就是说将 jq 对象看成一个伪数组
+			// 里面的每一个元素都是 dom 对象
+			// 同时提供了很多的方法
+			
+			// jq -> DOM
+			// $(...).get(0)
+			// $(...)[ 0 ]
+		</script>
+		<script src="../../js/jquery-1.12.1.js"></script>
+		<script>
+			
+			$(function () {
+				var temp = $( 'div' );
+				var temp = $();
+			});
+		</script>
+	</head>
+	<body>
+		<div class="c1"></div>
+		<div class="c2"></div>
+		<div class="c3"></div>
+	</body>
+</html>
+
+验证修改原型继承属性
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			var Person = function () {
+				
+			};
+			Person.prototype.age = 10;
+			
+			var p = new Person();
+			
+			console.log( p.age );
+//执行下面这句话之前  这个时候age是在他的原型里面的 
+	p: Person
+		__proto__:Object
+		age:10
+		constructor:()
+		__proto__:Object
+
+//执行下面这句话 	赋值以后 p里面有了age	 所以我们原型当中的age是不能修改的
+			// p.age = 123; 
+	p: Person
+		age:123
+		__proto__:Object
+		age:10
+		constructor:()
+		__proto__:Object
+
+			
+			p.age += 123;
+			// p.age = p.age + 123 注释了上面的p.age=123 执行这句话
+								//代表的是用原型里面的数据加上123 在给P一个age 
+			
+			console.log( p.age );
+			
+			
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+
+什么是事件：
+	事件不是一个名词 其实是一个过程 是人出发的一个行为 节点标签注册了一个
+	事件处理程序 节点会调用事件处理程序， 如果他注册事件处理程序的这个名字和我们的
+	这个行为刚好相同的话，那么我的dom对象就会调用我们的事件处理程序 这个过程称之为事件
+	事件的内部在操作的时候， 比如现在又一个click事件，在我们点一下的时候 会执行click方法
+	这就是在响应事件 ，这是内部去做的， 那么对于我们的onClick方法，当我们内部响应的时候，如果我们注册的事件处理程序，
+	我们的系统就会 调用这样的方法， 执行我们的Onclick方法。如果里面什么都没有返回
+	就把onclick执行了 同时把他的默认行为执行了，如果返回的是false, 代表的是取消他的默认
+	行为， 那么就把onclik执行了， 默认行为不执行
+click() {
+	if onclick != null {
+		if (onclick() !== false) {
+			默认行为
+		}
+	}
+}
+
+以前用的添加事件
+
+// addEventLisener   这种添加事件可以绑定多个事件 连续增加事件
+// 	dom.addEventLisener( 事件名, fn ) 事件名--  这个地方 fn 函数里面的this代表dom对象
+//	
+IE里面的添加事件
+// attachEvent
+//  dom.attachEvent( 事件名, fn ) 这个地方fn函数里面的this代码window 
+
+这种方式的事件的 新事件会把原来事件覆盖
+div.onclick = function() {
+	
+}
+
+
+
+// 什么是事件对象? 有什么用?
+事件就是用户做了一件事情，然后他就可以给我一个响应
+事件对象就是 用户在做这件事情的，有很多附带的信息 比如说
+用户做的是什么事情  用户在哪个地方的事情 
+// 如何访问事件对象????
+// 1> IE
+//		window.event
+// 2> 火狐
+//		事件处理函数的参数
+
+
+事件移出：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="itcast.js"></script>
+		<script>
+			// 添加事件 addEventListener
+			// 语法: addEventListener( 事件的类型, 事件处理函数, 冒泡还是捕获  )
+			// 移除事件 removeEventListener
+			// 语法: removeEventListener( 事件类型, 事件处理函数 )
+			// 移除的只能是加入的函数
+			onload = function () {
+				
+				
+				// var btn = document.getElementById( 'btn' );
+				
+				var fn = function () {
+					alert( '123' );
+				}
+				
+				/*
+				btn.addEventListener( 'click', fn );  // 这个函数无法移除
+				
+				btn.removeEventListener( 'click', fn );
+				*/
+				
+				I( '#btn' ).on( 'click', fn ); 
+				
+				I( '#btn' ).off( 'click', fn );
+			};
+		</script>
+	</head>
+	<body>
+		<input type="button" id="btn" value=" click " />
+	</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			div {
+				width: 100px; height: 20px; border: 1px solid red; margin: 10px 0;
+			}
+			.c1 {
+				background-color: red;	/* #ff0000 */
+			}
+			.c2 {
+				background-color: green; /* #00ff00 */
+			}
+			.c3 {
+				background-color: blue; /* #0000ff */
+			}
+		</style>
+		<script src="itcast.js"></script>
+		<script>
+			itcast.fn.extend({
+				css: function ( cssName, cssValue ) {
+					// 假设只有一个参数 cssName
+					// this 是多个元素是一个 DOM 的数组, 但是获取数据的时候
+					// 获得的是第 0 个元素的样式
+					// return this[ 0 ].style[ cssName ];
+					
+					// 在 js 中, 利用 js 获得样式, 默认只能获得行内样式, 类样式与外部样式无法获得
+					// 考虑使用 计算样式来获得第一次的结果
+					// window.getComputedStyle
+					// 如果是 低版本的 IE 浏览器, 需要使用 currentStyle
+					
+					var style = window.getComputedStyle( this[ 0 ] );
+					
+					return style[ cssName ];
+				}
+ 			});
+			
+			I(function () {
+				var res = I( 'div' ).css( 'background-color' );
+				console.log(typeof res );
+			});
+		</script>
+	</head>
+	<body>
+		<div class="c1"></div>
+		<div class="c2"></div>
+		<div class="c3"></div>
+	</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			div {
+				width: 100px; height: 20px; border: 1px solid red; margin: 10px 0;
+			}
+			.c1 {
+				background-color: red;	/* #ff0000 */
+			}
+			.c2 {
+				background-color: green; /* #00ff00 */
+			}
+			.c3 {
+				background-color: blue; /* #0000ff */
+			}
+		</style>
+		<script src="../js/jquery-1.12.1.js"></script>
+		<script type="text/javascript">
+			
+			// .css( '名字' )
+			// .css( '名字', '值' )
+			// .css( {  } );
+			
+			// addClass()
+			// removeClass()
+			// hasClass()
+			// toggleClass()
+			
+			$(function () {
+				
+				// var res = $( 'div' ).css( 'backgroundColor' );
+				
+				// console.log( res );
+				
+				alert( $('div').hasClass('c3') );
+			});
+			
+		</script>
+	</head>
+	<body>
+		<div class="c1"></div>
+		<div class="c2"></div>
+		<div class="c3"></div>
+	</body>
+</html>
+
+
+
+
+正则单词边界：
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			
+			// 利用正则表达式是用来匹配数据的. 匹配字符串
+			// 但是有些时候, 查找的东西可能比较复杂
+			// 比如需要查询一个方法, 叫 a
+			
+			// append
+			// appendTo
+			// add
+			// attach
+			// addEvent...
+			// ...
+			
+			// 因此需要规范, 我现在需要的是 a 的边界( 英文 )
+			// 使用 \b 表示一个单词的边界, 比如: I have a dream
+			
+			var s = "I have a dream";
+			var r = /\b\w\b/g;
+			var m = r.exec( s );
+			
+			m = r.exec( s );
+			
+			m = r.exec( s );
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+去空格
+str.replace(/^\s+/g,'').replace(/\s+$/g,'');
+在很多其他编程语言当中有trim方法，但是很多语言支持函数重载
+有一个规则 如果trim函数不带参数 则去掉左右空格
+如果带有参数 表示取消左右指定的字符
+'abc132'.trim('a') ---> bc132
+/^a+|a+$/g
+
+'abc132a'.trim('a','b') ---> c132
+/^[ab]+ | (a|b)+$/g
+
+
+
+兼容IE的currentStyle() 
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			div { width: 100px; height: 40px; border:1px solid red;}
+		</style>
+		<script>
+			var support = {};
+			// 浏览器检查
+			
+			onload = function () {
+				var dv = document.getElementsByTagName('div')[ 0 ];
+				
+				var style1 = dv.style;
+				var style2 = window.getComputedStyle( dv );
+				var style3 = dv.currentStyle;
+				
+				var _ = 0;
+			};
+			
+		</script>
+	</head>
+	<body>
+		<div></div>
+	</body>
+</html>
+
+
+移动前端：
+标准viewport 操作： meta:vp  tab键
+1. 流式布局
+	流式布局  就是百分比布局，通过盒子的宽度设置成百分比来根据屏幕的宽度来进行伸缩，不受固定像素的限制，内容向两侧填充。
+	这样的布局方式  就是移动web开发使用的常用布局方式
+2. viewport
+	有三层 一个是我们的浏览器 一个是我们的viewport 一个使我们的页面
+	viewport是一个虚拟的窗口 他可能比浏览器窗口大  可能比浏览器窗口小
+	是用来承载我们网页的 能设置缩放比例
+
+总结： 用meta标签 把view-port宽度设置为device-width 同时initial-scale = 1
+,user-scalable = 1 就构建了一个标准的移动web页面
+
+
+非标准viewport
+
+假如手机分辨率320 * 1000 ,  pc 端网页 640 * 1040px
+那么手机上显示 淘宝的做法是缩小一半
+例如我们的 m.taobao.com 
+body　比例是　640*960
+手机端配置显示是 如下 配置为了0.5
+<meta name="viewport" content="initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no">
+
+一些css的设置  reset css  、 common css
+
+
+
