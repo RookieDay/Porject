@@ -164,3 +164,555 @@ var deepClone = function(obj){
 ```
 
 ### 内存释放
+> Javascript 中不同类型以及不同环境下变量的内存都是何时释放?
+引用类型是在没有引用之后, 通过 v8 的 GC 自动回收, 值类型如果是处于闭包的情况下, 要等闭包没有引用才会被 GC 回收, 非闭包的情况下等待 v8 的新生代 (new space) 切换的时候回收.
+ -  v8 内存 GC 的机制  内存快照
+ - 内存释放
+ - 内存泄漏
+ - V8 中不同类型的数据存储的位置, 在内存释放的时候不同区域的不同策略
+ - [nodejs 垃圾回收](https://eggggger.xyz/2016/10/22/node-gc/)
+ ```
+ var theThing = null  
+var replaceThing = function () {
+  var originalThing = theThing
+  var unused = function () {
+    if (originalThing)
+      console.log("hi")
+  }
+  theThing = {
+    longStr: new Array(1000000).join('*'),
+    someMethod: function () {
+      console.log(someMessage)
+    }
+  };
+};
+setInterval(replaceThing, 1000)
+ ```
+
+ ```
+ 比如如下代码能否爆掉 V8 的内存?
+
+let arr = [];
+while(true)
+  arr.push(1);
+
+  然后上述代码与下方的情况有什么区别?
+
+let arr = [];
+while(true)
+  arr.push();
+
+
+  如果 push 的是 Buffer 情况又会有什么区别?
+
+let arr = [];
+while(true)
+  arr.push(new Buffer(1000));
+
+
+  思考完之后可以尝试找找别的情况如何爆掉 V8 的内存. 以及来聊聊内存泄漏?
+
+var theThing = null  
+var replaceThing = function () {
+  var originalThing = theThing
+  var unused = function () {
+    if (originalThing)
+      console.log("hi")
+  }
+  theThing = {
+    longStr: new Array(1000000).join('*'),
+    someMethod: function () {
+      console.log(someMessage)
+    }
+  };
+};
+setInterval(replaceThing, 1000)
+ ```
+
+比如上述情况中 unused 的函数中持有了 originalThing 的引用, 使得每次旧的对象不会释放从而导致内存泄漏
+
+###ES6 新特性
+- let 与 var 的区别, 以及 箭头函数 与 function 的区别
+函数体内的 this 对象，就是定义时所在的对象，而不是使用时所在的对象。
+```
+function foo() {
+  setTimeout(() => {
+    console.log('id:', this.id);
+  }, 100);
+}
+
+var id = 21;
+
+foo.call({ id: 42 });
+```
+setTimeout 的参数是一个箭头函数，这个箭头函数的定义生效是在 foo 函数生成时，而它的真正执行要等到100毫秒后。如果是普通函数，执行时 this 应该指向全局对象 window，这时应该输出 21 。但是，箭头函数导致 this 总是指向函数定义生效时所在的对象，所以输出的是 42 。
+不可以当做构造函数，也就是说，不可以使用 new 命令，否则会抛出错误。
+不可以使用 arguments 对象，该对象在函数体内不存在。
+不可以使用 yield 命令，因此箭头函数不能用作 Generator 函数。
+
+- ES6 引用 的知识点来询问 const 方面的知识. 结合 {} 的使用与缺点来谈 Set, Map 等. 比如私有化的问题与 symbol 
+ES6 提供了新的数据结构 Set。它类似于数组，但是成员的值都是唯一的，没有重复的值。
+
+Set 本身是一个构造函数，用来生成 Set 数据结构。
+```
+const s = new Set();
+
+[2, 3, 5, 4, 5, 2, 2].forEach(x => s.add(x));
+
+for (let i of s) {
+  console.log(i);
+}
+// 2 3 5 4
+```
+上面代码通过add方法向 Set 结构加入成员，结果表明 Set 结构不会添加重复的值。
+
+Set 函数可以接受一个数组（或类似数组的对象）作为参数，用来初始化。
+```
+/ 例一
+const set = new Set([1, 2, 3, 4, 4]);
+[...set]
+// [1, 2, 3, 4]
+
+// 例二
+const items = new Set([1, 2, 3, 4, 5, 5, 5, 5]);
+items.size // 5
+
+// 例三
+function divs () {
+  return [...document.querySelectorAll('div')];
+}
+
+const set = new Set(divs());
+set.size // 56
+
+// 类似于
+divs().forEach(div => set.add(div));
+set.size // 56
+```
+例一和例二都是Set函数接受数组作为参数，例三是接受类似数组的对象作为参数。
+上面代码中，也展示了一种去除数组重复成员的方法。
+```
+[...new Set([array])]
+```
+向Set加入值的时候，不会发生类型转换，所以5和"5"是两个不同的值。Set内部判断两个值是否不同，使用的算法叫做“Same-value equality”，它类似于精确相等运算符（===），主要的区别是NaN等于自身，而精确相等运算符认为NaN不等于自身。
+```
+let set = new Set();
+let a = NaN;
+let b = NaN;
+set.add(a);
+set.add(b);
+set // Set {NaN}
+```
+上面代码向 Set 实例添加了两个NaN，但是只能加入一个。这表明，在 Set 内部，两个NaN是相等。
+另外，两个对象总是不相等的。
+```
+let set = new Set();
+
+set.add({});
+set.size // 1
+
+set.add({});
+set.size // 2
+```
+上面代码表示，由于两个空对象不相等，所以它们被视为两个值。
+
+Set 实例的属性和方法
+Set 结构的实例有以下属性。
+
+Set.prototype.constructor：构造函数，默认就是Set函数。
+Set.prototype.size：返回Set实例的成员总数。
+Set 实例的方法分为两大类：操作方法（用于操作数据）和遍历方法（用于遍历成员）。下面先介绍四个操作方法。
+
+add(value)：添加某个值，返回Set结构本身。
+delete(value)：删除某个值，返回一个布尔值，表示删除是否成功。
+has(value)：返回一个布尔值，表示该值是否为Set的成员。
+clear()：清除所有成员，没有返回值。
+
+Array.from方法可以将 Set 结构转为数组。
+```
+const items = new Set([1, 2, 3, 4, 5]);
+const array = Array.from(items);
+```
+这就提供了去除数组重复成员的另一种方法。
+```
+function dedupe(array) {
+  return Array.from(new Set(array));
+}
+
+dedupe([1, 1, 2, 3]) // [1, 2, 3]
+```
+
+遍历操作
+Set 结构的实例有四个遍历方法，可以用于遍历成员。
+
+keys()：返回键名的遍历器
+values()：返回键值的遍历器
+entries()：返回键值对的遍历器
+forEach()：使用回调函数遍历每个成员
+需要特别指出的是，Set的遍历顺序就是插入顺序。这个特性有时非常有用，比如使用Set保存一个回调函数列表，调用时就能保证按照添加顺序调用。
+
+
+因此使用 Set 可以很容易地实现并集（Union）、交集（Intersect）和差集（Difference）。
+```
+let a = new Set([1, 2, 3]);
+let b = new Set([4, 3, 2]);
+
+// 并集
+let union = new Set([...a,...b]);
+// Set {1, 2, 3, 4}
+
+// 交集
+let intersect = new Set([...a].filter(x => b.has(x)));
+// set {2, 3}
+
+// 差集
+let difference = new Set([...a].filter(x => !b.has(x)));
+// Set {1}
+```
+如果想在遍历操作中，同步改变原来的 Set 结构，目前没有直接的方法，但有两种变通方法。一种是利用原 Set 结构映射出一个新的结构，然后赋值给原来的 Set 结构；另一种是利用Array.from方法。
+```
+// 方法一
+let set = new Set([1, 2, 3]);
+set = new Set([...set].map(val => val * 2));
+// set的值是2, 4, 6
+
+// 方法二
+let set = new Set([1, 2, 3]);
+set = new Set(Array.from(set, val => val * 2));
+// set的值是2, 4, 6
+```
+
+WeakSet 结构与 Set 类似，也是不重复的值的集合。但是，它与 Set 有两个区别。
+
+首先，WeakSet 的成员只能是对象，而不能是其他类型的值
+WeakSet 中的对象都是弱引用，即垃圾回收机制不考虑 WeakSet 对该对象的引用，也就是说，如果其他对象都不再引用该对象，那么垃圾回收机制会自动回收该对象所占用的内存，不考虑该对象还存在于 WeakSet 之中。
+
+这是因为垃圾回收机制依赖引用计数，如果一个值的引用次数不为0，垃圾回收机制就不会释放这块内存。对于那些不重要的引用，在结束使用之后，有时会忘记取消引用，导致内存无法释放，进而可能会引发内存泄漏。WeakSet 里面的引用，都不计入垃圾回收机制，所以就不存在这个问题。因此，WeakSet 适合临时存放一组对象，以及存放跟对象绑定的信息。只要这些对象在外部消失，它在 WeakMap 里面的引用就会自动消失。
+
+由于上面这个特点，WeakSet 的成员是不适合引用的，因为它会随时消失。另外，由于 WeakSet 内部有多少个成员，取决于垃圾回收机制有没有运行，运行前后很可能成员个数是不一样的，而垃圾回收机制何时运行是不可预测的，因此 ES6 规定 WeakSet 不可遍历。
+
+这些特点同样适用于本章后面要介绍的 WeakMap 结构。
+
+WeakSet 的一个用处，是储存 DOM 节点，而不用担心这些节点从文档移除时，会引发内存泄漏。
+```
+const foos = new WeakSet();
+class Foo{
+  constructor(){
+    foos.add(this);
+  }
+  method (){
+    if(!foos.has(this)){
+      throw new TypeErroe('Foo.prototype.method 只能在Foo的实例上调用！');
+    }
+  }
+}
+```
+上面代码保证了Foo的实例方法，只能在Foo的实例上调用。这里使用WeakSet的好处是，foos对实例的引用，不会被计入内存回收机制，所以删除实例的时候，不用考虑foos，也不会出现内存泄漏。
+
+Map的遍历
+```
+const map = new Map([
+  ['F', 'no'],
+  ['T',  'yes'],
+]);
+
+for (let key of map.keys()) {
+  console.log(key);
+}
+// "F"
+// "T"
+
+for (let value of map.values()) {
+  console.log(value);
+}
+// "no"
+// "yes"
+
+for (let item of map.entries()) {
+  console.log(item[0], item[1]);
+}
+// "F" "no"
+// "T" "yes"
+
+// 或者
+for (let [key, value] of map.entries()) {
+  console.log(key, value);
+}
+// "F" "no"
+// "T" "yes"
+
+// 等同于使用map.entries()
+for (let [key, value] of map) {
+  console.log(key, value);
+}
+// "F" "no"
+// "T" "yes"
+```
+Map 结构转为数组结构，比较快速的方法是使用扩展运算符（...）。
+```
+const map = new Map([
+  [1, 'one'],
+  [2, 'two'],
+  [3, 'three'],
+]);
+
+[...map.keys()]
+// [1, 2, 3]
+
+[...map.values()]
+// ['one', 'two', 'three']
+
+[...map.entries()]
+// [[1,'one'], [2, 'two'], [3, 'three']]
+
+[...map]
+// [[1,'one'], [2, 'two'], [3, 'three']]
+```
+forEach方法还可以接受第二个参数，用来绑定this。
+```
+const reporter = {
+  report:function(key,value){
+ console.log("Key: %s, Value: %s", key, value);
+  }
+}
+map.forEach(function(value,key,map){
+  this.report(key,value);
+},reporter)
+```
+上面代码中，forEach方法的回调函数的this，就指向reporter。
+
+互相转换：
+（1）Map 转为数组
+
+前面已经提过，Map 转为数组最方便的方法，就是使用扩展运算符（...）。
+
+const myMap = new Map()
+  .set(true, 7)
+  .set({foo: 3}, ['abc']);
+[...myMap]
+// [ [ true, 7 ], [ { foo: 3 }, [ 'abc' ] ] ]
+
+
+（2）数组 转为 Map
+
+将数组传入 Map 构造函数，就可以转为 Map。
+
+new Map([
+  [true, 7],
+  [{foo: 3}, ['abc']]
+])
+// Map {
+//   true => 7,
+//   Object {foo: 3} => ['abc']
+// }
+
+（3）Map 转为对象
+
+如果所有 Map 的键都是字符串，它可以转为对象。
+
+function strMapToObj(strMap) {
+  let obj = Object.create(null);
+  for (let [k,v] of strMap) {
+    obj[k] = v;
+  }
+  return obj;
+}
+
+const myMap = new Map()
+  .set('yes', true)
+  .set('no', false);
+strMapToObj(myMap)
+// { yes: true, no: false }
+
+（4）对象转为 Map
+
+function objToStrMap(obj) {
+  let strMap = new Map();
+  for (let k of Object.keys(obj)) {
+    strMap.set(k, obj[k]);
+  }
+  return strMap;
+}
+
+objToStrMap({yes: true, no: false})
+// Map {"yes" => true, "no" => false}
+
+（5）Map 转为 JSON
+
+Map 转为 JSON 要区分两种情况。一种情况是，Map 的键名都是字符串，这时可以选择转为对象 JSON。
+
+function strMapToJson(strMap) {
+  return JSON.stringify(strMapToObj(strMap));
+}
+
+let myMap = new Map().set('yes', true).set('no', false);
+strMapToJson(myMap)
+// '{"yes":true,"no":false}'
+另一种情况是，Map 的键名有非字符串，这时可以选择转为数组 JSON。
+
+function mapToArrayJson(map) {
+  return JSON.stringify([...map]);
+}
+
+let myMap = new Map().set(true, 7).set({foo: 3}, ['abc']);
+mapToArrayJson(myMap)
+// '[[true,7],[{"foo":3},["abc"]]]'
+（6）JSON 转为 Map
+
+JSON 转为 Map，正常情况下，所有键名都是字符串。
+
+function jsonToStrMap(jsonStr) {
+  return objToStrMap(JSON.parse(jsonStr));
+}
+
+jsonToStrMap('{"yes": true, "no": false}')
+// Map {'yes' => true, 'no' => false}
+但是，有一种特殊情况，整个 JSON 就是一个数组，且每个数组成员本身，又是一个有两个成员的数组。这时，它可以一一对应地转为Map。这往往是数组转为 JSON 的逆操作。
+
+function jsonToMap(jsonStr) {
+  return new Map(JSON.parse(jsonStr));
+}
+
+jsonToMap('[[true,7],[{"foo":3},["abc"]]]')
+// Map {true => 7, Object {foo: 3} => ['abc']}
+
+
+- 闭包应用的场景 / 闭包实现数据的私有  / es6 的一些新特性 (例如 class, symbol) 能否实现私有, 如果能的话那为什么要用闭包? 亦或者是什么闭包中的数据/私有化的数据的内存什么时候释放? 
+
+// 闭包的应用有两个模型
+			// 1, 实现私有数据
+			// 2, 实现缓存数据
+
+```
+缓存数据
+var fib = function ( n ) {
+				var res = fib[ n ];   // 先到函数名中取
+				if ( res !== undefined ) {
+					// 函数中有数据
+					return res;
+				} else {
+					// 如果是 1 或 0 则将 1 返回给 res
+					// 否则递归结果交给 res;
+					
+					if ( n === 0 || n === 1 ) {
+						res =  1;
+					} else {
+						res = arguments.callee( n - 1 ) + 
+								arguments.callee( n - 2 );
+					}
+					
+					fib[ n ] = res;  // 将计算的结果放到数组中, 那么下一次再计算的
+									 // 时候可以直接拿来用, 就不用计算量
+					fib.len++;
+					
+					return res;
+				}
+			};
+			
+			fib.len = 0;
+			
+			fib( 5 );
+```
+
+```
+function Foo() {
+				var num;
+				return {
+					get_Num: function () {
+						return num;
+					},
+					set_Num: function ( v ) {
+						num = v;
+					}
+				};
+			}
+			
+			var o = Foo();
+			
+			console.log( o.get_Num() );
+			
+			o.set_Num( 123 );
+			
+			console.log( o.get_Num() );
+```
+```
+私有化
+var Student=(function(){  
+    var m_staticMaxAge = 120;//定义一个私有的静态属性  
+    
+    function ageIsValid(age){ //定义一个私有的静态方法  
+        if(age > m_staticMaxAge){  
+            throw Error("the property age must be less than "+m_staticMaxAge);  
+        }  
+    }  
+  
+    //返回构造函数，设置一些属性  
+    return function (name,age) {  
+  
+        var m_name, m_age;//把私有属性都放到这里定义  
+  
+        //私有属性的 setter 和 getter 都放到这里  
+        this.setName = function (name) {  
+  
+            Student.nameIsValid(name);  
+            m_name = name;  
+        };  
+  
+        this.setAge = function (age) {  
+            ageIsValid(age);  
+            m_age = age;  
+        };  
+  
+        this.getName = function () {  
+            return m_name;  
+        };  
+  
+        this.getAge = function () {  
+            return m_age;  
+        };  
+  
+        this.setName(name);  
+        this.setAge(age);  
+    };  
+})();
+```
+      
+- ... 的使用上, 如何实现一个数组的去重 (使用 Set 可以加分).
+```
+[...new Set([array])]
+
+```
+
+```
+function dedupe(array) {
+  return Array.from(new Set(array));
+}
+
+dedupe([1,1,2,3,1])
+```
+
+- const 定义的 Array 中间元素能否被修改? 如果可以, 那 const 修饰对象有什么意义?
+其中的值可以被修改. 意义上, 主要保护引用不被修改 (如用 Map 等接口对引用的变化很敏感, 使用 const 保护引用始终如一是有意义的), 也适合用在 immutable 的场景.
+const 定义的 Array 中间元素能被修改，const 定义的变量只是持有 Array 的地址，这个变量只是本身不能修改，而对于存在于堆内存中的 Array 本身是可以修改的。
+对于 const 声明，只是它的赋值操作被冻结了，而值不会因为 const 而不变。主要是预防在coding过程中的coder因为疏忽对变量的意外修改。
+
+
+### 模块
+exports 和 module.exports 的区别：
+·1.module.exports 初始值为一个空对象 {}
+ 2.exports 是指向的 module.exports 的引用
+ 3.require() 返回的是 module.exports 而不是 exports
+ 
+我们经常看到这样的写法：
+exports = module.exports = somethings
+上面的代码等价于:
+module.exports = somethings
+exports = module.exports
+原理很简单，即 module.exports 指向新的对象时，exports 断开了与 module.exports 的引用，那么通过 exports = module.exports 让 exports 重新指向 module.exports 即可。
+
+[https://cnodejs.org/topic/5734017ac3e4ef7657ab1215](module.exports区别)
+
+CommonJS是服务器端模块的规范，Node.js采用了这个规范。
+根据CommonJS规范，一个单独的文件就是一个模块。加载模块使用require方法，该方法读取一个文件并执行，最后返回文件内部的exports对象。
+
+CommonJS 加载模块是同步的，所以只有加载完成才能执行后面的操作。像Node.js主要用于服务器的编程，加载的模块文件一般都已经存在本地硬盘，所以加载起来比较快，不用考虑异步加载的方式，所以CommonJS规范比较适用。但如果是浏览器环境，要从服务器加载模块，这是就必须采用异步模式。所以就有了 AMD CMD 解决方案。
