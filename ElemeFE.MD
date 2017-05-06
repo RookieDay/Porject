@@ -716,3 +716,195 @@ CommonJS是服务器端模块的规范，Node.js采用了这个规范。
 根据CommonJS规范，一个单独的文件就是一个模块。加载模块使用require方法，该方法读取一个文件并执行，最后返回文件内部的exports对象。
 
 CommonJS 加载模块是同步的，所以只有加载完成才能执行后面的操作。像Node.js主要用于服务器的编程，加载的模块文件一般都已经存在本地硬盘，所以加载起来比较快，不用考虑异步加载的方式，所以CommonJS规范比较适用。但如果是浏览器环境，要从服务器加载模块，这是就必须采用异步模式。所以就有了 AMD CMD 解决方案。
+
+[https://www.h5jun.com/post/luckey-draw-in-5-minutes.html](抽奖程序)
+利用 Array(n).fill().map(...) 可以方便快速地构造数组：
+```
+Array(10).fill().map((_,i) => i+1); // 得到 [1,2,3,4,5,6,7,8,9,10]
+或者
+Array.from({length:10}, (_,i) => i+1)
+或者
+[...Array(10).keys()] 
+```
+
+Array.keys()
+```
+keys() 方法返回一个新的Array迭代器，它包含数组中每个索引的键。
+var arr = ["a", , "c"];
+var sparseKeys = Object.keys(arr);
+var denseKeys = [...arr.keys()];
+console.log(sparseKeys); // ['0', '2']
+console.log(denseKeys);  // [0, 1, 2]
+```
+
+
+Array.from() 方法从一个类似数组或可迭代对象创建一个新的数组实例。
+语法：
+```
+Array.from(arrayLike[, mapFn[, thisArg]])
+```
+Array.from() 允许你从下面两者来创建数组：
+
+类数组对象（拥有一个 length 属性和若干索引属性的任意对象）
+可遍历对象（你可以从它身上迭代出若干个元素的对象，比如有 Map 和 Set 等）
+Array.from() 方法有一个可选参数 mapFn，让你可以在最后生成的数组上再执行一次 map 方法后再返回。也就是说 Array.from(obj, mapFn, thisArg) 就相当于 Array.from(obj).map(mapFn, thisArg), 除非创建的不是可用的中间数组。 这对一些数组的子类,如  typed arrays 来说很重要, 因为中间数组的值在调用 map() 时需要是适当的类型。
+
+from() 的 length 属性为 1 。
+
+在 ES2015 中， Class 语法允许我们为内置类型（比如 Array）和自定义类新建子类（比如叫 SubArray）。这些子类也会继承父类的静态方法，比如 SubArray.from()，调用该方法后会返回子类 SubArray 的一个实例，而不是 Array 的实例。
+```
+const bar = ["a", "b", "c"];
+Array.from(bar);
+// ["a", "b", "c"]
+
+Array.from('foo');
+// ["f", "o", "o"]
+```
+```
+// Using an arrow function as the map function to
+// manipulate the elements
+Array.from([1, 2, 3], x => x + x);      
+// [2, 4, 6]
+
+
+// Generate a sequence of numbers
+// Since the array is initialized with `undefined` on each position,
+// the value of `v` below will be `undefined`
+Array.from({length: 5}, (v, i) => i);
+// [0, 1, 2, 3, 4]
+```
+
+从 1 ~ 62，一共有 62 人，从其中要公平地抽取出 10 人，而且不重复。所以，初步判断，这是一个简单的随机抽取过程，有 N 个数，从中抽出 M 个（M < N）
+```
+const cards = Array(62).fill().map((_,i)=>i+1); //初始化一个1-62位的数组
+function draw(n = 1 ){
+  var ret = [];
+  for(var i = 0; i < n; i++){
+    let idx = Math.floor(cards.length * Math.random());
+    ret.push(...cards.splice(idx,1));
+  }
+  return ret;
+}
+
+console.log(draw(10));
+```
+首先生成一个顺序的 1 ~ 62 号的数组，然后从其中随机抽取 10 次，为了不重复，将抽取的数字通过 cards.splice(idx, 1) 从原数组中取出来。
+
+上面这种方式可行，但它不是最好的，因为每次 splice 一个数字，取 10 个数字需要 splice 10 次，这看起来不是特别好。可以想到另一种方法，先对数组进行“洗牌”，然后一次把 10 个数字取出来：
+
+```
+function draw(amounts,n=1){
+  const cards = Array(amounts).fill().map((_,i)=>i+1);
+  for(let i = amounts - 1;i >= 0; i--){
+    let rand = Math.floor((i+1)*Math.random());
+            17         60          60         17
+    [cards[rand],cards[i]] = [cards[i],cards[rand]];
+  }
+  return cards.slice(0,n);
+}
+console.log(draw(62,10));
+```
+首先它先把所有的牌都排序了，但实际上只需要排序 10 张牌就好，多余的排序没有必要。其次，它不方便连续抽奖，比如第一次抽取 10 个号，然后再想多抽取 5 个号，它就做不到了。
+
+[http://es6.ruanyifeng.com/#docs/destructuring](变量的解构赋值)
+```
+交换变量的值
+let x = 1;
+let y = 2;
+
+[x, y] = [y, x];
+```
+```
+const [a, b, c, d, e] = 'hello';
+a // "h"
+b // "e"
+c // "l"
+d // "l"
+e // "o"
+
+类似数组的对象都有一个length属性，因此还可以对这个属性解构赋值。
+let {length : len} = 'hello';
+len // 5
+```
+Knuth-Durstenfeld Shuffle
+Fisher-Yates 洗牌算法的一个变种是 Knuth Shuffle
+每次从未处理的数组中随机取一个元素，然后把该元素放到数组的尾部，即数组的尾部放的就是已经处理过的元素，这是一种原地打乱的算法，每个元素随机概率也相等，时间复杂度从 Fisher 算法的 O(n2)提升到了 O(n)
+
+选取数组(长度n)中最后一个元素(arr[length-1])，将其与n个元素中的任意一个交换，此时最后一个元素已经确定
+选取倒数第二个元素(arr[length-2])，将其与n-1个元素中的任意一个交换
+重复第 1 2 步，直到剩下1个元素为止
+```
+functuin shuffle(arr){
+  var length = arr.length, temp, random;
+  while(0 != length){
+    random = Math.floor(Math.random()*length);
+    length--;
+    temp = arr[length];
+    arr[length] = arr[random]l
+    arr[random] = temp;
+  }
+  return arr;
+}
+```
+
+Array.sort()
+利用Array的sort方法可以更简洁的实现打乱，对于数量小的数组来说足够。因为随着数组元素增加，随机性会变差。
+```
+[1,3,14,11,2,4,5].sort(()=>{
+  return .5 - Math.random();
+})
+Math.round(Math.random() * 1000)
+表示产生一个随机数并把它放大1000倍再取整，即生成0~1000之间的随机整数。
+
+((Math.random() * 10 + 5).toFixed(1) - 0)
+表示产生一个5到15之间，包含一位小数的随机数。
+分步解释一下，先产生一个随机数把它乘以10再加上5，即生成5~15的随机数，然后调用toFixed转换成保留1位小数的字符串形式，最后减0是做了隐式转换，把字符串再转换为数字。
+```
+不需要洗所有的牌
+```
+function draw(amount,n=1){
+  const cards = Array(amount).fill().map((_,i)=>i+1);
+  for(let i = amount - 1, stop = amount - n - 1;i > stop;i--){
+    let rand = Math.floor((i+1)*Math.random());
+    [cards[rand],cards[i]] = [cards[i],cards[rand]];
+  }
+  return cards.slice(-n);
+}
+console.log(draw(62,10));
+```
+上面这个版本是优化过的版本，显然如果取 10 个数，只需要循环 10 次即可，不需要把 64 张牌都洗了。
+
+要解决可以连续抽奖的问题，就需要把 cards 提取出来（就像方案 1 的随机抽取一样），但是那样的话就使得函数有副作用，虽说是临时写一个抽奖，也不喜欢设计得太糙。或者，那就加一个构造器执行初始化？
+```
+function Box(amount){
+  this.cards = Array(amount).fill().map((_,i)=>i+1);
+}
+Box.prototype.draw = function(n = 1){
+  let cards = this.cards,amount = this.cards.length;
+  for(let i = amount - 1, stop = amount - n - 1; i > stop; i--){
+    let rand = Math.floor((i + 1) * Math.random());
+    [cards[rand], cards[i]] =  [cards[i], cards[rand]];
+ }
+ let ret = cards.slice(-n);  //截取最后的十个数字
+ cards.length = amount - n;  //数组长度减少 去掉部分值
+ return ret;
+}
+var box = new Box(62);
+console.log(box.draw(5),box.draw(5));
+```
+
+更优雅的解决方式？
+实际上，对于一次可能抽取任意多个获奖人的场景，用 ES6 的 generators 非常合适，我们可以直接拿洗牌的版本略做修改
+```
+function* draw(amount){
+  const cards = Array.from({length:amount},(_,i)=>i+1);
+  const cards1 = [...Array(62).keys()];
+  for(let i = amount - 1; i >= 0;i--){
+    let rand = Math.floor((i+1)*Math.random());
+    [cards[rand],cards[i]] = [cards[i],cards[rand]];
+    yield cards[i];
+  }
+}
+var draw = draw(62);
+console.log(Array(10).fill().map(()=>draw.next().value));
+```
