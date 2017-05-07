@@ -902,10 +902,12 @@ function* draw(amount){
   for(let i = amount - 1; i >= 0;i--){
     let rand = Math.floor((i+1)*Math.random());
     [cards[rand],cards[i]] = [cards[i],cards[rand]];
-    yield cards[i];
+    //当这个迭代器的next()方法被调用时，生成器函数的主体会被执行直至第一个yield表达式，该表达式定义了迭代器返回的值，或者，被 yield*委派至另一个生成器函数。
+    yield cards[i]; 
   }
 }
 var draw = draw(62);
+//next()方法返回一个对象，该对象有一个value属性，表示产出的值，和一个done属性，表示生成器是否已经产出了它最后的值。
 console.log(Array(10).fill().map(()=>draw.next().value));
 ```
 
@@ -957,3 +959,153 @@ console.log(gen.next().value); // 12
 console.log(gen.next().value); // 13
 console.log(gen.next().value); // 20
 ```
+
+JS bind
+bind()方法创建一个新的函数, 当被调用时，它的this关键字被设置为提供的值 ，在调用新函数时，提供任何一个给定的参数序列。
+语法
+```
+fun.bind(thisArg[, arg1[, arg2[, ...]]])
+```
+参数
+```
+thisArg
+当绑定函数被调用时，该参数会作为原函数运行时的 this 指向。当使用new 操作符调用绑定函数时，该参数无效。
+arg1, arg2, ...
+当绑定函数被调用时，这些参数将置于实参之前传递给被绑定的方法。
+```
+返回值
+返回由指定的this值和初始化参数改造的原函数拷贝
+
+描述
+bind() 函数会创建一个新函数（称为绑定函数），新函数与被调函数（绑定函数的目标函数）具有相同的函数体（在 ECMAScript 5 规范中内置的call属性）。当目标函数被调用时 this 值绑定到 bind() 的第一个参数，该参数不能被重写。绑定函数被调用时，bind() 也接受预设的参数提供给原函数。一个绑定函数也能使用new操作符创建对象：这种行为就像把原函数当成构造器。提供的 this 值被忽略，同时调用时的参数被提供给模拟函数。
+
+示例
+创建绑定函数
+bind() 最简单的用法是创建一个函数，使这个函数不论怎么调用都有同样的 this 值。JavaScript新手经常犯的一个错误是将一个方法从对象中拿出来，然后再调用，希望方法中的 this 是原来的对象。（比如在回调中传入这个方法。）如果不做特殊处理的话，一般会丢失原来的对象。从原来的函数和原来的对象创建一个绑定函数，则能很漂亮地解决这个问题：
+```
+this.x = 9; 
+var module = {
+  x: 81,
+  getX: function() { return this.x; }
+};
+
+module.getX(); // 返回 81
+
+var retrieveX = module.getX;
+retrieveX(); // 返回 9, 在这种情况下，"this"指向全局作用域
+
+// 创建一个新函数，将"this"绑定到module对象
+// 新手可能会被全局的x变量和module里的属性x所迷惑
+var boundGetX = retrieveX.bind(module);
+boundGetX(); // 返回 81
+```
+偏函数（Partial Functions）
+bind()的另一个最简单的用法是使一个函数拥有预设的初始参数。这些参数（如果有的话）作为bind()的第二个参数跟在this（或其他对象）后面，之后它们会被插入到目标函数的参数列表的开始位置，传递给绑定函数的参数会跟在它们的后面。
+
+```
+function list() {
+  return Array.prototype.slice.call(arguments);
+}
+
+var list1 = list(1, 2, 3); // [1, 2, 3]
+
+// Create a function with a preset leading argument
+var leadingThirtysevenList = list.bind(undefined, 37);
+
+var list2 = leadingThirtysevenList(); // [37]
+var list3 = leadingThirtysevenList(1, 2, 3); // [37, 1, 2, 3]
+```
+
+配合 setTimeout
+
+在默认情况下，使用 window.setTimeout() 时，this 关键字会指向 window （或全局）对象。当使用类的方法时，需要 this 引用类的实例，你可能需要显式地把 this 绑定到回调函数以便继续使用实例。
+```
+function LateBloomer() {
+  this.petalCount = Math.ceil(Math.random() * 12) + 1;
+}
+
+// Declare bloom after a delay of 1 second
+LateBloomer.prototype.bloom = function() {
+  window.setTimeout(this.declare.bind(this), 1000);
+};
+
+LateBloomer.prototype.declare = function() {
+  console.log('I am a beautiful flower with ' +
+    this.petalCount + ' petals!');
+};
+
+var flower = new LateBloomer();
+flower.bloom();  // 一秒钟后, 调用'declare'方法
+```
+
+bind和call以及apply一样，都是可以改变上下文的this指向的。不同的是，call和apply一样，直接引用在方法上，而bind绑定this后返回一个方法，但内部核心还是apply。
+```
+var obj = {
+  a: 1,
+  b: 2,
+  getCount: function(c, d) {
+    return this.a + this.b + c + d;
+  }
+};
+ 
+window.a = window.b = 0;
+console.log(obj.getCount(3, 4));  // 10
+var func = obj.getCount;
+console.log(func(3, 4));  // 7
+```
+为何会这样？因为func在上下文中的this是window！bind的存在正是为了改变this指向获取想要的值：
+```
+var obj = {
+  a: 1,
+  b: 2,
+  getCount: function(c, d) {
+    return this.a + this.b + c + d;
+  }
+};
+ 
+window.a = window.b = 0;
+var func = obj.getCount.bind(obj);
+console.log(func(3, 4));  // 10
+```
+低版本ie6~8兼容写法：
+```
+var obj = {
+  a:1,
+  b:2,
+  getCount:function(c,d){
+    return this.a + this.b + c + d;
+  }
+}
+Function.prototype.bind = Function.prototype.bind || function(context){
+  var that = this;
+  return function(){
+    return that.apply(context,arguments);
+  }
+}
+window.a = window.b = 0;
+var func = obj.getCount.bind(obj);
+console.log(func(3,4));
+```
+
+bind的核心是返回一个未执行的方法，如果直接使用apply或者call：
+```
+var ans = obj.getCount.apply(obj, [3, 4]);
+console.log(ans); // 10
+```
+函数前加上波浪号，其作用是把函数声明转换为表达式，这样就可以直接运行。
+```
+for(var i = 0;i < 10; i++){
+  ~function(i){
+    setTimeout(function(){
+      console.log(i);
+    },i*1000);
+  }(i)
+}
+```
+bind实现
+```
+for(var i = 0; i < 10;i++){
+  setTimeout(console.log.bind(console,i),i*1000)
+}
+```
+bind是和apply、call一样，是Function的扩展方法，所以应用场景是func.bind()，而传的参数形式和call一样，第一个参数是this指向，之后的参数是func的实参，fun.bind(thisArg[, arg1[, arg2[, ...]]])。
