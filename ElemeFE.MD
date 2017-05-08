@@ -872,6 +872,33 @@ function draw(amount,n=1){
 }
 console.log(draw(62,10));
 ```
+```
+function shuffle(amount,n=1){
+  const arr = Array(amount).fill().map((_,i)=>i+1); 建立长度为amount的数组
+  for(var i = arr.length - 1,stop = amount - n - 1;i >stop;i--){
+    var random = Math.floor((i+1)*Math.random());
+    [arr[random],arr[i]] = [arr[i],arr[random]];
+  }
+  return arr.slice(-n);
+}
+```
+shuffle(12,10);
+
+
+```
+Array.prototype.shuffle = function() {
+    var input = this;
+    for (var i = input.length-1; i >=0; i--) {
+        var randomIndex = Math.floor(Math.random()*(i+1)); 
+        [input[randomIndex], input[i]] = [input[i], input[randomIndex]] ; 
+    }
+    return input;
+}
+var tempArray = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+tempArray.shuffle();
+console.log(tempArray);  
+```
+
 上面这个版本是优化过的版本，显然如果取 10 个数，只需要循环 10 次即可，不需要把 64 张牌都洗了。
 
 要解决可以连续抽奖的问题，就需要把 cards 提取出来（就像方案 1 的随机抽取一样），但是那样的话就使得函数有副作用，虽说是临时写一个抽奖，也不喜欢设计得太糙。或者，那就加一个构造器执行初始化？
