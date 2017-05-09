@@ -147,3 +147,254 @@ return demoStr;
 app.config(function (demoServiceProvider) {
 demoServiceProvider.setStr('hello world')
 });
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>04AngularJS表达式</title>
+    <script src="../angular.js"></script>
+</head>
+<body ng-app="demo.main">
+
+<div ng-controller="nameController">
+{{num}}
+</div>
+
+<script>
+    var app = angular.module('demo.main', []);
+    app.controller('nameController', function ($scope, $parse) {
+        $scope.num = 1;
+
+         // 1. 调用$parse获得一个函数
+        var parseFn = $parse('num');
+         // 2. 把作用域传给那个函数，然后获取表达式的值
+        var value = parseFn($scope)
+
+    })
+
+    function demoFn(){
+        var a = 1;
+        var b = 2;
+        console.log(a);
+    }
+
+</script>
+</body>
+</html>
+
+
+$scope.$apply();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>07作用域上的数据变更未被AngularJS框架知晓</title>
+    <script src="../angular.js"></script>
+</head>
+<body ng-app="demo.main">
+<div ng-controller="outerController">
+    {{num}}
+</div>
+<script src="jquery.js"></script>
+<script>
+    var app = angular.module('demo.main', []);
+    app.controller('outerController', function ($scope, $window) {
+        $scope.num = 0;
+
+//        setTimeout(function () {
+//            $scope.num = 10;
+//            // 通知AngularJS应用我们的数据变更，然后更新视图
+//            $scope.$apply();
+//        },1000)
+
+//        $timeout(function(){
+//            $scope.num = 10;
+//        },1000)
+
+//        $interval(function(){
+//            $scope.num ++
+//        },100)
+
+//        console.log($window);
+//
+//        $window.setTimeout(function(){
+//            $scope.num = 10;
+//        },100)
+
+        $.get('data.json', function (data) {
+            console.log(data);
+            $scope.num = data.num;
+            $scope.$apply();
+        })
+    });
+
+</script>
+</body>
+</html>
+
+
+$scope.$watch();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>07作用域上的数据变更未被AngularJS框架知晓</title>
+    <script src="../angular.js"></script>
+</head>
+<body ng-app="demo.main">
+<div ng-controller="outerController">
+    {{num}}
+    <input type="text" ng-model="num">
+</div>
+<script src="jquery.js"></script>
+<script>
+    var app = angular.module('demo.main', []);
+    app.controller('outerController', function ($scope, $window) {
+        $scope.num = 0;
+        console.log($scope);
+        var releaseFn = $scope.$watch('num', function (newValue, oldValue, scope) {
+            console.log(newValue, oldValue, scope);
+        });
+        // 释放自己注册的watcher
+//        releaseFn();
+    });
+
+</script>
+</body>
+</html>
+
+
+
+
+$scope.$location();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>复习</title>
+    <script src="../angular.js"></script>
+</head>
+<body ng-app="demo.main">
+<div ng-controller="outerController">
+    <a href="#/a">goto a</a>
+    <a href="#/b">goto b</a>
+    <a href="#/c">goto c</a>
+
+    {{name}}
+</div>
+<script>
+    var app = angular.module('demo.main', []);
+    app.controller('outerController', function ($scope, $location) {
+        console.log($location);
+        // 用$location.path()能够拿到当前的路径，我们把$location放到$scope上，以便监听
+        $scope.location = $location;
+        $scope.name = 'index';
+        // 监听AngularJS表达式“location.path()”
+        $scope.$watch('location.path()', function (newValue, oldValue, scope) {
+            console.log(newValue, oldValue);
+            $scope.name = newValue;
+        })
+
+    });
+</script>
+</body>
+</html>
+
+
+指令：ng-repeat
+item: 数组里面的每一个元素（每一个ng-repeat生成$scope中,item都不同）item来自于"item in array"的写法，实际上item可以随便自定义它的名字。
+$index:这个元素在数组里的索引
+$first: 这个元素是不是数组里的第一个元素
+$last:这个元素是不是数组里最后一个元素
+$middle:……是不是中间的元素
+$even:索引值是不是偶数
+$odd:索引值是不是奇数
+
+<trng-repeat="itemininfoes"ng-class="{'bg-blue':$even}">
+绑定的数组，语法是item in array
+<trng-repeat="(key,item)ininfoes"ng-class="{'bg-blue':$even}">
+绑定对象，语法是(key , value) in object
+
+如果你的repeat所绑定的数组经常发生变化，最好也加一个track by $index
+
+自定义服务:
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>11ng-repeat</title>
+    <script src="../angular.js"></script>
+    <style>
+        .bg-blue {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+<div ng-app="demo.main">
+    <div ng-controller="mainController">
+
+    </div>
+</div>
+
+<script>
+    var app = angular.module('demo.main', []);
+    // 用factory创建一个自定义服务：
+    // 1 自定义服务的名字
+    // 2 回调函数，它的返回值，就是自定义服务的内容
+    app.factory('modelService',function(){
+        var arr = [
+            {name: "张三", phone: "18612345678", state: "邀请中"},
+            {name: "李四", phone: "18612345678", state: "已接受"}
+        ];
+        return  {
+            nameList: arr,
+            invite:function(userinfo){
+                arr.push(userinfo)
+            }
+        }
+    });
+    app.controller('mainController', function ($scope,modelService) {
+        console.log(modelService);
+        modelService.invite({})
+    })
+</script>
+</body>
+</html>
+```
+
+过滤器：
+```
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="UTF-8">
+    <title>filter</title>
+    <scritpt src="./angular.js"></script>
+    <style>
+        .bg-blue{
+            background-color:pink;
+        }
+    </style>
+</head>
+<body ng-app="app">
+    <div ng-cotrollor="mainController">
+        <div ng-repeat="item in array | filter:{state:'on'}">
+            {{item.name}}, {{item.statte}}
+        </div>
+     </div>
+     <script>
+        var app = angular.module('app",[]);
+        app.controller('mainController',function($scope){
+                 $scope.array =  [
+           {name: "张三", phone: "18612345678", state: "邀请中"},
+           {name: "李四", phone: "18612345678", state: "已接受"}
+       ];
+        }) 
+    </script>
+</body>
+</html>
+```
