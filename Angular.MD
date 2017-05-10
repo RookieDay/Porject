@@ -398,3 +398,169 @@ $odd:索引值是不是奇数
 </body>
 </html>
 ```
+
+```
+// 我们应用中的model
+var model = [
+    { name: "张三", phone: "18612345678", state: "邀请中" },
+    { name: "李四", phone: "18612342178", state: "已接受" }
+];
+
+var app = angular.module('nameList.main',[]);
+app.controller('mainController',function($scope,$location){
+    $scope.nameList = model;
+    $scope.invite = function(){
+        var name = $scope.name;
+        var phone = $scope.phone;
+
+        var userInfo = {name:name,phone:phone,state:"邀请中"};
+        var isOk = true;
+        if(!name || !phone){
+            isOk = false;
+        }
+        model.forEach(function(value,index,array){
+            isOk = isOk &&(!(value.phone == phone));
+        });
+        if(isOk){
+            model.push(userInfo);
+        } else {
+            alert('not good');
+        }
+        $scope.name = "";
+        $scope.phone = "";
+    }
+    $scope.remove = function(userInfo){
+        var index = model.indexOf(userInfo);
+        model.splice(index,1);
+    }
+    $scope.accept = function(userInfo){
+        userInfo.state = "已接受";
+    }
+    $scope.refuse = function(userInfo){
+        userInfo.state = "已拒绝";
+    }
+    $scope.location = $location;
+    $scope.$watch('location.path()',function(newValue,oldValue){
+        switch(newValue){
+            case '/all':
+                $scope.nameList = model;
+                break;
+              case '/invite':
+                    $scope.nameList = model.filter(function(value) {
+                        return value.state == '邀请中'
+                    });
+                    break;
+                case '/accept':
+                    $scope.nameList = model.filter(function(value) {
+                        return value.state == '已接受'
+                    });
+                    break;
+                case '/refuse':
+                    $scope.nameList = model.filter(function(value) {
+                        return value.state == '已拒绝'
+                    });
+                    break;   }
+    })
+})
+```
+
+
+
+Angular创建服务的三种方式：
+在模块上指定服务名和服务对象（可以是对象、函数、数值等等任意JavaScript变量），在AngularJS框架中其它用得到回调函数的地方，可以使用依赖注入的方式获得这个服务对象。用法：
+module.factory('demoService',function(){
+    //
+    return {
+        name:'demo',
+        fn:function(){...}
+    }
+})
+module.controller('demoController',function($scope,demoService){})
+
+service和factory唯一的区别就是，service的回调函数不返回一个对象，而是把自身当做一个构造函数使用，创建出来的对象作为服务对象。
+module.service(
+    'demoService',
+    function(){
+        this.name = "demo",
+        this.xxx = xxx;
+    }
+)
+
+
+使用provider时，其回调函数返回的对象中，$get就是我们的服务对象。至于其他字段，我们可以在module.config里访问。如下：
+module.config(function(demoServiceProvider){
+        demoServiceProvider.setName = "demoPlus";
+})
+
+module.provider('demoService',function(){
+    var name = "demo";
+    return {
+        $get:function(){
+            return name;
+        },
+        setName:function(newName){
+            name =newName;
+        }
+    }
+})
+
+
+AngularJS自定义指令
+directives.directive('demoHello',function(){
+    // 返回一个对象，这个对象用于描述我们的指令
+    return {
+        restrict:'EA',// 设置这个指令可以接受元素、和属性的标记,如果没有指定restrict属性，默认是“EA”
+        template:"<div>this is demo directive</div>"
+    }
+})
+
+使用指令
+<h3>用标签打标记：</h3> 当restrict的字符串里面有E的时候，可以用标签名来打标记
+<demo-hello></demo-hello>  template 复制到标签里面
+
+<h3>用属性打标记：</h3>
+<div demo-hello></div> 当restrict的字符串中有A的时候，可以用属性名来打标记  ， 标签内容替换
+
+
+
+templateUrl: 模板的路径（对应的是template传入模板的字符串）
+transclude：内嵌功能。原来的标签的内容，放入到模板中指定的标签之内。
+replace：替换，用模板中的元素，替换指令所指定的那个元素。
+
+
+transclude:
+```
+<!DOCTYPE html>
+<html lang="en" ng-app="demo.main">
+<head>
+    <meta charset="UTF-8">
+    <title>AngularJS指令：内嵌</title>
+    <script src="angular.js"></script>
+</head>
+<body>
+
+<div demo-hello="">
+    <div>world</div>
+</div>
+
+<div demo-hello="">
+    <div>AngularJs</div>
+</div>
+
+<script>
+    var app = angular.module('demo.main',['demo.directives']);
+    var directives = angular.module('demo.directives',[]);
+
+    directives.directive('demoHello',function(){
+        return {
+            restrict:"EA", // 指令生效的方式：E代表作为元素名，A代表作为属性名，可以重复
+            //原来的标签的内容，放入到模板中指定的标签之内。
+            template:"<div><h1>hello,</h1> <div ng-transclude style='padding-left: 50px;font-size: 40px'></div> </div>",
+            transclude:true
+        }
+    });
+</script>
+
+</body>
+</html>
+```
