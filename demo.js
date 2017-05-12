@@ -124,7 +124,9 @@ var $ = {
 
 
 //-----------------------------------------------------------------------
-/*浏览器缓存机制 http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html
+/*浏览器缓存机制 
+http://www.cnblogs.com/skynet/archive/2012/11/28/2792503.html
+http://blog.csdn.net/longxibendi/article/details/41630389
 
 Expires策略:
 浏览器缓存机制，其实主要就是HTTP协议定义的缓存机制（如： Expires； Cache-control等）。
@@ -158,4 +160,91 @@ http协议头Cache-Control    ：
     min-fresh指示客户机可以接收响应时间小于当前时间加上指定时间的响应。
     max-stale指示客户机可以接收超出超时期间的响应消息。如果指定max-stale消息的值，那么客户机可以接收超出超时期指定值之内的响应消息。
 还是上面那个请求，web服务器返回的Cache-Control头的值为max-age=300，即5分钟（和上面的Expires时间一致，这个不是必须的）。
+
+Last-Modified/If-Modified-Since
+Last-Modified/If-Modified-Since要配合Cache-Control使用
+  i.Last-Modified：标示这个响应资源的最后修改时间。web服务器在响应请求时，告诉浏览器资源的最后修改时间。
+  ii.If-Modified-Since：当资源过期时（使用Cache-Control标识的max-age），发现资源具有Last-Modified声明，
+     则再次向web服务器请求时带上头 If-Modified-Since，表示请求时间。web服务器收到请求后发现有头
+    If-Modified-Since 则与被请求资源的最后修改时间进行比对。若最后修改时间较新，说明资源又被改动过，
+    则响应整片资源内容（写在响应消息包体内），HTTP 200；若最后修改时间较旧，说明资源无新修改，则响应
+    HTTP 304 (无需包体，节省浏览)，告知浏览器继续使用所保存的cache。
+
+Etag/If-None-Match
+Etag/If-None-Match也要配合Cache-Control使用。
+  i.Etag：web服务器响应请求时，告诉浏览器当前资源在服务器的唯一标识（生成规则由服务器觉得）。Apache中，ETag的值，
+    默认是对文件的索引节（INode），大小（Size）和最后修改时间（MTime）进行Hash后得到的。
+  ii.If-None-Match：当资源过期时（使用Cache-Control标识的max-age），发现资源具有Etage声明，则再次向web
+     服务器请求时带上头If-None-Match （Etag的值）。web服务器收到请求后发现有头If-None-Match 则与被请求资源的
+     相应校验串进行比对，决定返回200或304。
+
+既生Last-Modified何生Etag？
+你可能会觉得使用Last-Modified已经足以让浏览器知道本地的缓存副本是否足够新，为什么还需要Etag（实体标识）呢？
+HTTP1.1中Etag的出现主要是为了解决几个Last-Modified比较难解决的问题：
+i  Last-Modified标注的最后修改只能精确到秒级，如果某些文件在1秒钟以内，被修改多次的话，它将不能准确标注文件的修改时间
+ii  如果某些文件会被定期生成，当有时内容并没有任何变化，但Last-Modified却改变了，导致文件没法使用缓存
+iii  有可能存在服务器没有准确获取文件修改时间，或者与代理服务器时间不一致等情形
+
+
+Etag是服务器自动生成或者由开发者生成的对应资源在服务器端的唯一标识符，能够更加准确的控制缓存。Last-Modified与
+ETag是可以一起使用的，服务器会优先验证ETag，一致的情况下，才会继续比对Last-Modified，最后才决定是否返回304。
+
+
+用户行为与缓存
+浏览器缓存行为还有用户的行为有关！！
+
+用户操作        Expires/Cache-Control       Last-Modified/Etag
+地址栏回车        有效                          有效
+页面链接跳转      有效                          有效
+新开窗口          有效                          有效
+前进、后退        有效                          有效
+F5刷新            无效                          有效
+Ctrl+F5刷新       无效                          无效
+
+
+参考2： http://www.cnblogs.com/ziyunfei/archive/2012/11/16/2772729.htm
+刚刚开始使用Fiddler的用户经常会对Fiddler的网络会话(Web Sessions)列表中的HTTP/304响应感到困惑:
+
+如果客户端发送的是一个条件验证(Conditional Validation)请求,则web服务器可能会返回HTTP/304响应,这就表明了客户端中
+所请求资源的缓存仍然是有效的,也就是说该资源从上次缓存到现在并没有被修改过.条件请求可以在确保客户端的资源是最新的
+同时避免因每次都请求完整资源给服务器带来的性能问题.
+
+# 辨别条件请求
+当客户端缓存了目标资源但不确定该缓存资源是否是最新版本的时候,就会发送一个条件请求.在Fiddler中,你可以在
+Headers Inspector查找相关请求头,这样就可以辨别出一个请求是否是条件请求.
+
+在进行条件请求时,客户端会提供给服务器一个If-Modified-Since请求头,其值为服务器上次返回的Last-Modified响应头中的日期
+值,还会提供一个If-None-Match请求头,值为服务器上次返回的ETag响应头的值:
+
+服务器会读取到这两个请求头中的值,判断出客户端缓存的资源是否是最新的,如果是的话,服务器就会返回HTTP/304 Not Modified响应,但没有响应体.客户端收到304响应后,就会从缓存中读取对应的资源.
+
+另一种情况是,如果服务器认为客户端缓存的资源已经过期了,那么服务器就会返回HTTP/200 OK响应,响应体就是该资源当前最新的内
+容.客户端收到200响应后,就会用新的响应体覆盖掉旧的缓存资源.
+
+只有在客户端缓存了对应资源且该资源的响应头中包含了Last-Modified或ETag的情况下,才可能发送条件请求.如果这两个头都不存在
+,则必须无条件(unconditionally)请求该资源,服务器也就必须返回完整的资源数据.
+
+#为什么要使用条件请求
+当用户访问一个网页时,条件请求可以加速网页的打开时间(因为可以省去传输整个响应体的时间),但仍然会有网络延迟,因为浏览器还
+是得为每个资源生成一条条件请求,并且等到服务器返回HTTP/304响应,才能读取缓存来显示网页.更理想的情况是,服务器在响应上指定
+Cache-Control或Expires指令,这样客户端就能知道该资源的可用时间为多长,也就能跳过条件请求的步骤,直接使用缓存中的资源了.
+可是,即使服务器提供了这些信息,在下列情况下仍然需要使用条件请求:
+
+在超过服务器指定的过期时间之后
+如果用户执行了刷新操作的话
+在上节给出的图片中,请求头中包含了一个Pragma: no-cache.这是由于用户使用F5刷新了网页.如果用户按下了CTRL-F5 (有时称之为“强刷-hard refresh”),
+你会发现浏览器省略了If-Modified-Since和If-None-Match请求头,也就是无条件的请求页面中的每个资源.
+
+#避免条件请求
+通常来说,缓存是个好东西.如果你想提高自己网站的访问速度,缓存是必须要考虑的.可是在调试的时候,有时候需要阻止缓存,这样才能确保你所访问到的资
+源是最新的.
+
+你也许会有个疑问:“如果不改变网站内容,我怎么才能让Fiddler不返回304而返回一个包含响应体的HTTP/200响应呢?”
+
+你可以在Fiddler中的网络会话(Web Sessions)列表中选择一条响应为HTTP/304的会话,然后按下U键.Fiddler将会无条件重发(Unconditionally reissue)
+这个请求.然后使用命compare命令对比一下两个请求有什么不同,对比结果如下,从中可以得知,Fiddler是通过省略条件请求头来实现无缓存请求的:
+
+
+如果你想全局阻止HTTP/304响应,可以这么做:首先清除浏览器的缓存,可以使用Fiddler工具栏上的Clear Cache按钮(仅能清除Internet Explorer缓存),
+或者在浏览器上按CTRL+SHIFT+DELETE(所有浏览器都支持).在清除浏览器的缓存之后,回到Fiddler中,在菜单中选择Rules > Performance > Disable Caching选项,然后Fiddler就会:删除所有请求中的条件请求相同的请求头以及所有响应中的缓存时间相关的响应头.此外,还会在每个请求中添加Pragma: no-cache请求头,在每个响应中添加Cache-Control: no-cache响应头,阻止浏览器缓存这些资源.
 */
