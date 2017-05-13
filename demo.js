@@ -30,6 +30,9 @@ $('.submit').on('click', function() {
 })
 
 //封装自己的ajax
+//  AJAX：AJAX即“Asynchronous Javascript And XML”（异步 JavaScript 和 XML），是指一种创建交互式网页应用的网页开发技术。
+//  通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
+
 var $ = {
     params: function(params) {
         var data = '';
@@ -334,4 +337,92 @@ function foo(data) {
 }
 
 
-// 如何理解虚拟DOM?
+// 如何理解虚拟DOM? https://www.zhihu.com/question/29504639?sort=created
+
+// console.log(NaN == undefined); // false
+// cosole.log(NaN == NaN); // false
+
+// 在浏览器中使用 ECMAScript Modules
+// 你需要做的只是为 script 标签添加 type=module 属性, 这样浏览器就会将你引入或编写的脚本视为 ECMAScript module 处理。
+
+/*<script type = "module" >
+    import {addTextToBody} from './util.js';
+    addTextToBody('anan');
+</script>
+util.js 
+export addTextToBody(text){
+    const div = document.createElement('div');
+    div.textContent = text;
+    document.body.appendChild(div);
+}*/
+// import 引入路径支持还不完善
+// 支持如下路径格式:
+// import {foo} from 'https://jakearchibald.com/utils/bar.js';
+// import {foo} from '/utils/bar.js';
+// import {foo} from './bar.js';
+// import {foo} from '../bar.js';
+
+// 下列格式不支持:
+// import {foo} from 'bar.js';
+// import {foo} from 'utils/bar.js';
+
+
+/*引入 nomodule 属性向后兼容
+<script type="module" src="module.js"></script>
+<script nomodule src="fallback.js"></script>
+支持 type=module 属性的浏览器可以忽略附带 nomodule属性的脚本标签。在上面这个示例中，如果浏览器支持载入模块则会加载前一个标签的脚本，
+而其他不支持模块的浏览器则会载入后一个名为 fallback.js 的脚本。*/
+
+/*默认延迟
+<!-- This script will execute after… -->
+<script type="module" src="1.js"></script>
+
+<!-- …this script… -->
+<script src="2.js"></script>
+
+<!-- …but before this script. -->
+<script defer src="3.js"></script>
+脚本阻塞HTML加载是非常糟糕的情况。 你可以为脚本标签添加一个 defer 属性来防止页面阻塞发生，同时也会使得这段脚本在文档完成解析之后才会
+运行。默认的，module 类型的脚本的加载也类似于添加 defer 属性的脚本 - 毕竟我们毫无理由让这些脚本阻塞页面的加载。
+module 脚本与添加 defer 属性的脚本使用相同的执行队列。*/
+/*
+内联脚本同样会延迟加载
+<!-- This script will execute after… -->
+<script type="module">
+  addTextToBody("Inline module executed");
+</script>
+
+<!-- …this script… -->
+<script src="1.js"></script>
+
+<!-- …and this script… -->
+<script defer>
+  addTextToBody("Inline script executed");
+</script>
+
+<!-- …but before this script. -->
+演示页面加载顺序为 1.js, 内联脚本, 内联模块, 2.js。
+通常内联脚本会忽略 defer 属性，与此同时，不管内联的 module 脚本是否有引入什么，都会被延迟加载。
+
+Module 只执行一次
+module 均以跨域资源共享方式载入*/
+
+// 强制类型转换 Boolean、Number、String、parseInt、parseFloat
+// 隐式类型转换 +、–、==、!
+
+// DOM事件流
+// 事件流描述的是从页面中接收事件的顺序。 DOM 结构是树形结构，当页面中的某一个元素触发了某个一个事件，事件会从最顶层的 window 对
+// 象开始，向下传播到目标元素，途径的祖先节点都会触发对应的事件，如果当前节点的该事件绑定了事件处理函数的话，则会执行该函数当事件
+// 达到目标元素并执行绑定函数（如果有绑定的话）后，事件又会向上传播到 window 元素，途径的祖先节点都会触发对应的事件（如果绑定事件处理函数的话）
+// 事件流包含三个阶段：
+// 事件捕捉阶段 - 处于目标阶段 - 事件冒泡阶段
+//     事件捕捉阶段：事件开始由顶层对象触发，然后逐级向下传播，直到目标的元素；
+//     处于目标阶段：处在绑定事件的元素上；
+//     事件冒泡阶段：事件由具体的元素先接收，然后逐级向上传播，直到不具体的元素；
+
+// BOM 对象
+// window 对象，是 JS 的最顶层对象，其他的 BOM 对象都是 window 对象的属性；
+// location 对象，浏览器当前URL信息；
+// navigator 对象，浏览器本身信息；
+// screen 对象，客户端屏幕信息；
+// history 对象，浏览器访问历史信息；
