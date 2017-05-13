@@ -76,13 +76,44 @@ var $ = {
     }
 }
 
-// HTTP协议状态码表示的意思主要分为五类 ,大体是 :  
+// HTTP协议状态码表示的意思主要分为五类 ,大体是 :
+// HTTP，全称为 HyperText Transfer Protocol，即为超文本传输协议  
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
 // 1×× 　　保留   
 // 2×× 　　表示请求成功地接收   
 // 3×× 　　为完成请求客户需进一步细化请求   
 // 4×× 　　客户错误   
 // 5×× 　　服务器错误
+
+// Request请求头：
+// User - Agent: 用户代理， 简称 UA， 它是一个特殊字符串头， 使得服务器能够识别客户端使用的
+// 操作系统及版本、 CPU 类型、 浏览器及版本、 浏览器渲染引擎、 浏览器语言、 浏览器插件等。
+
+// Referer: 先前访问的网页的地址， 当前请求网页紧随其后， 说明你是先前是从哪个网址点击访问到该页面的， 如果没有则不填。
+// Content - Type： 内容的类型， GET 请求无该字段， POST 请求中常见的有 application / x - www - form - urlencoded 为普通
+// 的表单提交， 还有文件上传为 multipart / form - data
+
+// 会话追踪：
+// 会话： 客户端向服务器端发起请求到服务端响应客户端请求的全过程。
+// 会话跟踪： 会话追踪指的是服务器对用户响应的监视。
+
+// 为什么需要会话跟踪：
+// 浏览器与服务器之间的通信是通过 HTTP 协议进行通信的， 而 HTTP 协议是” 无状态” 的协议， 它不能保存客户的信息， 即一次响应完成之后连接就断开了， 下一次的请求需要重新连接， 这样就需要判断是否是同一个用户， 所以才有会话跟踪技术来实现这种要求。
+
+// 比如你在访问淘宝登录之后会持续追踪你的会话， 记录你的购物车记录等等。
+
+// 会话跟踪常用方法：
+// URL 重写：URL 重写技术就是在 URL 结尾添加一个附加数据以标识该会话，把会话 ID 通过 URL 的信息传递过去，以便在服务器进行识别不同的用户。
+// 隐藏表单域：将会话ID添加到HTML表单元素中提交到服务器，此表单元素并不在客户端显示。
+// Cookie：Cookie 是 Web 服务器发送给客户端的一小段信息，客户端请求时可以读取该信息发送给服务器端，进而进行用户的识别，对于客户端的每次请求，服务器都会将 Cookie 发送到客户端，客户端保存下来，以便下次使用。
+// 客户端可以采用两种方式来保存这个 Cookie 对象，一种方式是保存在客户端内存中，称为临时 Cookie，浏览器关闭后这个 Cookie 对象将消失。 
+// 另外一种方式是保存在客户机的磁盘上，称为永久 Cookie。以后客户端只要访问该网站，就会将这个 Cookie 再次发送到服务器上，前提是这个 Cookie 在有效期内，这样就实现了对客户的跟踪。
+// Cookie 是可以被禁止的，当你打开 Chrome，在设置里面关闭 Cookie，那么你将再也无法登录淘宝页面。
+// Session：在服务器端会创建一个 session 对象，产生一个 sessionID 来标识这个 session 对象，然后将这个 sessionID 放入到 Cookie 中发送到客户端，下一次访问时，sessionID 会发送到服务器，在服务器端进行识别不同的用户。
+
+// 每一个用户都有一个不同的 session，各个用户之间是不能共享的，是每个用户所独享的，在 session 中可以存放信息。
+// Session的实现依赖于Cookie，如果Cookie被禁用，那么session也将失效。
+
 
 //----------------------------------------------------------------------------
 // 302 重定向和网址劫持（URL hijacking）
@@ -248,3 +279,59 @@ Cache-Control或Expires指令,这样客户端就能知道该资源的可用时�
 如果你想全局阻止HTTP/304响应,可以这么做:首先清除浏览器的缓存,可以使用Fiddler工具栏上的Clear Cache按钮(仅能清除Internet Explorer缓存),
 或者在浏览器上按CTRL+SHIFT+DELETE(所有浏览器都支持).在清除浏览器的缓存之后,回到Fiddler中,在菜单中选择Rules > Performance > Disable Caching选项,然后Fiddler就会:删除所有请求中的条件请求相同的请求头以及所有响应中的缓存时间相关的响应头.此外,还会在每个请求中添加Pragma: no-cache请求头,在每个响应中添加Cache-Control: no-cache响应头,阻止浏览器缓存这些资源.
 */
+
+
+
+// 协商缓存（性能优化）
+// 利用浏览器的缓存机制，可以有效的减少HTTP的请求，提高页面加载速度，增强用户体验，同时也能极大的减轻服务器的负担，结合HTTP协议，缓存协商就是根据HTTP协议实现缓存控制的一种机制。
+// 问题：是否见过某些网站CSS地址后面会带有一些参数，通常为xxx.css?cache=20160106形式
+// 这种做法是用来强制清除缓存的，实际开发过程中，每当新功能上线时最容易引起BUG的即CSS的缓存，但是浏览器的缓存能减少请求，如果每次都强制清除，会对性能有损失，所以控制浏览器缓存成为前端性能优化的一个重点
+// 1、Last-Modified时间精确到了秒，但如果1秒内修改了多次，并不能精确的更新缓存。
+// 2、ETag则是判断文件内容任何改变后，便会由服务器自动生成一个唯一标识。
+// 3、Expires 过期时间，HTTP1.0的规范，一个绝对的时间
+// 4、Cache-Control HTTP1.1规范，设置过期时间，优先级高于Expires。
+
+// 前端优化： 雅虎35条 http://www.tuicool.com/articles/J3uyaa
+
+
+// // 同源策略是浏览器的一种安全策略， 所谓同源是指， 域名， 协议， 端口完全相同
+// 同源政策的目的，是为了保证用户信息的安全，防止恶意的网站窃取数据。
+// 设想这样一种情况：A网站是一家银行，用户登录以后，又去浏览其他网站。如果其他网站可以读取A网站的 Cookie，会发生什么？
+// 很显然，如果 Cookie 包含隐私（比如存款总额），这些信息就会泄漏。更可怕的是，Cookie 往往用来保存用户的登录状态，如果用户没有退出登录，其他网站就可以冒充用户，为所欲为。因为浏览器同时还规定，提交表单不受同源政策的限制。
+// 由此可见，"同源政策"是必需的，否则 Cookie 可以共享，互联网就毫无安全可言了。
+
+// Cookie 是服务器写入浏览器的一小段信息，只有同源的网页才能共享。但是，两个网页一级域名相同，只是二级域名不同，浏览器允
+// 许通过设置document.domain共享 Cookie。
+
+// 跨域方案
+// 1、顶级域名相同的可以通过domain.name来解决，即同时设置 domain.name = 顶级域名（如example.com）
+// 2、document.domain + iframe
+// 3、window.name + iframe
+// 4、location.hash + iframe
+// 5、window.postMessage()
+
+// CORS与JSONP的使用目的相同，但是比JSONP更强大。
+// JSONP只支持GET请求，CORS支持所有类型的HTTP请求。JSONP的优势在于支持老式浏览器，以及可以向不支持CORS的网站请求数据。
+
+// http://www.cnblogs.com/wangyuyu/p/3388180.html
+// XSS：跨站脚本（Cross-site scripting）
+
+// CSRF：跨站请求伪造（Cross-site request forgery）
+
+// JSONP
+function addScript(src) {
+    var script = document.createElement('script');
+    script.setAttribute('type', 'text/javascript');
+    script.src = src;
+    document.body.appendChild('script');
+}
+window.onload = function() {
+    addScript('http://example.com/ip?callback=foo');
+}
+
+function foo(data) {
+    console.log('ip is' + data.ip);
+}
+
+
+// 如何理解虚拟DOM?
