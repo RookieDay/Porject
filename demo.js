@@ -32,7 +32,11 @@ $('.submit').on('click', function() {
 //封装自己的ajax
 //  AJAX：AJAX即“Asynchronous Javascript And XML”（异步 JavaScript 和 XML），是指一种创建交互式网页应用的网页开发技术。
 //  通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
-
+//局限性： 
+// AJAX 不支持浏览器 back 按钮。
+// 安全问题 AJAX 暴露了与服务器交互的细节。
+// 对搜索引擎的支持比较弱。不会执行你的 JS 脚本，只会操作你的网页源代码；
+// 跨域请求有一定限制。解决方式：jsonp；
 var $ = {
     params: function(params) {
         var data = '';
@@ -426,3 +430,82 @@ module 均以跨域资源共享方式载入*/
 // navigator 对象，浏览器本身信息；
 // screen 对象，客户端屏幕信息；
 // history 对象，浏览器访问历史信息；
+/*
+VM:
+相对于 DOM 对象，原生的 JavaScript 对象处理起来更快，而且更简单。DOM 树上的结构、属性信息我们都可以很容易地用 JavaScript 对象表示出来：
+var element = {
+  tagName: 'ul', // 节点标签名
+  props: { // DOM的属性，用一个对象存储键值对
+    id: 'list'
+  },
+  children: [ // 该节点的子节点
+    {tagName: 'li', props: {class: 'item'}, children: ["Item 1"]},
+    {tagName: 'li', props: {class: 'item'}, children: ["Item 2"]},
+    {tagName: 'li', props: {class: 'item'}, children: ["Item 3"]},
+  ]
+}
+
+上面对应的HTML写法是：
+
+<ul id='list'>
+  <li class='item'>Item 1</li>
+  <li class='item'>Item 2</li>
+  <li class='item'>Item 3</li>
+</ul>*/
+
+// 构造对象的整个过程:
+// 1, new 申请内存, 创建对象
+// 2, 调用构造函数, 构造函数有一个隐式参数, 即 this
+// 3, 刚创建出来的对象的引用 赋值给 this, 由函数处理
+// 4, 在构造函数中利用 this.成员 = 值 来给对象添加成员
+
+//实现数组乱序
+
+var arr = [1, 4, 1, 2, 3, 5, 72, 3, 9];
+
+function RandomSort(arr, n = 1) {
+    var len = arr.length;
+    for (let i = len - 1; i > 0; i--) {
+        let rand = Math.floor((i + 1) * Math.random());
+        [arr[rand], arr[i]] = [arr[i], arr[rand]];
+    }
+    return arr.slice(0, n);
+}
+
+console.log(RandomSort(arr, 10));
+
+//封装
+function Box(arr) {
+    this.arr = arr;
+}
+Box.prototype.draw = function(n = 1) {
+    let len = arr.length;
+    for (let i = len - 1, stop = len - n - 1; i > stop; i--) {
+        let rand = Math.floor((i + 1) * Math.random());
+        [arr[rand], arr[i]] = [arr[i], arr[rand]];
+    }
+    let ret = arr.slice(-n);
+    arr.length = len - n;
+    return ret;
+}
+var arr = [1, 4, 1, 2, 3, 5, 72, 3, 9];
+var box = new Box(arr);
+console.log(box.draw(arr.length));
+
+//克隆
+function clone(obj) {
+    //isObject
+    if (typeof obj === 'Object' && typeof obj !== 'null') {
+        var o = Object.prototype.toString.call(obj) === '[Object Objcet]' ? {} : [];
+        for (var k in obj) {
+            if (typeof obj[k] === 'Object' && typeof obj[k] !== 'null') {
+                o[k] = clone[obj[k]];
+            } else {
+                o[k] = obj[k];
+            }
+        }
+    } else {
+        return obj;
+    }
+    return o;
+}
