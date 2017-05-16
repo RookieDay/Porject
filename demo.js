@@ -325,6 +325,8 @@ Cache-Control或Expires指令,这样客户端就能知道该资源的可用时�
 
 // CSRF：跨站请求伪造（Cross-site request forgery）
 
+// SQL注入
+
 // JSONP
 function addScript(src) {
     var script = document.createElement('script');
@@ -495,10 +497,10 @@ console.log(box.draw(arr.length));
 //克隆
 function clone(obj) {
     //isObject
-    if (typeof obj === 'Object' && typeof obj !== 'null') {
+    if (typeof obj === 'object' && typeof obj !== 'null') {
         var o = Object.prototype.toString.call(obj) === '[Object Objcet]' ? {} : [];
         for (var k in obj) {
-            if (typeof obj[k] === 'Object' && typeof obj[k] !== 'null') {
+            if (typeof obj[k] === 'object' && typeof obj[k] !== 'null') {
                 o[k] = clone[obj[k]];
             } else {
                 o[k] = obj[k];
@@ -509,3 +511,46 @@ function clone(obj) {
     }
     return o;
 }
+
+/*清除浮动
+01:
+.classfix{
+    clear:both;
+}
+<div class="clearfix"></div>
+02:
+clearfix的方法：使用overflow进行包裹所有的浮动子元素。有误伤。
+Ckearfix的使用场景：
+1、父盒子要把所有的子盒子包裹住。
+2、父盒子是包裹正行的 div元素，需要前后进行清除浮动。
+
+.clearfix {
+    display:table;//触发bfc，div具有的包裹性
+}
+.clearfix:before,.clearfix:after{
+    conotent:'';
+    display: block;
+    clear:both;
+    height:0;
+    visibility:hidden;
+}
+.clearfix {
+    _zoom:1;
+}
+
+		消除inline块之间的空隙
+		第一种方法： font-size=0方法
+		div {
+			font-size: 0;
+		}
+
+		第二种方法： 使用html注释消除空格方法 或者将行内块元素放到一行显示  <span>2</span><!--
+		--><span>3</span>
+
+		第三种办法：可以使用float
+
+		第四种方法： 可以使用letter-space 和 word-space调整
+		div {
+			letter-spacing: -2px;
+		}
+*/
