@@ -497,10 +497,10 @@ console.log(box.draw(arr.length));
 //克隆
 function clone(obj) {
     //isObject
-    if (typeof obj === 'object' && typeof obj !== 'null') {
-        var o = Object.prototype.toString.call(obj) === '[Object Objcet]' ? {} : [];
+    if (typeof obj === 'object' && typeof obj !== 'null' && typeof obj !== 'function') {
+        var o = Object.prototype.toString.call(obj) === '[object Objcet]' ? {} : [];
         for (var k in obj) {
-            if (typeof obj[k] === 'object' && typeof obj[k] !== 'null') {
+            if (typeof obj[k] === 'object' && typeof obj[k] !== 'null' && typeof obj !== 'function') {
                 o[k] = clone[obj[k]];
             } else {
                 o[k] = obj[k];
