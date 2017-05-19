@@ -5,34 +5,35 @@
 // “**”：匹配0个或多个子文件夹    例：src/**/*.js(包含src的0个或多个子文件夹下的js文件)；
 // “{}”：匹配多个属性    例：src/{a,b}.js(包含a.js和b.js文件)  src/*.{jpg,png,gif}(src下的所有jpg/png/gif文件)；
 // “!”：排除文件    例：!src/a.js(不包含src下的a.js文件)；
+var gulp = require('gulp');
+// demo
 
-var gulp = require('gulp'),
-    less = require('gulp-less'),
-    jshint = require('gulp-jshint'),
-    minify = require('gulp-minify-css');
+// var gulp = require('gulp'),
+//     less = require('gulp-less'),
+//     jshint = require('gulp-jshint'),
+//     minify = require('gulp-minify-css');
 
-gulp.task('lint', function() {
-    // gulp.src('src/js/*.js')
-    //     .pipe(jshint())
-    //     .pipe(jshint.reporter('default'));
-    gulp.src('src/css/**/*.css')
-        .pipe(minify())
-        .pipe(gulp.dest('build'));
+// gulp.task('lint', function() {
+//     gulp.src('src/css/**/*.css')
+//         .pipe(minify())
+//         .pipe(gulp.dest('build'));
 
-    gulp.src('src/css/**/*.css', { base: 'src' })
-        .pipe(minify())
-        .pipe(gulp.dest('testbase'));
-});
-
+//     gulp.src('src/css/**/*.css', { base: 'src' })
+//         .pipe(minify())
+//         .pipe(gulp.dest('testbase'));
+// });
 
 
-gulp.task('testLess', function() {
-    gulp.src('src/less/*.less') //该任务针对的文件
-        .pipe(less()) //该任务调用的模块
-        .pipe(gulp.dest('src/css')); //将会在src/css下生成index.css
-});
 
-gulp.task('default', ['testLess', 'lint']);
+// gulp.task('testLess', function() {
+//     gulp.src('src/less/*.less') //该任务针对的文件
+//         .pipe(less()) //该任务调用的模块
+//         .pipe(gulp.dest('src/css')); //将会在src/css下生成index.css
+// });
+
+// gulp.task('default', ['testLess', 'lint']);
+
+
 // options：类型(可选)：Object，有3个属性buffer、read、base；
 // options.buffer：  类型：Boolean  默认：true 设置为false，将返回file.content的流并且不缓冲文件，处理大文件时非常有用；
 // options.read：  类型：Boolean  默认：true 设置false，将不执行读取文件操作，返回null；
@@ -74,3 +75,27 @@ gulp.task('default', ['testLess', 'lint']);
 // 4.3、opts：  类型(可选)：Object 具体参看https://github.com/shama/gaze；
 // 4.4、tasks：  类型(必填)：StringArray 需要执行的任务的名称数组；
 // 4.5、cb(event)：  类型(可选)：Function 每个文件变化执行的回调函数；
+
+// gulp 技巧集
+
+// 1. 整合 streams 来处理错误
+// 默认情况下，在 stream 中发生一个错误的话，它会被直接抛出，除非已经有一个时间监听器监听着 error 时间。 这在处理一个比较长的管道操作的时候会显得比较棘手。
+// 通过使用 stream-combiner2，你可以将一系列的 stream 合并成一个，这意味着，你只需要在你的代码中一个地方添加监听器监听 error 时间就可以了。
+// var combiner = require('stream-combiner2');
+// var uglify = require('gulp-uglify');
+// var gulp = require('gulp');
+
+// gulp.task('test', function() {
+//     var combined = combiner.obj([
+//         gulp.src('src/**/*.js'),
+//         uglify(),
+//         gulp.dest('public/js')
+//     ]);
+
+//     combined.on('error', console.error.bind(console));
+//     return combined;
+// })
+
+// gulp.task('default', ['test']);
+
+// 2. 删除文件和文件夹
