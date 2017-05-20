@@ -554,3 +554,201 @@ Ckearfix的使用场景：
 			letter-spacing: -2px;
 		}
 */
+
+// Javascript模块化编程
+// 1. 对于早期来说 我们一般函数的写法如下
+
+function m1() {}
+
+function m2() {}
+// 函数m1 m2组成了一个模块， 直接使用调用即可， 但是
+// 这样的话会污染全局变量，无法保证不和其他模块的变量
+// 名冲突，而且也看不出和其他模块成员的关系
+
+// 2. 那我们将模块写成对象，所以模块成员放到这个对象当中
+var modul1 = new Object({
+        _count: 0,
+        m1: function() {},
+        m2: function() {}
+    })
+    // 这里讲m1 m2封装到module1里面，使用的时候调用就可以
+module.m1();
+// 这样的话会暴露所有模块的成员，内部状态可以被改写，比如
+// 外部可以直接修改内部计数器的数值
+modul1._count = 5;
+
+// 3. 立即执行函数可以达到不暴露私有成员的目的
+var module1 = (function() {
+    var _count = 1;
+    var m1 = function() {};
+    var m2 = function() {};
+    return {
+        m1: m1,
+        m2: m2
+    }
+})();
+// 这种写法 外部代码就无法访问内部_count 变量
+console.info(modul1._count);
+
+
+// 4. 那么接下来， 如果模块很大的话， 可能继承自其他模块，
+// 这个时候可以采用"放大模式"
+
+var module1 = (function(mod) {
+    mod.m3 = function() {};
+    return mod;
+})(module1);
+
+// 在不影响原来模块的基础上， 添加新的方法， 返回新的module1模块
+
+// 5. 但是上面的这种写法有一个弊病， 在浏览器环境中， 模块的各个部分通常都是从网上获取的， 有时无法知道哪个部分会先加载， 如果采用上面的方法， 第一个执行的部分有可能加载一个不存在空对象， 这时就要采用 "宽放大模式"。
+var module1 = (function(mod) {
+    // ...
+    return mod;
+})(window.modul1 || {});
+
+// 与放大模式相比， 宽放大模式就是立即执行函数的参数可能是空对象
+
+// 6. 输入全局变量
+// 独立性是模块的重要特点，模块内部最好不和程序其他部分直接交互
+// 为了在模块内部调用全局变量，必须显示将其他变量输入模块
+
+var module1 = (function($, YAHOO) {
+    //...
+})(jQuery, YAHOO);
+// 上面的module1模块需要使用jQuery库和YUI库，就把这两个库（其实是两个模块）当作参数输入module1。这样做除了保证模块
+
+// ii. CommonJS
+// node.js的模块系统，就是参照CommonJS规范实现
+// 因为所有的模块都存放在本地硬盘，可以同步加载完成，等待时间就是硬盘的读取时间。但是，对于浏览器，这却是一个大问题，因为模块都放在服务器端，等待时间取决于网速的快慢，可能要等很长时间，浏览器处于"假死"状态。
+// 因此，浏览器端的模块，不能采用"同步加载"（synchronous），只能采用"异步加载"（asynchronous）。这就是AMD规范诞生的背景。
+
+// AMD：意思就是"异步模块定义"。它采用异步方式加载模块，模块的加载不影响它后面语句的运行。所有依赖这个模块的语句，都定义在一个回调函数中，等到加载完成之后，这个回调函数才会运行。
+// 第一个参数[module]，是一个数组，里面的成员就是要加载的模块；第二个参数callback，则是加载成功之后的回调函数。如果将前面的代码改写成AMD形式，就是下面这样：
+require(['math'], function(math) {
+        math.add(2, 3);
+    })
+    // math.add() 与math模块加载不是同步的， 浏览器不会发生假死。 所以很显然， AMD比较适合浏览器环境。
+
+// 为什要使用requrie.js 
+// 比如7个script标签加载js文件
+// 首先，加载的时候，浏览器会停止网页渲染，加载文件越多，网页失去响应的时间就会越长；其次，由于js文件之间存在依赖关系，因此必须严格保证加载顺序（比如上例的1.js要在2.js的前面），依赖性最大的模块一定要放到最后加载，当依赖关系很复杂的时候，代码的编写和维护都会变得困难。
+
+// （1）实现js文件的异步加载，避免网页失去响应；
+// 　　（2）管理模块之间的依赖性，便于代码的编写和维护。
+
+// 下面开始require.js 
+// 　<script src="js/require.js"></script>
+// 加载这个也可能使得页面失去响应，解决办法如下：
+// i.放在网页底部， 最后加载
+// ii. <script src="js/require.js" defer async="true"></script>
+// async属性表明这个文件需要异步加载，避免网页失去响应。IE不支持这个属性，
+
+/*下一步是加载我们的代码
+<script src="js/require.js" data-main="js/main"></script>*/
+require(['moduleA', 'moduleB', 'moduleC'], function(moduleA, moduleB, moduleC) {
+        //...
+    })
+    // require()函数接受两个参数。第一个参数是一个数组，表示所依赖的模块，上例就是['moduleA', 'moduleB', 'moduleC']，即主模块依赖这三个模块；第二个参数是一个回调函数，当前面指定的模块都加载成功后，它将被调用。加载的模块会以参数形式传入该函数，从而在回调函数内部就可以使用这些模块。
+    // require()异步加载moduleA，moduleB和moduleC，浏览器不会失去响应；它指定的回调函数，只有前面的模块都加载成功后，才会运行，解决了依赖性的问题。
+
+// 模块的加载：默认情况下，require.js假定这三个模块与main.js在同一个目录，文件名分别为jquery.js，underscore.js和backbone.js，然后自动加载。
+// 使用require.config()方法，我们可以对模块的加载行为进行自定义。require.config()就写在主模块（main.js）的头部。参数就是一个对象，这个对象的paths属性指定各个模块的加载路径。
+require.config({
+        path: {　
+            "jquery": "jquery.min",
+            　　　　"underscore": "underscore.min",
+            "backbone": "backbone.min"
+        }
+    })
+    // 上面的代码给出了三个模块的文件名，路径默认与main.js在同一个目录（js子目录）。如果这些模块在其他目录，比如js/lib目录，则有两种写法。一种是逐一指定路径。
+
+　 require.config({　　　　
+    paths: {　　　　　　
+        "jquery": "lib/jquery.min",
+        　　　　　　
+        "underscore": "lib/underscore.min",
+        　　　　　　"backbone": "lib/backbone.min"　　　　
+    }　　
+});
+// 另一种则是直接改变基目录（baseUrl）。
+require.config({　　　　
+    baseUrl: "js/lib",
+    　　　　paths: { "jquery": "jquery.min", "underscore": "underscore.min", "backbone": "backbone.min"　　　　 }　　
+});
+// 如果某个模块在另一台主机上，也可以直接指定它的网址，比如：
+　　
+require.config({　　　　
+    paths: {
+        "jquery": "https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min"　　　　
+    }　　
+});
+
+// require.js要求，每个模块是一个单独的js文件。这样的话，如果加载多个模块，就会发出多次HTTP请求，会影响网页的加载速度。因此，require.js提供了一个优化工具，当模块部署完毕以后，可以用这个工具将多个模块合并在
+
+
+// AMD模块写法：模块必须按照AMD的规定来写。
+// 具体来说，就是模块必须采用特定的define()函数来定义。如果一个模块不依赖其他模块，那么可以直接定义在define()函数之中。
+
+// main.js
+define(['myLib'], function(myLib) {
+    function foo() {
+        myLib.doSomething();
+    }
+    return {
+        foo: foo
+    }
+});
+// 当require()函数加载上面这个模块的时候，就会先加载myLib.js文件。
+
+// 加载非规范的模块
+// 理论上，require.js加载的模块，必须是按照AMD规范、用define()函数定义的模块。但是实际上，虽然已经有一部分流行的函数库（比如jQuery）符合AMD规范，更多的库并不符合。那么，require.js是否能够加载非规范的模块呢？
+// 这样的模块在用require()加载之前，要先用require.config()方法，定义它们的一些特征。
+　
+require.config({
+    shim: {
+        'underscore': { exports: '_'　 },
+        'backbone': {
+            deps: ['underscore', 'jquery'],
+            exports: 'Backbone'　
+        }
+    }　　
+});
+// require.config()接受一个配置对象，这个对象除了有前面说过的paths属性之外，还有一个shim属性，专门用来配置不兼容的模块。具体来说，每个模块要定义（1）exports值（输出的变量名），表明这个模块外部调用时的名称；（2）deps数组，表明该模块的依赖性。
+// 比如，jQuery的插件可以这样定义：
+　
+// shim: {
+//     'jquery.scroll': {
+//         deps: ['jquery'],
+//         exports: 'jQuery.fn.scroll'
+//     }
+// }
+
+// require.js插件
+// require.js还提供一系列插件，实现一些特定的功能。
+// domready插件，可以让回调函数在页面DOM结构加载完成后再运行。
+
+require(['domready!'], function(doc) {
+    // called once the DOM is ready
+    　　});
+// text和image插件，则是允许require.js加载文本和图片文件。
+　　
+define([
+        'text!review.txt', 'image!cat.jpg'　　　　
+    ],
+    function(review, cat) {　　　　　　
+        console.log(review);　　　　　　
+        document.body.appendChild(cat);　　　　
+    }　　);
+
+// Browserify本身不是模块管理器，只是让服务器端的CommonJS格式的模块可以运行在浏览器端。这意味着通过它，我们可以使用Node.js的npm模块管理器。所以，实际上，它等于间接为浏览器提供了npm的功能。
+// 然后，编写一个服务器端脚本。
+var uniq = require('uniq');
+var mus = [2, 1, 2, 3, 1, 2, 4];
+console.log(uniq(mus));
+// 上面代码中uniq模块是CommonJS格式，无法在浏览器中运行。这时，Browserify就登场了，将上面代码编译为浏览器脚本。
+// $ browserify root.js > bundle.js
+
+// 生成的bundle.js可以直接插入网页。
+// 　<script src="bundle.js"></script>
+// Browserify编译的时候，会将脚本所依赖的模块一起编译进去。这意味着，它可以将多个模块合并成一个文件

@@ -99,3 +99,26 @@ var gulp = require('gulp');
 // gulp.task('default', ['test']);
 
 // 2. 删除文件和文件夹
+// var strripDebug = require('gulp-strip-debug'),
+//     del = require('del'),
+//     vinyPaths = require('vinyl-paths');
+
+// gulp.task('clean:mobile', function() {
+//     del([
+//         'dist/repost.csv',
+//         'dist/mobile/**',
+//         '!dist/mobile/s.json'
+//     ])
+// });
+// gulp.task('clear:tmp', function() {
+//     return gulp.src('tmp/*')
+//         .pipe(strripDebug())
+//         .pipe(gulp.dest())
+//         //  vinyl-paths 模块来简单地获取 stream 中每个文件的路径，然后传给 del 方法。
+//         .pipe(vinyPaths(del));
+// });
+// gulp.task('defalut', ['clean:tmp']);
+
+
+// 3. 使用 watchify 加速 browserify 编译
+// 一个持续监视文件的改动，并且 只重新打包必要的文件 的 browserify 打包工具。用这种方法，第一次打包的时候可能会还是会花 30 秒，但是后续的编译打包工作将一直保持在 100 毫秒以下 —— 这是一个极大的提升。
