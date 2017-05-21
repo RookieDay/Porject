@@ -6,6 +6,7 @@ var APP_PATH = path.resolve(ROOT_PATH, 'app');
 var BUILD_PATH = path.resolve(ROOT_PATH, 'build');
 
 module.exports = {
+    devtool: 'eval-source-map',
     //项目的文件夹 可以直接用文件夹名称 默认会找index.js 也可以确定是哪个文件名字
     entry: APP_PATH,
     output: {
@@ -16,7 +17,8 @@ module.exports = {
     plugins: [
         new htmlwebpackPlugin({
             title: 'hello world app'
-        })
+        }),
+        new webpack.BannerPlugin("Copyright Flying Unicorns inc.")
     ],
     // 在项目根目录下输入npm start,一堆花花绿绿的信息后server已经起来了，在浏览器里面输入http://localhost:8080 发现伟大的hello world出现了，在js里面随便修改一些输出然后保存, boom!浏览器自动刷新，新的结果出现了。
 
@@ -30,10 +32,16 @@ module.exports = {
     // 这里就是先运行css-loader然后是style-loader.
     module: {
         loaders: [{
-            test: /\.css$/,
-            loaders: ['style', 'css'],
-            include: APP_PATH
-        }]
+                test: /\.scss$/,
+                loaders: ['style-loader', 'css-loader', 'sass-loader'],
+                include: APP_PATH
+            },
+            {
+                test: /\.(png|jpg)$/,
+                // 注意后面那个limit的参数，当你图片大小小于这个限制的时候，会自动启用base64编码图片。
+                loader: 'url?limit=40000'
+            }
+        ]
     }
 }
 

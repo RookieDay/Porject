@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -80,11 +80,18 @@ module.exports = generateText;
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports) {
+
+throw new Error("Module parse failed: D:\\Front_End\\Porject\\webpack_demo\\main.css Unexpected token (1:3)\nYou may need an appropriate loader to handle this file type.\n| h1 {\r\n|     color: red;\r\n| }");
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var sub = __webpack_require__(0);
+var css_color = __webpack_require__(1);
 var app = document.createElement('div');
-app.innerHTML = '<h1>hello index</h1>';
+app.innerHTML = '<h1>hello ana index</h1>';
 app.appendChild(sub());
 document.body.appendChild(app);
 

@@ -1,6 +1,10 @@
 var sub = require('./sub');
-var css_color = require('../main.css');
+var $ = require('jquery');
+var moment = require('moment');
+// require('./main.css');
+require('./main.scss');
 var app = document.createElement('div');
 app.innerHTML = '<h1>hello ana index</h1>';
 app.appendChild(sub());
 document.body.appendChild(app);
+$('body').append('<p>look at me~ now is ' + moment.calendarFormat() + '</p>');
