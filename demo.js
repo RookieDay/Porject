@@ -644,6 +644,13 @@ require(['math'], function(math) {
 // ii. <script src="js/require.js" defer async="true"></script>
 // async属性表明这个文件需要异步加载，避免网页失去响应。IE不支持这个属性，
 
+// defer & async (http://blog.csdn.net/liuhe688/article/details/51247484)
+/*DOMContentLoaded – the browser fully loaded HTML, and the DOM tree is built, but external resources like pictures <img> and stylesheets may be not yet loaded.
+load – the browser loaded all resources (images, styles etc).
+beforeunload/unload – when the user is leaving the page.*/
+
+
+
 /*下一步是加载我们的代码
 <script src="js/require.js" data-main="js/main"></script>*/
 require(['moduleA', 'moduleB', 'moduleC'], function(moduleA, moduleB, moduleC) {
