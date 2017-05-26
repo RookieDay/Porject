@@ -664,7 +664,7 @@ require(['moduleA', 'moduleB', 'moduleC'], function(moduleA, moduleB, moduleC) {
 require.config({
         path: {　
             "jquery": "jquery.min",
-            　　　　"underscore": "underscore.min",
+            "underscore": "underscore.min",
             "backbone": "backbone.min"
         }
     })
@@ -759,3 +759,145 @@ console.log(uniq(mus));
 // 生成的bundle.js可以直接插入网页。
 // 　<script src="bundle.js"></script>
 // Browserify编译的时候，会将脚本所依赖的模块一起编译进去。这意味着，它可以将多个模块合并成一个文件
+/*
+AMD/CMD/CommonJs是JS模块化开发的标准，目前对应的实现是RequireJs/SeaJs/nodeJs.
+
+CommonJs主要针对服务端，AMD/CMD主要针对浏览器端，所以最容易混淆的是AMD/CMD。（顺便提一下，
+针对服务器端和针对浏览器端有什么本质的区别呢？服务器端一般采用同步加载文件，也就是说需要某个模块，
+服务器端便停下来，等待它加载再执行。这里如果有其他后端语言，如java，经验的‘玩家’应该更容易理解。
+而浏览器端要保证效率，需要采用异步加载，这就需要一个预处理，提前将所需要的模块文件并行加载好。）
+
+ AMD/CMD区别，虽然都是并行加载js文件，但还是有所区别，AMD是预加载，在并行加载js文件同时，还会解析执行该模
+ 块（因为还需要执行，所以在加载某个模块前，这个模块的依赖模块需要先加载完成）；而CMD是懒加载，虽然会一开
+ 始就并行加载js文件，但是不会执行，而是在需要的时候才执行。
+
+
+AMD/CMD的优缺点.一个的优点就是另一个的缺点， 可以对照浏览。
+                AMD优点：加载快速，尤其遇到多个大文件，因为并行解析，所以同一时间可以解析多个文件。
+                AMD缺点：并行加载，异步处理，加载顺序不一定，可能会造成一些困扰，甚至为程序埋下大坑。
+
+                CMD优点：因为只有在使用的时候才会解析执行js文件，因此，每个JS文件的执行顺序在代码中是有体现的，是可控的。
+                CMD缺点：执行等待时间会叠加。因为每个文件执行时是同步执行（串行执行），因此时间是所有文件解析执行时间之和，尤其在文件较多较大时，这种缺点尤为明显。
+
+https://www.zhihu.com/question/20351507/answer/14859415
+
+如何使用？CommonJs的话，因为nodeJs就是它的实现，所以使用node就行，也不用引入其他包。AMD则是通过<script>标签引入RequireJs，具体语法还是去看官方文档或者百度一下吧。CMD则是引入SeaJs。
+    */
+
+// 数组去重
+[...new Set([array])]
+
+
+
+// 说明
+// 时间复杂度指的是一个算法执行所耗费的时间
+// 空间复杂度指运行完一个程序所需内存的大小
+// 稳定指，如果a=b,a在b的前面，排序后a仍然在b的前面
+// 不稳定指，如果a=b，a在b的前面，排序后可能会交换位置
+
+
+//冒泡排序 两两比较 最大或者最小的排在了最后
+function bubbleSort(arr){
+    for(let i = 0; i < arr.length;i++){
+        for(let j = 0; j < arr.length - 1 - i;j++){
+            let temp;
+            if(arr[j] > arr[j+1]){
+                temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+    return arr;
+}
+
+//快速排序  元素为基准， 小的放左边 大的放右边
+function quickSort(arr){
+    if(arr.length <= 1) return arr;
+    var pivotIndex = Math.floor(arr.length/2);
+    //找基准，并把基准从原数组删除 从index开始删除1个元素
+    var pivot = arr.splice(pivotIndex,1)[0];
+
+    var left = [];
+    var right = [];
+
+    // 比基准小的放在left 大的放在right
+    for(var i = 0; i < arr.length; i++){
+        if(arr[i] <= pivot) {
+            left.push(arr[i]);
+        } else {
+            right.push(arr[i]);
+        }
+    }
+    return quickSort(left).concat([pivot],quickSort(right));
+}   
+
+
+// 选择排序 把每一个数都与第一个数比较，如果小于第一个数，就把它们交换位置；这样一轮下来，最小的数就排到了最前面；重复n-1轮
+function selectSort(arr){
+    let len = arr.length;
+    let temp;
+    for(let i = 0; i < len -1;i++){
+        let minIndex = i;
+        for(let j = i + 1; j < len; j++){
+            if(arr[j] < arr[minIndex]){ //寻找最小的数
+                minIndex = j;           //将最小数的索引保存
+            }
+        }
+        temp = arr[i];
+        arr[i] = arr[minIndex];
+        arr[minIndex] = temp;
+    }
+    return arr;
+}
+
+
+//数组去重
+function unique(arr){
+    var obj = {};
+    var temp = [];
+    for(var i = 0; i < arr.length; i++){
+        if(!obj[arr[i]]){
+            obj[arr[i]] = true;
+            temp.push(arr[i]);
+        }
+    }
+    return temp;
+}
+
+// 插入排序:
+
+// 解析：
+
+//  （1） 从第一个元素开始，该元素可以认为已经被排序
+
+//  （2） 取出下一个元素，在已经排序的元素序列中从后向前扫描
+
+//  （3） 如果该元素（已排序）大于新元素，将该元素移到下一位置
+
+//  （4） 重复步骤3，直到找到已排序的元素小于或者等于新元素的位置
+
+//  （5）将新元素插入到下一位置中
+
+//  （6） 重复步骤2
+
+function insertSort(arr){
+// 假设第0个元素是一个有序的数列，第1个以后是无序的序列
+// 所以第一个元素开始讲无序序列的元素插入到有序数列中
+    for(let i = 1; i < arr.length;i++){
+        // 升序
+        if(arr[i] < arr[i - 1]){
+            // 取出无序序列的第i个元素作为被插入元素
+            var guard = arr[i];
+            // 记住有序序列的最后一个位置 并且将有序序列位置扩大一个
+            var j = i - 1;
+            arr[i] = arr[j];
+            while(j > 0 && guard < arr[j]){
+                arr[j+1] = arr[j];
+                j--;
+            }
+            arr[j+1] = guard;
+        }
+    }
+    return arr;
+}
